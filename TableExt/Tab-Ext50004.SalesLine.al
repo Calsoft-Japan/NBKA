@@ -57,5 +57,9 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             ToolTip = 'Specifies if the item is a Special Product.';
             DataClassification = ToBeClassified;
         }
+        field(50015; "Shipping Date"; Date)
+        {
+            DataClassification = ToBeClassified;
+        }
     }
 }
