@@ -4,84 +4,78 @@ tableextension 50003 "SalesHeader Ext" extends "Sales Header"
     {
         field(50000; "EC Order"; Boolean)
         {
-            ToolTip = 'Indicate whether it was received from EC';
             Caption = 'EC Order';
+            ToolTip = 'Indicate whether it was received from EC';
             DataClassification = ToBeClassified;
         }
         field(50001; "Special Order Work"; Boolean)
         {
-            ToolTip = 'If the customer requires Special Order Work';
             Caption = 'Special Order Work';
+            ToolTip = 'If the customer requires Special Order Work';
             DataClassification = ToBeClassified;
         }
         field(50002; "Special Order Work Completed"; Boolean)
         {
-            ToolTip = 'If Special Order Work is completed';
             Caption = 'Special Order Work Completed';
+            ToolTip = 'If Special Order Work is completed';
             DataClassification = ToBeClassified;
         }
         field(50003; "Special Shipping Work"; Boolean)
         {
-            ToolTip = 'If the customer requires Special Shipping Work';
             Caption = 'Special Shipping Work';
+            ToolTip = 'If the customer requires Special Shipping Work';
             DataClassification = ToBeClassified;
         }
         field(50004; "Special Shipping Completed"; Boolean)
         {
+            Caption = 'Special Shipping Completed';
             ToolTip = 'If Special Shipping Work is completed';
-            Caption = 'Special Shipping Work Completed';
             DataClassification = ToBeClassified;
         }
-
-
+        field(50005; "Estimator Role"; Code[50])
+        {
+            Caption = 'Estimator Role';
+            ToolTip = 'Specifies the User Role of the Quote Author.';
+            DataClassification = CustomerContent;
+        }
+        field(50007; "Discount Rate Updated"; Boolean)
+        {
+            Caption = 'Discount Rate Updated';
+            ToolTip = 'Defines whether the Sales Quote contains an updated Discount Rate % from the default value.';
+            FieldClass = FlowField;
+            CalcFormula = Exist("Sales Line" where("Document Type" = const(Quote), "Document No." = field("No."), "Discount Rate Updated" = const(true)));
+        }
+        field(50008; "Gross Profit Rate Updated"; Boolean)
+        {
+            Caption = 'Gross Profit Rate Updated';
+            ToolTip = 'Defines whether the Sales Quote contains an updated Gross Profit Rate % from the default value.';
+            FieldClass = FlowField;
+            CalcFormula = Exist("Sales Line" where("Document Type" = const(Quote), "Document No." = field("No."), "Gross Profit Rate Updated" = const(true)));
+        }
+        field(50009; "Gross Profit Rate below 60"; Boolean)
+        {
+            Caption = 'Gross Profit Rate < 60%';
+            ToolTip = 'Defines whether the Sales Quote contains lines with less than 60% profit.';
+            FieldClass = FlowField;
+            CalcFormula = Exist("Sales Line" where("Document Type" = const(Quote), "Document No." = field("No."), "Special Product" = const(true), "Gross Profit Rate %" = filter(.. 59.99999)));
+        }
+        field(50010; "Approval User"; Code[50])
+        {
+            Caption = 'Approval User';
+            ToolTip = 'Specifies the User who approved the Sales Quote';
+        }
     }
 
+    trigger OnInsert()
+    var
+        UserSetup: Record "User Setup";
+    begin
+        // Set the creator's User ID as the currently logged-in user
+        "Assigned User ID" := UserId;
+
+        // Autofill Estimator Role from User Setup
+        if UserSetup.Get(UserId) then
+            "Estimator Role" := Format(UserSetup."User Role");
+    end;
 
 }
-
-//----------------------------------------------------------------------------
-// trigger OnBeforeModify()
-// var
-//     Customer: Record Customer;
-//     SalesLine: Record "Sales Line";
-// begin
-//     // Logic 1: Special Order Work - When Customer No. is updated
-//     if Rec."Sell-to Customer No." <> xRec."Sell-to Customer No." then begin
-//         if Customer.Get(Rec."Sell-to Customer No.") then begin
-//             Rec."Special Order Work" := Customer."Special Order Work";
-//             Rec."Special Shipping Work" := Customer."Special Shipping Work";
-//         end;
-//     end;
-
-// // Logic 2 & 3: When Status changes from Open to Released
-// if (Rec.Status = Rec.Status::Released) and (xRec.Status = Rec.Status::Open) then begin
-//     if Rec."Special Order Work" and not Rec."Special Order Work Completed" then begin
-
-//         // Revert the status back to Open
-//         Rec.Status := Rec.Status::Open;
-
-//         Error('Special Order Work is not completed.');
-
-//         SalesLine.Reset();
-//         SalesLine.SetRange("Document Type", Rec."Document Type");
-//         SalesLine.SetRange("Document No.", Rec."No.");
-//         if SalesLine.FindSet() then
-//             repeat
-//                 if (SalesLine.Type = SalesLine.Type::"Charge (Item)") and (SalesLine."No." = 'JB-FREIGHT') then begin
-//                     Rec."Shipping Advice" := Rec."Shipping Advice"::Complete;
-//                     exit;
-//                 end;
-//             until SalesLine.Next() = 0;
-//     end;
-// end;
-
-
-
-//end;
-
-
-
-
-
-
-

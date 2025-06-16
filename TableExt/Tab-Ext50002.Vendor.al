@@ -4,9 +4,7 @@ tableextension 50002 "VendorExt" extends Vendor
     {
         field(50000; "Expenses Rate %"; Decimal)
         {
-            // ObsoleteState = Removed;
-            // ObsoleteReason = 'Replaced by "Expense Rate %".';
-            Caption = 'Expenses Rate %';
+            ToolTip = 'Used for Quote Price Calculation.';
         }
         field(50001; "EDI Target"; Boolean)
         {

@@ -35,7 +35,7 @@ tableextension 50000 "Item Ext" extends "Item"
 
         field(50003; "Web Product No."; Code[50])
         {
-            ToolTip = 'Specifies the date one day before Blocked will be activated';
+            ToolTip = 'Specifies WEB Product No. of the item.';
         }
 
         field(50004; "Special Product"; Boolean)
