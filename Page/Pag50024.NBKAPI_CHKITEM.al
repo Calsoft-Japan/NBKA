@@ -50,7 +50,7 @@ page 50024 "NBKAPI_CHKITEM"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(PN; Rec."P/N")
+                field(SEHNCD; Rec."SEHNCD")
                 {
                     ApplicationArea = All;
                 }
@@ -63,9 +63,9 @@ page 50024 "NBKAPI_CHKITEM"
         RecItem: Record Item;
     begin
         Rec."Created datetime" := CurrentDateTime;
-        if Rec."P/N".Trim() <> '' then begin
+        if Rec."SEHNCD".Trim() <> '' then begin
             RecItem.Reset();
-            RecItem.SetRange("P/N", rec."P/N");
+            RecItem.SetRange("P/N", rec."SEHNCD");
             if RecItem.FindFirst() then begin
                 if RecItem.Blocked then begin
                     Rec.P_RTCD := '99';

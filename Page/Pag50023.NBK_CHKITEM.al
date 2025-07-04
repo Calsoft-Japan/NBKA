@@ -41,7 +41,7 @@ page 50023 "NBK_CHKITEM"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field("P/N"; Rec."P/N")
+                field(SEHNCD; Rec."SEHNCD")
                 {
                     ApplicationArea = All;
                     Editable = false;

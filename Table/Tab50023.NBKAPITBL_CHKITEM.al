@@ -32,9 +32,9 @@ table 50023 "NBKAPITBL_CHKITEM"
             Caption = 'P_ERRMSG';
             Editable = false;
         }
-        field(6; "P/N"; Text[50])
+        field(6; "SEHNCD"; Text[50])
         {
-            Caption = 'P/N';
+            Caption = 'SEHNCD';
         }
     }
     keys

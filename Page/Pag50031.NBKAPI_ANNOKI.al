@@ -67,26 +67,42 @@ page 50031 "NBKAPI_ANNOKI"
     var
         SalesHeader: Record "Sales Header";
         SalesLine: Record "Sales Line";
+        ShippingDateEmpty: Boolean;
+        MaxShippingDate: Date;
     begin
         Rec."Created datetime" := CurrentDateTime;
         if Rec.JUCH1.Trim() <> '' then begin
             SalesHeader.Reset();
             SalesHeader.SetRange("No.", Rec.JUCH1);
+            SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
             if SalesHeader.FindFirst() then begin
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", Rec.JUCH1);
-                if SalesLine.FindFirst() then begin
-                    if SalesLine."Shipping Date" <> 0D then begin
+                SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+                if not SalesLine.IsEmpty then begin
+                    SalesLine.FindSet();
+                    ShippingDateEmpty := false;
+                    MaxShippingDate := 0D;
+                    repeat
+                        if SalesLine."Shipping Date" <> 0D then begin
+                            if MaxShippingDate < SalesLine."Shipping Date" then begin
+                                MaxShippingDate := SalesLine."Shipping Date";
+                            end;
+                        end
+                        else begin
+                            Rec.P_RTCD := '99';
+                            Rec.P_ERRCD := 'NBKAPI_ANNOKI';
+                            Rec.P_ERRMSG := 'Shipping Date is blank on a sales line.';
+                            Rec.ANNOKI := '';
+                            ShippingDateEmpty := true;
+                            break;
+                        end;
+                    until SalesLine.Next() = 0;
+                    if (not ShippingDateEmpty) and (MaxShippingDate <> 0D) then begin
                         Rec.P_RTCD := '00';
                         Rec.P_ERRCD := '';
                         Rec.P_ERRMSG := '';
-                        Rec.ANNOKI := CustomFormatDate(SalesLine."Shipping Date");
-                    end
-                    else begin
-                        Rec.P_RTCD := '99';
-                        Rec.P_ERRCD := 'NBKAPI_ANNOKI';
-                        Rec.P_ERRMSG := 'Shipping Date is blank on a sales line.';
-                        Rec.ANNOKI := '';
+                        Rec.ANNOKI := CustomFormatDate(MaxShippingDate);
                     end;
                 end;
             end

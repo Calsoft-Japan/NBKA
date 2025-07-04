@@ -77,6 +77,7 @@ page 50033 "NBKAPI_SYKA"
         if Rec.JUCH1.Trim() <> '' then begin
             SalesHeader.Reset();
             SalesHeader.SetRange("No.", Rec.JUCH1);
+            SalesHeader.SetRange("Document Type", SalesHeader."Document Type"::Order);
             if SalesHeader.FindFirst() then begin
                 SalesHeader.calcfields("Completely Shipped");
                 if SalesHeader."Completely Shipped" then begin

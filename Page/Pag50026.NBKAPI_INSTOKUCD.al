@@ -179,7 +179,8 @@ page 50026 "NBKAPI_INSTOKUCD"
         RecCustomer.Validate("E-Mail", RecINSTOKUCD.EMAIL);
         RecCustomer.Validate("Home Page", RecINSTOKUCD.URL);
         RecCustomer.Validate(Contact, RecINSTOKUCD.TCONTACT);
-        if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER <> '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
+        RecCustomer.Validate("Payment Terms Code", 'ADVANCE');
+        if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
         else begin

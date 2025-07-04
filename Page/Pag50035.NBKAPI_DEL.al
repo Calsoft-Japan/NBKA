@@ -66,8 +66,8 @@ page 50035 "NBKAPI_DEL"
         PONo: Code[20];
         CanDelete: Boolean;
     begin
-        Rec."Created datetime" := CurrentDateTime;
         if Rec.JUCH1.Trim() <> '' then begin
+            Rec."Created datetime" := CurrentDateTime;
             RecSalesHeader.Reset();
             RecSalesHeader.SetRange("No.", Rec.JUCH1);
             RecSalesHeader.SetRange("Document Type", RecSalesHeader."Document Type"::Order);
@@ -137,10 +137,10 @@ page 50035 "NBKAPI_DEL"
                 Rec.P_ERRMSG := '';
             end;
         end else begin
-            Rec.P_RTCD := '99';
-            Rec.P_ERRCD := 'NBKAPI_DEL';
-            Rec.P_ERRMSG := 'The input Sales Order No. is invalid.';
+            Rec."Created datetime" := 0DT;
+            exit(false);
         end;
+        exit(true);
         if Rec.Insert(true) then begin
             exit(false);
         end
