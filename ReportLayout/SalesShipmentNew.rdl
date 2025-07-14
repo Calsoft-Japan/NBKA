@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-07-02T15:46:00.7120708Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-07-11T16:19:33.8838706Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1707,7 +1707,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!Item_Netweight.Value* 0.0022</Value>
+                                                    <Value>=Fields!Item_Netweight.Value*0.0022</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -1810,7 +1810,7 @@
                                       <TablixMember />
                                     </TablixMembers>
                                     <Visibility>
-                                      <Hidden>=iif(Fields!TempSalesShptLineQy.Value&lt;&gt;0,False,True)</Hidden>
+                                      <Hidden>=IIf(Fields!TempSalesShptLineQy.Value = 0, True, False)</Hidden>
                                     </Visibility>
                                   </TablixMember>
                                 </TablixMembers>
@@ -1852,7 +1852,6 @@
                             </Border>
                           </Style>
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

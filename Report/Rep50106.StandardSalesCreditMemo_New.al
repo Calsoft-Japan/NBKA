@@ -30,7 +30,7 @@ using System.Utilities;
 report 50106 "Standard Sales - Credit Memo"
 {
     Caption = 'Sales - Credit Memo-NBK';
-    RDLCLayout = './ReportLayout/StandardSalesCreditMemoNew.rdl';
+    RDLCLayout = './Src/Report/Layouts/StandardSalesCreditMemoNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
     dataset
@@ -1247,7 +1247,7 @@ report 50106 "Standard Sales - Credit Memo"
         Shiptoaddlbl: Label 'Ship-to Address';
         CreditMemoNolbl: Label 'Credit Memo No:';
         currencylbl: Label 'Currency';
-        Remarklbl: Label 'Remark';
+        Remarklbl: Label 'Remark:';
         NBKProductNolbl: Label 'NBK Product No.';
         QuantityLbl: Label 'Quantity';
         AmountLbl: Label 'Amount';

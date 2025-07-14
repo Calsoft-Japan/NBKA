@@ -4,7 +4,7 @@ report 50109 "CertificateofConformanceReport"
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
     DefaultLayout = RDLC;
-    RDLCLayout = './ReportLayout/CertificateofConformanceReport.rdl';
+    RDLCLayout = './Src/Report/Layouts/CertificateofConformanceReport.rdl';
 
     dataset
     {
@@ -27,7 +27,7 @@ report 50109 "CertificateofConformanceReport"
             dataitem("Sales Shipment Line"; "Sales Shipment Line")
             {
                 DataItemLink = "Document No." = FIELD("No.");
-                DataItemTableView = SORTING("Document No.", "Line No.") WHERE(Type = CONST(Item));
+                DataItemTableView = where(Type = const(Item), "Certificate of Conformance" = const(true));
 
                 column(ItemDescription; Description)
                 {
@@ -99,14 +99,40 @@ report 50109 "CertificateofConformanceReport"
                 column(COCSignerSignature; CompanyInfo."COC Signer Signature")
                 {
                 }
-                trigger OnAfterGetRecord()
-                var
-                    SalesLine: Record "Sales Line";
+                trigger OnPreDataItem()
                 begin
-                    if SalesLine.Get(SalesLine."Document Type"::Order, "Sales Shipment Line"."Order No.", "Sales Shipment Line"."Order Line No.") and
-                    not SalesLine."Certificate of Conformance" then
-                        CurrReport.Skip();
+                    if LineNo <> '' then
+                        "Sales Shipment Line".SetFilter("Line No.", LineNo);
                 end;
+            }
+            trigger OnPreDataItem()
+            begin
+                if SalesShipmentNo <> '' then
+                    "Sales Shipment Header".SetFilter("No.", SalesShipmentNo);
+            end;
+        }
+    }
+    requestpage
+    {
+        SaveValues = true;
+
+        layout
+        {
+            area(content)
+            {
+                group(Options)
+                {
+                    Caption = 'Options';
+
+                    field(SalesShipmentNo; SalesShipmentNo)
+                    {
+                        Caption = 'Shipment No.';
+                    }
+                    field(LineNo; LineNo)
+                    {
+                        Caption = 'Line No.';
+                    }
+                }
             }
         }
     }
@@ -126,10 +152,18 @@ report 50109 "CertificateofConformanceReport"
         NBKPartLbl: Label 'NBK Part# ';
         QuantityLbl: Label 'Quantity ';
         Colan: Label ':';
+        SalesShipmentNo: Code[20];
+        LineNo: Text;
 
     trigger OnPreReport()
     begin
         CompanyInfo.Get();
         CompanyInfo.CalcFields("COC Signer Signature")
+    end;
+
+    procedure SetFilters(No: code[20]; lineNovar: Text)
+    begin
+        SalesShipmentNo := No;
+        LineNo := lineNovar;
     end;
 }
