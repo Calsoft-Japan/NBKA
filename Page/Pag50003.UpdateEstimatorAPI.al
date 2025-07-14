@@ -18,24 +18,4 @@ page 50003 "Update Estimator API"
             field(EstimatorRole; Rec."Estimator Role") { Editable = true; }
         }
     }
-
-    // actions
-    // {
-    //     area(processing)
-    //     {
-    //         action(UpdateEstimator)
-    //         {
-    //             Caption = 'Update Estimator Info';
-    //             ApplicationArea = All;
-
-    //             trigger OnAction()
-    //             var
-    //                 UpdateService: Codeunit "Update Estimator Info";
-    //             begin
-    //                 UpdateService.Update(Rec."No.", UserId);
-    //                 Message('Estimator Info Updated');
-    //             end;
-    //         }
-    //     }
-    // }
 }

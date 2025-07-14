@@ -35,44 +35,9 @@ pageextension 50012 "Sales Quote Ext" extends "Sales Quote"
         }
         modify("Assigned User ID")
         {
-            Editable = true;// Change is needed after testing.
+            Editable = false;
         }
 
-    }
-
-    actions
-    {
-        addlast(Processing)
-        {
-            action(RequestApproval)
-            {
-                ApplicationArea = All;
-                Caption = 'Request Approval';
-                Image = Approve;
-
-                trigger OnAction()
-                var
-                    SalesLine: Record "Sales Line";
-                    ApprovalMgt: Codeunit "Sales Approval Mgt";
-                begin
-                    // Validate Discount Price Logic
-                    SalesLine.SetRange("Document Type", Rec."Document Type");
-                    SalesLine.SetRange("Document No.", Rec."No.");
-
-                    if SalesLine.FindSet() then
-                        repeat
-                            if not SalesLine."Special Product" and (SalesLine."Line Discount %" <> 0) then
-                                Error('Discount Price Calculation is not completed.');
-                        until SalesLine.Next() = 0;
-
-                    // Delegate assignment logic to codeunit
-                    ApprovalMgt.AssignApproverInfo(Rec);
-
-                    CurrPage.Update(false);
-                    Message('Approval request initiated by %1.', UserId);
-                end;
-            }
-        }
     }
 }
 

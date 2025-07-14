@@ -48,7 +48,7 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
 
     actions
     {
-        addlast(Processing) // Or any general group like Functions or Line
+        addlast(Processing)
         {
             action(DiscountPrice)
             {
@@ -60,8 +60,6 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
                     CalcPrice: Codeunit "Discount Price";
                     SalesHeader: Record "Sales Header";
                 begin
-                    // CalcPrice.Run(Rec);
-                    // CurrPage.Update(true);
                     if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
                         CalcPrice.RunForDocument(SalesHeader);
                 end;

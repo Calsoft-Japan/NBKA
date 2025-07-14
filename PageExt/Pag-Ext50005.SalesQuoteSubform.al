@@ -84,8 +84,6 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                     CalcPrice: Codeunit "Discount Price";
                     SalesHeader: Record "Sales Header";
                 begin
-                    // CalcPrice.Run(Rec);
-                    // CurrPage.Update(true);
                     if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
                         CalcPrice.RunForDocument(SalesHeader);
                 end;
