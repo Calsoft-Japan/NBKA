@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-07-02T14:21:57.5729125Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-07-10T15:41:49.8812460Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1784,7 +1784,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                               <Top>8.7987cm</Top>
                               <Left>0.21678cm</Left>
                               <Height>1.2cm</Height>
-                              <Width>17.88519cm</Width>
+                              <Width>17.8852cm</Width>
                               <ZIndex>6</ZIndex>
                               <Style>
                                 <Border>
@@ -2764,7 +2764,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                     <Paragraph>
                                       <TextRuns>
                                         <TextRun>
-                                          <Value>=Fields!CurrencyCode.Value</Value>
+                                          <Value>=last(Fields!CurrencyCode.Value)</Value>
                                           <Style>
                                             <FontFamily>Segoe UI</FontFamily>
                                             <FontSize>8pt</FontSize>

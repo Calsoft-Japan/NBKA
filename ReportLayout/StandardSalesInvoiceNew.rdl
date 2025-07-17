@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-07-02T17:24:56.3210677Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-07-12T12:01:56.6863878Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -35,7 +35,7 @@
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>13.88514cm</Height>
+                  <Height>14.25557cm</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -243,8 +243,8 @@
                               <Value>=First(Fields!CompanyPicture.Value, "DataSet_Result")</Value>
                               <MIMEType>image/jpeg</MIMEType>
                               <Sizing>FitProportional</Sizing>
-                              <Top>0.10051cm</Top>
-                              <Left>12.43337cm</Left>
+                              <Top>0.06495cm</Top>
+                              <Left>13.61471cm</Left>
                               <Height>1.99931cm</Height>
                               <Width>5.10479cm</Width>
                               <ZIndex>5</ZIndex>
@@ -444,8 +444,8 @@
                                 </Textbox>
                               </ReportItems>
                               <KeepTogether>true</KeepTogether>
-                              <Top>1.46454cm</Top>
-                              <Left>12.43337cm</Left>
+                              <Top>1.42898cm</Top>
+                              <Left>13.61471cm</Left>
                               <Height>1.34112cm</Height>
                               <Width>5.12664cm</Width>
                               <ZIndex>6</ZIndex>
@@ -1079,7 +1079,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!SalesShipmentHeader_SellToContactNo.Value</Value>
+                                                    <Value>=Fields!SalesShipmentHeader_SellToContactName.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
@@ -1092,6 +1092,9 @@
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox72</rd:DefaultName>
+                                            <Visibility>
+                                              <Hidden>=IIf(Fields!Type_Line.Value = "Item", False, True)</Hidden>
+                                            </Visibility>
                                             <Style>
                                               <Border>
                                                 <Style>Solid</Style>
@@ -1103,6 +1106,7 @@
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
+                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                     </TablixCells>
@@ -1189,7 +1193,7 @@
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox94</rd:DefaultName>
                                       <Top>0cm</Top>
-                                      <Left>0.02884cm</Left>
+                                      <Left>0.0552cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>6.8033cm</Width>
                                       <Style>
@@ -1223,8 +1227,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>0.83528cm</Top>
-                                      <Left>3.33214cm</Left>
+                                      <Top>1.27464cm</Top>
+                                      <Left>3.3585cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.5cm</Width>
                                       <ZIndex>1</ZIndex>
@@ -1254,8 +1258,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox94</rd:DefaultName>
-                                      <Top>0.4cm</Top>
-                                      <Left>0.02884cm</Left>
+                                      <Top>0.83936cm</Top>
+                                      <Left>0.0552cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>6.81364cm</Width>
                                       <ZIndex>2</ZIndex>
@@ -1285,8 +1289,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>0.82117cm</Top>
-                                      <Left>0.02884cm</Left>
+                                      <Top>1.26053cm</Top>
+                                      <Left>0.0552cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.3033cm</Width>
                                       <ZIndex>3</ZIndex>
@@ -1316,8 +1320,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>1.24967cm</Top>
-                                      <Left>0.02884cm</Left>
+                                      <Top>1.68903cm</Top>
+                                      <Left>0.0552cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.3033cm</Width>
                                       <ZIndex>4</ZIndex>
@@ -1347,8 +1351,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>1.69092cm</Top>
-                                      <Left>0cm</Left>
+                                      <Top>2.13028cm</Top>
+                                      <Left>0.02636cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.28566cm</Width>
                                       <ZIndex>5</ZIndex>
@@ -1378,8 +1382,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>1.27139cm</Top>
-                                      <Left>3.32484cm</Left>
+                                      <Top>1.71075cm</Top>
+                                      <Left>3.3512cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.5cm</Width>
                                       <ZIndex>6</ZIndex>
@@ -1409,8 +1413,8 @@
                                         </Paragraph>
                                       </Paragraphs>
                                       <rd:DefaultName>Textbox36</rd:DefaultName>
-                                      <Top>1.71264cm</Top>
-                                      <Left>3.3033cm</Left>
+                                      <Top>2.152cm</Top>
+                                      <Left>3.32966cm</Left>
                                       <Height>0.4cm</Height>
                                       <Width>3.53918cm</Width>
                                       <ZIndex>7</ZIndex>
@@ -1420,12 +1424,47 @@
                                         </Border>
                                       </Style>
                                     </Textbox>
+                                    <Textbox Name="Textbox102">
+                                      <CanGrow>true</CanGrow>
+                                      <KeepTogether>true</KeepTogether>
+                                      <Paragraphs>
+                                        <Paragraph>
+                                          <TextRuns>
+                                            <TextRun>
+                                              <Value>Citizens Bank</Value>
+                                              <Style>
+                                                <FontStyle>Normal</FontStyle>
+                                                <FontFamily>Segoe UI</FontFamily>
+                                                <FontSize>8pt</FontSize>
+                                                <FontWeight>Normal</FontWeight>
+                                                <TextDecoration>None</TextDecoration>
+                                                <Color>#000000</Color>
+                                              </Style>
+                                            </TextRun>
+                                          </TextRuns>
+                                          <Style>
+                                            <TextAlign>Left</TextAlign>
+                                          </Style>
+                                        </Paragraph>
+                                      </Paragraphs>
+                                      <rd:DefaultName>Textbox94</rd:DefaultName>
+                                      <Top>0.43528cm</Top>
+                                      <Left>0.0552cm</Left>
+                                      <Height>0.4cm</Height>
+                                      <Width>6.81364cm</Width>
+                                      <ZIndex>8</ZIndex>
+                                      <Style>
+                                        <Border>
+                                          <Style>None</Style>
+                                        </Border>
+                                      </Style>
+                                    </Textbox>
                                   </ReportItems>
                                   <KeepTogether>true</KeepTogether>
-                                  <Top>1.775cm</Top>
-                                  <Left>10.53864cm</Left>
-                                  <Height>2.11264cm</Height>
-                                  <Width>6.84248cm</Width>
+                                  <Top>1.76089cm</Top>
+                                  <Left>11.57473cm</Left>
+                                  <Height>2.552cm</Height>
+                                  <Width>6.86884cm</Width>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -1673,8 +1712,8 @@
                                     </Textbox>
                                   </ReportItems>
                                   <KeepTogether>true</KeepTogether>
-                                  <Top>0cm</Top>
-                                  <Left>6.54745cm</Left>
+                                  <Top>0.18725cm</Top>
+                                  <Left>6.36189cm</Left>
                                   <Height>0.8095cm</Height>
                                   <Width>5.11403cm</Width>
                                   <ZIndex>2</ZIndex>
@@ -1688,8 +1727,8 @@
                               <KeepTogether>true</KeepTogether>
                               <Top>9.92154cm</Top>
                               <Left>0.22063cm</Left>
-                              <Height>3.9107cm</Height>
-                              <Width>17.51189cm</Width>
+                              <Height>4.33403cm</Height>
+                              <Width>18.49887cm</Width>
                               <ZIndex>8</ZIndex>
                               <Style>
                                 <Border>
@@ -1709,7 +1748,7 @@
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>0.61683cm</Height>
+                                    <Height>0.6cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -1784,7 +1823,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.65875cm</Height>
+                                    <Height>0.6cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -1862,7 +1901,7 @@
                                     </TablixCells>
                                   </TablixRow>
                                   <TablixRow>
-                                    <Height>0.56916cm</Height>
+                                    <Height>0.6cm</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
@@ -1987,8 +2026,8 @@
                                 </Filter>
                               </Filters>
                               <Top>7.72321cm</Top>
-                              <Left>10.53816cm</Left>
-                              <Height>1.84474cm</Height>
+                              <Left>11.79536cm</Left>
+                              <Height>1.8cm</Height>
                               <Width>7cm</Width>
                               <ZIndex>9</ZIndex>
                               <Style>
@@ -2143,7 +2182,7 @@
                                     <Paragraph>
                                       <TextRuns>
                                         <TextRun>
-                                          <Value>=Fields!currencylbl.Value</Value>
+                                          <Value>=Fields!PaymentTermsDescription_Lbl.Value</Value>
                                           <Style>
                                             <FontFamily>Segoe UI</FontFamily>
                                             <FontSize>8pt</FontSize>
@@ -2262,11 +2301,73 @@
                                     </Border>
                                   </Style>
                                 </Textbox>
+                                <Textbox Name="Textbox86">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Fields!currencylbl.Value</Value>
+                                          <Style>
+                                            <FontFamily>Segoe UI</FontFamily>
+                                            <FontSize>8pt</FontSize>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style>
+                                        <TextAlign>Left</TextAlign>
+                                      </Style>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox43</rd:DefaultName>
+                                  <Top>1.62091cm</Top>
+                                  <Left>0cm</Left>
+                                  <Height>0.4cm</Height>
+                                  <Width>2.96883cm</Width>
+                                  <ZIndex>8</ZIndex>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                  </Style>
+                                </Textbox>
+                                <Textbox Name="Textbox87">
+                                  <CanGrow>true</CanGrow>
+                                  <KeepTogether>true</KeepTogether>
+                                  <Paragraphs>
+                                    <Paragraph>
+                                      <TextRuns>
+                                        <TextRun>
+                                          <Value>=Last(Fields!CurrencyCode.Value)</Value>
+                                          <Style>
+                                            <FontFamily>Segoe UI</FontFamily>
+                                            <FontSize>8pt</FontSize>
+                                          </Style>
+                                        </TextRun>
+                                      </TextRuns>
+                                      <Style>
+                                        <TextAlign>Left</TextAlign>
+                                      </Style>
+                                    </Paragraph>
+                                  </Paragraphs>
+                                  <rd:DefaultName>Textbox43</rd:DefaultName>
+                                  <Top>1.62091cm</Top>
+                                  <Left>2.96883cm</Left>
+                                  <Height>0.4cm</Height>
+                                  <Width>2.96883cm</Width>
+                                  <ZIndex>9</ZIndex>
+                                  <Style>
+                                    <Border>
+                                      <Style>None</Style>
+                                    </Border>
+                                  </Style>
+                                </Textbox>
                               </ReportItems>
                               <KeepTogether>true</KeepTogether>
-                              <Top>4.0071cm</Top>
+                              <Top>3.18619cm</Top>
                               <Left>0.26808cm</Left>
-                              <Height>1.62091cm</Height>
+                              <Height>2.02091cm</Height>
                               <Width>5.93766cm</Width>
                               <ZIndex>10</ZIndex>
                               <Style>
@@ -2284,7 +2385,6 @@
                             </Border>
                           </Style>
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -2313,7 +2413,7 @@
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
             <Top>0.22049cm</Top>
-            <Height>13.88514cm</Height>
+            <Height>14.25557cm</Height>
             <Width>18.88037cm</Width>
             <Style>
               <Border>
@@ -2322,7 +2422,7 @@
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>14.10563cm</Height>
+        <Height>14.47606cm</Height>
         <Style />
       </Body>
       <Width>18.88037cm</Width>
@@ -3129,8 +3229,8 @@ End Function
         <Field Name="BuyersNamelbl">
           <DataField>BuyersNamelbl</DataField>
         </Field>
-        <Field Name="SalesShipmentHeader_SellToContactNo">
-          <DataField>SalesShipmentHeader_SellToContactNo</DataField>
+        <Field Name="SalesShipmentHeader_SellToContactName">
+          <DataField>SalesShipmentHeader_SellToContactName</DataField>
         </Field>
         <Field Name="SalesShipmentHeader_ExternalDocNo">
           <DataField>SalesShipmentHeader_ExternalDocNo</DataField>

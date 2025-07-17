@@ -35,7 +35,7 @@ using System.Utilities;
 report 50105 "Standard Sales - Invoice"
 {
 
-    RDLCLayout = './ReportLayout/StandardSalesInvoiceNew.rdl';
+    RDLCLayout = './Src/Report/Layouts/StandardSalesInvoiceNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
     Caption = 'Standard Sales - Invoice- NBK';
@@ -754,7 +754,7 @@ report 50105 "Standard Sales - Invoice"
                 column(BuyersNamelbl; BuyersNamelbl)
                 {
                 }
-                column(SalesShipmentHeader_SellToContactNo; SalesShipmentHeader."Sell-to Contact No.")
+                column(SalesShipmentHeader_SellToContactName; Contact.Name)
                 {
                 }
                 column(SalesShipmentHeader_ExternalDocNo; SalesShipmentHeader."External Document No.")
@@ -879,7 +879,9 @@ report 50105 "Standard Sales - Invoice"
                     Line.GetSalesShptLines(TempSaleshipmentLine);
 
                     if TempSaleshipmentLine.FindFirst() then
-                        if SalesShipmentHeader.Get(TempSaleshipmentLine."Document No.") then;
+                        if SalesShipmentHeader.Get(TempSaleshipmentLine."Document No.") then begin
+                            if Contact.Get(SalesShipmentHeader."Sell-to Contact No.") then;
+                        end;
 
                 end;
 
@@ -1281,6 +1283,7 @@ report 50105 "Standard Sales - Invoice"
                 column(TotalAmountDue; Format(TotalAmountDue, 0, AutoFormat.ResolveAutoFormat("Auto Format"::AmountFormat, Header."Currency Code")))
                 {
                 }
+
                 trigger OnPreDataItem()
                 begin
                     if Header."Prices Including VAT" then begin
@@ -1356,7 +1359,7 @@ report 50105 "Standard Sales - Invoice"
                         RemainingAmountTxt := '';
 
                 OnAfterGetSalesHeader(Header);
-
+                //if Contact.get("Sell-to Contact No.") then;
 
                 TotalSubTotal := 0;
                 TotalInvDiscAmount := 0;
@@ -1481,6 +1484,7 @@ report 50105 "Standard Sales - Invoice"
     end;
 
     var
+        Contact: Record Contact;
         GLSetup: Record "General Ledger Setup";
         DummyCompanyInfo: Record "Company Information";
         Cust: Record Customer;

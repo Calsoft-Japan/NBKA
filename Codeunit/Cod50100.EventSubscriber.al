@@ -154,4 +154,48 @@ codeunit 50100 EventSubscriber
         WhseJournalLine.CalcSums("Qty. (Absolute, Base)");
         exit(WhseEntry."Qty. (Base)" + WhseJournalLine."Qty. (Absolute, Base)" + QtyPlaced - QtyTaken);
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnAfterPostSalesDoc, '', false, false)]
+    local procedure OnAfterPostSalesDoc(var SalesHeader: Record "Sales Header"; var GenJnlPostLine: Codeunit "Gen. Jnl.-Post Line"; SalesShptHdrNo: Code[20]; RetRcpHdrNo: Code[20]; SalesInvHdrNo: Code[20]; SalesCrMemoHdrNo: Code[20]; CommitIsSuppressed: Boolean; InvtPickPutaway: Boolean; var CustLedgerEntry: Record "Cust. Ledger Entry"; WhseShip: Boolean; WhseReceiv: Boolean; PreviewMode: Boolean)
+    var
+        SalesShipmentHeader: Record "Sales Shipment Header";
+        SalesShipmentLines: Record "Sales Shipment Line";
+        RecRef: RecordRef;
+        RecRef2: RecordRef;
+    begin
+        if SalesShptHdrNo <> '' then begin
+            SalesShipmentHeader.Reset();
+            SalesShipmentHeader.SetRange("No.", SalesShptHdrNo);
+            if SalesShipmentHeader.FindFirst() then begin
+                //Clear(RecRef);
+                // RecRef.GetTable(SalesShipmentHeader);
+                // Report.Print(50104, '', '', RecRef);
+
+                // Clear(RecRef2);
+                // RecRef2.GetTable(SalesShipmentHeader);
+                //Report.Print(50109, '', '', RecRef2);
+                report.Run(50104, false, true, SalesShipmentHeader);
+
+                SalesShipmentLines.Reset();
+                SalesShipmentLines.SetRange("Document No.", SalesShipmentHeader."No.");
+                SalesShipmentLines.SetRange(Type, SalesShipmentLines.Type::Item);
+                SalesShipmentLines.SetRange("Certificate of Conformance", true);
+                If SalesShipmentLines.FindFirst() then
+                    if Confirm('Do you want to print the next report?') then
+                        report.Run(50109, false, true, SalesShipmentHeader);
+
+            end;
+        end;
+    end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post (Yes/No)", OnAfterConfirmPost, '', false, false)]
+    local procedure OnAfterConfirmPost(var SalesHeader: Record "Sales Header")
+    begin
+        if SalesHeader.Ship then begin
+            if SalesHeader."Special Order Work" and Not SalesHeader."Special Order Work Completed" then
+                Error('Special Order Work is required, but it is not completed.');
+            if SalesHeader."Special Shipping Work" and not SalesHeader."Special Shipping Completed" then
+                Error('Special Shipping Work is required, but it is not completed.');
+        end;
+    end;
 }

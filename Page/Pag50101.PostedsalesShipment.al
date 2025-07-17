@@ -16,7 +16,8 @@ pageextension 50101 PostedsalesShipmentExtension extends "Posted Sales Shipment"
                 begin
                     SalesShipmentHeader.Reset();
                     SalesShipmentHeader.SetRange("No.", Rec."No.");
-                    Report.RunModal(Report::CertificateofConformanceReport, true, true, SalesShipmentHeader);
+                    if SalesShipmentHeader.FindFirst() then
+                        Report.RunModal(Report::CertificateofConformanceReport, true, true, SalesShipmentHeader);
                 end;
             }
         }
