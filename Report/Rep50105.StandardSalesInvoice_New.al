@@ -35,7 +35,7 @@ using System.Utilities;
 report 50105 "Standard Sales - Invoice"
 {
 
-    RDLCLayout = './Src/Report/Layouts/StandardSalesInvoiceNew.rdl';
+    RDLCLayout = './ReportLayout/StandardSalesInvoiceNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
     Caption = 'Standard Sales - Invoice- NBK';
