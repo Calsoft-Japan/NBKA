@@ -113,7 +113,10 @@ report 50108 "Whse. - Shipment"
                 column(ShippingAgentService_Description; ShippingAgentService.Description)
                 {
                 }
-                column(SystemCreatedAt; SystemCreatedAt)
+                column(ShippingAgentService_code; ShippingAgentService.Code)
+                {
+                }
+                column(SystemCreatedAt; SalesHeader.SystemCreatedAt)
                 {
                 }
                 column(ShipToAddress1; ShipToAddress[1])
@@ -180,6 +183,9 @@ report 50108 "Whse. - Shipment"
                     column(Qty_WhseShptLine; Quantity)
                     {
                         IncludeCaption = true;
+                    }
+                    column(shippingdate_whsshptLine; SalesLine."Shipping Date")
+                    {
                     }
                     column(SourceNo_WhseShptLine; "Source No.")
                     {
@@ -277,7 +283,7 @@ report 50108 "Whse. - Shipment"
 
                 Barcodefontprovider := Enum::"Barcode Font Provider"::IDAutomation1D;
                 Barcodesymbology := Enum::"Barcode Symbology"::Code128;
-                BarcodeStr := "No.";
+                BarcodeStr := '*' + "No." + '*';
                 Barcodefontprovider.ValidateInput(BarcodeStr, Barcodesymbology);
                 EncodedTxt := Barcodefontprovider.EncodeFont(BarcodeStr, Barcodesymbology);
 
