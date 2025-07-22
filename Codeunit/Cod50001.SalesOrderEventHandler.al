@@ -66,6 +66,17 @@ codeunit 50001 "Sales Order Event Handler"
         end;
     end;
 
+    // FDD-004: Updates 'Discount Rate Updated' flag when 'Discount Rate' differs from 'Original Discount %' 
+    // and 'Special Product' is FALSE. Applies on Sales Line modify.
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnBeforeModifyEvent', '', false, false)]
+    local procedure SalesLineOnBeforeModify(var Rec: Record "Sales Line"; var xRec: Record "Sales Line"; RunTrigger: Boolean)
+    begin
+        if (not Rec."Special Product") and
+        (Rec."Original Discount %" <> Rec."Discount Rate") then
+            Rec."Discount Rate Updated" := true;
+    end;
+
+
     //4. Limit "Copy Document" Lookup to Only Released Quotes
     // [EventSubscriber(ObjectType::Report, Report::"Copy Sales Document", 'OnBeforeLookupSalesDoc', '', false, false)]
     // local procedure FilterSalesQuoteListOnCopySalesDoc(var SalesHeader: Record "Sales Header")
