@@ -11,6 +11,7 @@ pageextension 50008 ItemListExt extends "Item List"
             field("Web Product No."; Rec."Web Product No.")
             {
                 ApplicationArea = All;
+                Visible = false;
             }
         }
 

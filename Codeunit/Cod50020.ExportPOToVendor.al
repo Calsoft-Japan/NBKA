@@ -148,14 +148,24 @@ codeunit 50020 "Export PO To Vendor"
             if HasRecord then begin
                 EmailSubject := StrSubstNo('NBKA PO_%1', FORMAT(CurrentDateTime(), 0, '<Year4><Month,2><Day,2>-<Hour,2><Minute,2>'));
                 if SendEmailWithCSV(TmpRecVendor.Name, TmpRecVendor."E-Mail", '', EmailSubject, BigTxtEdiContents) then begin
-                    RecPurchaseHeader."EDI Order Completed" := true;
-                    RecPurchaseHeader."EDI Order Completed Date-Time" := CurrentDateTime();
-                    RecPurchaseHeader.Modify();
-                end
-                else begin
-                    RecPurchaseHeader."EDI Order Completed" := false;
-                    RecPurchaseHeader."EDI Order Completed Date-Time" := 0DT;
-                    RecPurchaseHeader.Modify();
+                    RecPurchaseHeader.Reset();
+                    RecPurchaseHeader.SetRange("Document Type", RecPurchaseHeader."Document Type"::Order);
+                    RecPurchaseHeader.SetRange(Status, RecPurchaseHeader.Status::Released);
+                    RecPurchaseHeader.SetRange("Buy-from Vendor No.", TmpRecVendor."No.");
+                    RecPurchaseHeader.SetRange("EDI Order Completed", false);
+                    if (not RecPurchaseHeader.IsEmpty) then begin
+                        RecPurchaseHeader.FindSet();
+                        repeat
+                            RecPurchaseLine.Reset();
+                            RecPurchaseLine.SetRange("Document Type", RecPurchaseLine."Document Type"::Order);
+                            RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
+                            if not RecPurchaseLine.IsEmpty() then begin
+                                RecPurchaseHeader.Validate("EDI Order Completed", true);
+                                RecPurchaseHeader.Validate("EDI Order Completed Date-Time", CurrentDateTime);
+                                RecPurchaseHeader.Modify();
+                            end;
+                        until RecPurchaseHeader.Next() = 0;
+                    end;
                 end;
             end;
         until TmpRecVendor.Next() = 0;
