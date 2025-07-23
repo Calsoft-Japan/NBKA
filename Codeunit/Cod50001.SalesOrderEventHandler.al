@@ -70,10 +70,26 @@ codeunit 50001 "Sales Order Event Handler"
     // and 'Special Product' is FALSE. Applies on Sales Line modify.
     [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnBeforeModifyEvent', '', false, false)]
     local procedure SalesLineOnBeforeModify(var Rec: Record "Sales Line"; var xRec: Record "Sales Line"; RunTrigger: Boolean)
+    var
+        SalesHeader: Record "Sales Header";
     begin
-        if (not Rec."Special Product") and
-        (Rec."Original Discount %" <> Rec."Discount Rate") then
-            Rec."Discount Rate Updated" := true;
+        if not Rec."Special Product" then begin
+            if Rec."Original Discount %" <> Rec."Discount Rate" then begin
+                // Update line flag
+                Rec."Discount Rate Updated" := true;
+
+                // Update header only if not already true (to reduce Modify() calls)
+                if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then begin
+                    if not SalesHeader."Discount Rate Updated" then begin
+                        SalesHeader."Discount Rate Updated" := true;
+                        SalesHeader.Modify(true);
+                    end;
+                end;
+            end else begin
+                // Reset line flag when rates match
+                Rec."Discount Rate Updated" := false;
+            end;
+        end;
     end;
 
 
