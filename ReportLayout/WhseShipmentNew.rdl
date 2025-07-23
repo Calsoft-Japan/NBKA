@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-06-30T20:22:59.3506673Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-07-21T16:39:58.4876062Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -570,7 +570,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=First(Fields!ShippingAgentService_Description.Value, "DataSet_Result")</Value>
+                                      <Value>=First(Fields!ShippingAgentService_code.Value, "DataSet_Result")</Value>
                                       <Style />
                                     </TextRun>
                                   </TextRuns>
@@ -1079,7 +1079,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!DueDate_WhseShptLine.Value</Value>
+                                      <Value>=Fields!shippingdate_whsshptLine.Value</Value>
                                       <Style>
                                         <Format>M/d/yyyy</Format>
                                       </Style>
@@ -1401,9 +1401,9 @@
               </Paragraphs>
               <rd:DefaultName>Textbox4</rd:DefaultName>
               <Top>1.35875cm</Top>
-              <Left>4.71325cm</Left>
+              <Left>2.08506cm</Left>
               <Height>0.4cm</Height>
-              <Width>5.6866cm</Width>
+              <Width>8.31479cm</Width>
               <ZIndex>2</ZIndex>
               <Style>
                 <Border>
@@ -1440,7 +1440,7 @@
               <Top>1.35875cm</Top>
               <Left>0.07054cm</Left>
               <Height>0.4cm</Height>
-              <Width>4.64271cm</Width>
+              <Width>2.01452cm</Width>
               <ZIndex>3</ZIndex>
               <Style>
                 <Border>
@@ -1533,7 +1533,7 @@
                           <Style />
                         </TextRun>
                         <TextRun>
-                          <Value>=First(Fields!ShipToAddress7.Value, "DataSet_Result")</Value>
+                          <Value>=First(Fields!ShipToAddress6.Value, "DataSet_Result")</Value>
                           <Style />
                         </TextRun>
                         <TextRun>
@@ -1760,15 +1760,21 @@
                   <TextRuns>
                     <TextRun>
                       <Value>=First(Fields!Datelbl.Value, "DataSet_Result")</Value>
-                      <Style />
+                      <Style>
+                        <Format>M/d/yyyy</Format>
+                      </Style>
                     </TextRun>
                     <TextRun>
                       <Value> : </Value>
-                      <Style />
+                      <Style>
+                        <Format>M/d/yyyy</Format>
+                      </Style>
                     </TextRun>
                     <TextRun>
                       <Value>=Fields!SystemCreatedAt.Value</Value>
-                      <Style />
+                      <Style>
+                        <Format>M/d/yyyy</Format>
+                      </Style>
                     </TextRun>
                   </TextRuns>
                   <Style>
@@ -1787,14 +1793,10 @@
                   <Style>None</Style>
                 </Border>
                 <BottomBorder>
-                  <Color>Black</Color>
                   <Style>Solid</Style>
-                  <Width>1pt</Width>
                 </BottomBorder>
                 <RightBorder>
-                  <Color>Black</Color>
                   <Style>Solid</Style>
-                  <Width>1pt</Width>
                 </RightBorder>
                 <PaddingLeft>2pt</PaddingLeft>
                 <PaddingRight>2pt</PaddingRight>
@@ -1970,11 +1972,6 @@
             <Border>
               <Style>None</Style>
             </Border>
-            <BottomBorder>
-              <Color>Black</Color>
-              <Style>Solid</Style>
-              <Width>1pt</Width>
-            </BottomBorder>
           </Style>
         </PageHeader>
         <InteractiveHeight>11in</InteractiveHeight>
@@ -2294,6 +2291,9 @@ End Function
         <Field Name="ShippingAgentService_Description">
           <DataField>ShippingAgentService_Description</DataField>
         </Field>
+        <Field Name="ShippingAgentService_code">
+          <DataField>ShippingAgentService_code</DataField>
+        </Field>
         <Field Name="SystemCreatedAt">
           <DataField>SystemCreatedAt</DataField>
         </Field>
@@ -2353,6 +2353,9 @@ End Function
         </Field>
         <Field Name="Qty_WhseShptLineFormat">
           <DataField>Qty_WhseShptLineFormat</DataField>
+        </Field>
+        <Field Name="shippingdate_whsshptLine">
+          <DataField>shippingdate_whsshptLine</DataField>
         </Field>
         <Field Name="SourceNo_WhseShptLine">
           <DataField>SourceNo_WhseShptLine</DataField>

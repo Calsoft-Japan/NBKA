@@ -4,7 +4,7 @@ report 50109 "CertificateofConformanceReport"
     UsageCategory = ReportsAndAnalysis;
     ApplicationArea = All;
     DefaultLayout = RDLC;
-    RDLCLayout = './Src/Report/Layouts/CertificateofConformanceReport.rdl';
+    RDLCLayout = './ReportLayout/CertificateofConformanceReport.rdl';
 
     dataset
     {
