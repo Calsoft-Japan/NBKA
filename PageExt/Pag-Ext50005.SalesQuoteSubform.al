@@ -2,17 +2,8 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
 {
     layout
     {
-        modify("Line Discount %")
+        addafter("Description")
         {
-            Visible = false;
-            Editable = false;
-        }
-        addlast(Control1)
-        {
-            field("Certificate of Conformance"; Rec."Certificate of Conformance")
-            {
-                ApplicationArea = All;
-            }
             field("P/N"; Rec."P/N")
             {
                 ApplicationArea = All;
@@ -21,6 +12,41 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
             {
                 ApplicationArea = All;
                 Visible = false;
+            }
+            field("Special Product"; Rec."Special Product")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+        }
+        modify("Line Discount %")
+        {
+            Visible = false;
+            Editable = false;
+        }
+        addafter("Line Discount %")
+        {
+            field("Original Price"; Rec."Original Price")
+            {
+                ApplicationArea = All;
+                Caption = 'Original Price';
+            }
+            field("Original Discount %"; Rec."Original Discount %")
+            {
+                ApplicationArea = All;
+                Caption = 'Original Discount %';
+            }
+            field("Discount Rate"; Rec."Discount Rate")
+            {
+                ApplicationArea = All;
+                Caption = 'Discount Rate';
+            }
+        }
+        addafter("Amount Including VAT")
+        {
+            field("Certificate of Conformance"; Rec."Certificate of Conformance")
+            {
+                ApplicationArea = All;
             }
             field("Quantity (min)"; Rec."Quantity (min)")
             {
@@ -50,24 +76,7 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                 Editable = false;
                 ToolTip = 'Updated when Approval Workflow API is executed.';
             }
-            field("Original Price"; Rec."Original Price")
-            {
-                ApplicationArea = All;
-                Caption = 'Original Price';
-            }
-            field("Original Discount %"; Rec."Original Discount %")
-            {
-                ApplicationArea = All;
-                Caption = 'Original Discount %';
-            }
-            field("Discount Rate"; Rec."Discount Rate")
-            {
-                ApplicationArea = All;
-                Caption = 'Discount Rate';
-            }
         }
-
-
     }
 
     actions

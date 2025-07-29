@@ -2,17 +2,8 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
 {
     layout
     {
-        modify("Line Discount %")
+        addafter(Description)
         {
-            Visible = false;
-            Editable = false;
-        }
-        addlast(Control1)
-        {
-            field("Certificate of Conformance"; Rec."Certificate of Conformance")
-            {
-                ApplicationArea = All;
-            }
             field("P/N"; Rec."P/N")
             {
                 ApplicationArea = All;
@@ -23,6 +14,20 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Visible = false;
             }
+            field("Special Product"; Rec."Special Product")
+            {
+                ApplicationArea = All;
+                Editable = false;
+            }
+
+        }
+        modify("Line Discount %")
+        {
+            Visible = false;
+            Editable = false;
+        }
+        addafter("Line Discount %")
+        {
             field("Original Price"; Rec."Original Price")
             {
                 ApplicationArea = All;
@@ -37,6 +42,13 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 Caption = 'Discount Rate';
+            }
+        }
+        addafter("Amount Including VAT")
+        {
+            field("Certificate of Conformance"; Rec."Certificate of Conformance")
+            {
+                ApplicationArea = All;
             }
             field("Shipping Date"; Rec."Shipping Date")
             {

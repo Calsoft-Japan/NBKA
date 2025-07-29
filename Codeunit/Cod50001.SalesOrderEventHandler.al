@@ -91,16 +91,4 @@ codeunit 50001 "Sales Order Event Handler"
             end;
         end;
     end;
-
-
-    //4. Limit "Copy Document" Lookup to Only Released Quotes
-    // [EventSubscriber(ObjectType::Report, Report::"Copy Sales Document", 'OnBeforeLookupSalesDoc', '', false, false)]
-    // local procedure FilterSalesQuoteListOnCopySalesDoc(var SalesHeader: Record "Sales Header")
-    // begin
-    //     if SalesHeader."Document Type" = SalesHeader."Document Type"::Quote then begin
-    //         Message('Triggered OnBeforeLookupSalesDoc. Filtering Released quotes.');
-    //         SalesHeader.SetRange(Status, SalesHeader.Status::Released);
-    //     end;
-
-    // end;
 }

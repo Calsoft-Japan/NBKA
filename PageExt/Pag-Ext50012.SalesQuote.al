@@ -7,7 +7,7 @@ pageextension 50012 "Sales Quote Ext" extends "Sales Quote"
             field("Estimator Role"; Rec."Estimator Role")
             {
                 ApplicationArea = All;
-                Editable = true;//
+                Editable = false;
             }
             field("Discount Rate Updated"; Rec."Discount Rate Updated")
             {

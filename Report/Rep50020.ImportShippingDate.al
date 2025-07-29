@@ -58,7 +58,7 @@ report 50021 "Import Shipping Date"
         ErrorsStatus := 0;
         CSVFileSeperator := ',';
         CSVFileFieldSeperator := '"';
-        if UploadIntoStream('Import txt file:', 'C:\TEMP', ' TXT file|*.TXT', PathFileName, FileInStream) then begin
+        if UploadIntoStream('Import a shipping date file:', 'C:\TEMP', ' CSV file|*.CSV', PathFileName, FileInStream) then begin
             CSVBuf.LOCKTABLE;
             CSVBuf.DELETEALL;
             CSVBuf.LoadDataFromStream(FileInStream, CSVFileSeperator, CSVFileFieldSeperator);
