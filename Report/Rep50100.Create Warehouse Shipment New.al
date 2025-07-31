@@ -247,6 +247,8 @@ report 50100 "Create Warehouse Shipment New"
         Item: Record Item;
         ReservedQty: Decimal;
         EmptyDate: Date;
+        PostedPurchRcpt: Record "Purch. Rcpt. Header";
+        PostedPurchRcptLine: Record "Purch. Rcpt. Line";
     begin
         SalesLine.reset();
         SalesLine.setrange("Document Type", SalesHeader."Document Type");
@@ -262,21 +264,36 @@ report 50100 "Create Warehouse Shipment New"
                 // Item.SetRange("No.", SalesLine."No.");
                 // Item.SetFilter("Location Filter", SalesLine."Location Code");
                 // if Item.FindFirst() then;
-                Clear(ReservedQty);
-                SalesLine.CalcFields("Reserved Qty. (Base)");
-                if SalesLine."Reserved Qty. (Base)" <> 0 then begin
-                    ReservationEntry.Reset();
-                    ReservationEntry.SetRange("Source Type", Database::"Sales Line");
-                    ReservationEntry.SetRange("Source Subtype", 1);
-                    ReservationEntry.SetRange("Item No.", SalesLine."No.");
-                    ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
-                    ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
-                    ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
-                    if ReservationEntry.FindSet() then
+                if not SalesLine."Special Order" then begin
+                    Clear(ReservedQty);
+                    SalesLine.CalcFields("Reserved Qty. (Base)");
+                    if SalesLine."Reserved Qty. (Base)" <> 0 then begin
+                        ReservationEntry.Reset();
+                        ReservationEntry.SetRange("Source Type", Database::"Sales Line");
+                        ReservationEntry.SetRange("Source Subtype", 1);
+                        ReservationEntry.SetRange("Item No.", SalesLine."No.");
+                        ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
+                        ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
+                        ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
+                        if ReservationEntry.FindSet() then
+                            repeat
+                                if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
+                                    ReservedQty += ReservationEntry2."Quantity (Base)";
+                            until ReservationEntry.Next() = 0;
+                    end;
+                end else begin
+                    Clear(ReservedQty);
+                    PostedPurchRcpt.Reset();
+                    PostedPurchRcpt.SetRange("Order No.", SalesLine."Special Order Purchase No.");
+                    if PostedPurchRcpt.FindSet() then
                         repeat
-                            if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
-                                ReservedQty += ReservationEntry2."Quantity (Base)";
-                        until ReservationEntry.Next() = 0;
+                            PostedPurchRcptLine.Reset();
+                            PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
+                            PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
+                            if PostedPurchRcptLine.FindFirst() then begin
+                                ReservedQty += PostedPurchRcptLine.Quantity;
+                            end;
+                        Until PostedPurchRcpt.Next() = 0;
                 end;
                 if SalesLine."Outstanding Qty. (Base)" > (ReservedQty) then
                     exit(false);
@@ -292,13 +309,17 @@ report 50100 "Create Warehouse Shipment New"
         SalesWarehouseMgt: Codeunit "Sales Warehouse Mgt.";
         ReservedQty: Decimal;
         RedFlag: Boolean;
+        PostedPurchRcpt: Record "Purch. Rcpt. Header";
+        PostedPurchRcptLine: Record "Purch. Rcpt. Line";
+        DateFilter: Text;
     begin
         SalesLine.reset();
         SalesLine.setrange("Document Type", SalesHeader."Document Type");
         SalesLine.SetRange("Document No.", SalesHeader."No.");
         SalesLine.SetRange(Type, SalesLine.Type::Item);
-        if ToBeShippedBY <> 0D then
+        if ToBeShippedBY <> 0D then begin
             SalesLine.SetFilter("Shipping Date", '<=%1', ToBeShippedBY);
+        end;
         //SalesLine.SetFilter("Shipment Date", '<=%1', ToBeShippedBY);
         if SalesLine.FindSet() then begin
             repeat
@@ -306,21 +327,36 @@ report 50100 "Create Warehouse Shipment New"
                 // Item.SetRange("No.", SalesLine."No.");
                 // Item.SetFilter("Location Filter", SalesLine."Location Code");
                 // if Item.FindFirst() then;
-                Clear(ReservedQty);
-                SalesLine.CalcFields("Reserved Qty. (Base)");
-                if SalesLine."Reserved Qty. (Base)" <> 0 then begin
-                    ReservationEntry.Reset();
-                    ReservationEntry.SetRange("Source Type", Database::"Sales Line");
-                    ReservationEntry.SetRange("Source Subtype", 1);
-                    ReservationEntry.SetRange("Item No.", SalesLine."No.");
-                    ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
-                    ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
-                    ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
-                    if ReservationEntry.FindSet() then
+                if not SalesLine."Special Order" then begin
+                    Clear(ReservedQty);
+                    SalesLine.CalcFields("Reserved Qty. (Base)");
+                    if SalesLine."Reserved Qty. (Base)" <> 0 then begin
+                        ReservationEntry.Reset();
+                        ReservationEntry.SetRange("Source Type", Database::"Sales Line");
+                        ReservationEntry.SetRange("Source Subtype", 1);
+                        ReservationEntry.SetRange("Item No.", SalesLine."No.");
+                        ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
+                        ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
+                        ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
+                        if ReservationEntry.FindSet() then
+                            repeat
+                                if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
+                                    ReservedQty += ReservationEntry2."Quantity (Base)";
+                            until ReservationEntry.Next() = 0;
+                    end;
+                end else begin
+                    Clear(ReservedQty);
+                    PostedPurchRcpt.Reset();
+                    PostedPurchRcpt.SetRange("Order No.", SalesLine."Special Order Purchase No.");
+                    if PostedPurchRcpt.FindSet() then
                         repeat
-                            if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
-                                ReservedQty += ReservationEntry2."Quantity (Base)";
-                        until ReservationEntry.Next() = 0;
+                            PostedPurchRcptLine.Reset();
+                            PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
+                            PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
+                            if PostedPurchRcptLine.FindFirst() then begin
+                                ReservedQty += PostedPurchRcptLine.Quantity;
+                            end;
+                        Until PostedPurchRcpt.Next() = 0;
                 end;
                 if (SalesLine."Outstanding Qty. (Base)" <= (ReservedQty)) and
                 SalesWarehouseMgt.CheckIfFromSalesLine2ShptLine(SalesLine, ReservedFromStock) then
