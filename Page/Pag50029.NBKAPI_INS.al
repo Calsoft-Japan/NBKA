@@ -118,6 +118,14 @@ page 50029 "NBKAPI_INS"
                 {
                     ApplicationArea = All;
                 }
+
+                //CR: FDD303/add new field
+                field(SHIPSERVICE; Rec.SHIPSERVICE)
+                {
+                    ApplicationArea = All;
+                }
+                //End CR: FDD303/add new field
+
                 field(PAYMENT; Rec.PAYMENT)
                 {
                     ApplicationArea = All;
@@ -334,6 +342,11 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Ship-to Phone No.", RecINS.NTELNO);
         RecSalesHeader.Validate("Ship-to Contact", RecINS.NCONTACT);
         RecSalesHeader.Validate("Shipping Agent Code", RecINS.SHIPAGENT);
+
+        //CR: FDD303/Validate new field
+        RecSalesHeader.Validate("Shipping Agent Service Code", RecINS.SHIPSERVICE);
+        //End CR: FDD303/Validate new field
+
         RecSalesHeader.Insert(true);
         RecSalesLine.Init();
         LineNo := 0;
@@ -378,4 +391,5 @@ page 50029 "NBKAPI_INS"
             end;
         end;
     end;
+
 }

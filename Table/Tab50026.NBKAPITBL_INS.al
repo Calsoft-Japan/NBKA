@@ -80,6 +80,14 @@ table 50026 "NBKAPITBL_INS"
         {
             Caption = 'SHIPAGENT';
         }
+
+        //CR: FDD303/add new field
+        field(43; "SHIPSERVICE"; Text[10])
+        {
+            Caption = 'SHIPSERVICE';
+        }
+        //End CR: FDD303/add new field
+
         field(18; "PAYMENT"; Code[10])
         {
             Caption = 'PAYMENT';
@@ -180,6 +188,7 @@ table 50026 "NBKAPITBL_INS"
         {
             Caption = 'JUCH2';
         }
+
     }
     keys
     {
