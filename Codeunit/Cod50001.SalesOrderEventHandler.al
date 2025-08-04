@@ -25,11 +25,15 @@ codeunit 50001 "Sales Order Event Handler"
     begin
         if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
 
-            // 🔸 1. Special Order Work Validation
+            //2. Special Order Work Validation
             if (SalesHeader."Special Order Work") and (not SalesHeader."Special Order Work Completed") then
                 Error('Special Order Work is not completed.');
 
-            // 🔸 2. Discount Price Validation (independent of Special Order)
+            //3. Contact Information Validation (FDD005/CR)
+            if IsBlank(SalesHeader."Sell-to Contact No.") or IsBlank(SalesHeader."Sell-to Contact") then
+                Error('The ''Contact No. and Contact'' fields in Sell-to are required.');
+
+            // Discount Price Validation (independent of Special Order)
             SalesLine.SetRange("Document Type", SalesHeader."Document Type");
             SalesLine.SetRange("Document No.", SalesHeader."No.");
             if SalesLine.FindSet() then
@@ -40,8 +44,14 @@ codeunit 50001 "Sales Order Event Handler"
         end;
     end;
 
+    // Helper function to check if a Text value is blank
+    local procedure IsBlank(Value: Text): Boolean
+    begin
+        exit(DelChr(Value, '=', ' ') = '');
+    end;
 
-    // 3. Set Shipping Advice to Complete when specific Sales Line condition is met
+
+    // 4. Set Shipping Advice to Complete when specific Sales Line condition is met
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", 'OnAfterManualReleaseSalesDoc', '', false, false)]
     local procedure OnAfterManualReleaseSalesDocSubscriber(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean)
@@ -91,4 +101,5 @@ codeunit 50001 "Sales Order Event Handler"
             end;
         end;
     end;
+
 }
