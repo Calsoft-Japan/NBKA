@@ -165,9 +165,12 @@ page 50026 "NBKAPI_INSTOKUCD"
     var
         errorMsg: Text;
         RecCompanyInfo: Record "Company Information";
+        NoSeries: Codeunit "No. Series";
     begin
         RecCustomer.Init();
-        RecCustomer.Validate("No.");
+        RecCustomer.Validate("No.", NoSeries.GetNextNo('CUST-EC', Today));
+        RecCustomer.Insert(true);
+
         RecCustomer.Validate(Name, RecINSTOKUCD.TNAME);
         RecCustomer.Validate(Address, RecINSTOKUCD.TADDRESS);
         RecCustomer.Validate("Address 2", RecINSTOKUCD.TADDRESS2);
@@ -180,12 +183,15 @@ page 50026 "NBKAPI_INSTOKUCD"
         RecCustomer.Validate("Home Page", RecINSTOKUCD.URL);
         RecCustomer.Validate(Contact, RecINSTOKUCD.TCONTACT);
         RecCustomer.Validate("Payment Terms Code", 'ADVANCE');
+        RecCustomer.Validate("Gen. Bus. Posting Group", 'DEFAULT');
+        RecCustomer.Validate("Customer Posting Group", 'DEFAULT');
+        RecCustomer.Validate("Location Code", 'NBKAM');
         if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
         else begin
             RecCustomer."Tax Liable" := false;
         end;
-        RecCustomer.Insert(true);
+        RecCustomer.Modify(true);
     end;
 }
