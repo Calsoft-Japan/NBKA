@@ -120,8 +120,7 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
             end;
             if (not CurrentPOHasError) then begin
                 if (PurchaseOrderHeaderNo <> '') and (PurchaseOrderLineNo > 0) and (not CurrentPOHasError) then begin
-                    if (RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo)
-                        and RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo)) then begin
+                    if RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) then begin
                         ReOpened := false;
                         if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
                             ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
@@ -135,31 +134,39 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                             InvoiceNo := CellText.Trim();
                             if InvoiceNo <> '' then begin
                                 RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo);
-                                CellText := GetValueAtCell(X, 6, 0);
-                                Quantity := CellText;
-                                if Evaluate(QuantityValue, Quantity.Trim()) then begin
-                                    RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
-                                    CellText := GetValueAtCell(X, 9, 0);
-                                    DCost := CellText;
-                                    if Evaluate(DUnitCost, DCost.Trim()) then begin
-                                        RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
-                                        RecPurchaseLine.Modify();
-                                        RecPurchaseHeader.Modify();
-                                        if ReOpened then begin
-                                            ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
+                                if RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo) then begin
+                                    CellText := GetValueAtCell(X, 6, 0);
+                                    Quantity := CellText;
+                                    if Evaluate(QuantityValue, Quantity.Trim()) then begin
+                                        RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
+                                        CellText := GetValueAtCell(X, 9, 0);
+                                        DCost := CellText;
+                                        if Evaluate(DUnitCost, DCost.Trim()) then begin
+                                            RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
+                                            RecPurchaseLine.Modify();
+                                            RecPurchaseHeader.Modify();
+                                            if ReOpened then begin
+                                                ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
+                                            end;
+                                            ErrorMsg := '';
+                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
+                                        end else begin
+                                            CurrentPOHasError := true;
+                                            WholeFileHasError := true;
+                                            ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
+                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                         end;
-                                        ErrorMsg := '';
-                                        SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
                                     end else begin
                                         CurrentPOHasError := true;
                                         WholeFileHasError := true;
-                                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
+                                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Quantity] in File Line [%2] is not a valid Decimal.', Quantity, X);
                                         SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                     end;
-                                end else begin
+                                end
+                                else begin
                                     CurrentPOHasError := true;
                                     WholeFileHasError := true;
-                                    ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Quantity] in File Line [%2] is not a valid Decimal.', Quantity, X);
+                                    ErrorMsg := StrSubstNo('The value [%1] for Cloumn [ShipmentDate] in File Line [%2] is not a valid Date.', CellText, X);
                                     SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                 end;
                             end else begin
@@ -199,9 +206,6 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 if RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) and (not CurrentPOHasError) then begin
                     RecPurchaseHeader.Receive := false;
                     RecPurchaseHeader.Invoice := true;
-                    if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Released then begin
-                        ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
-                    end;
                     RecPurchaseHeader.Modify();
                     Commit();
                     if not PurPost.RUN(RecPurchaseHeader) then begin
