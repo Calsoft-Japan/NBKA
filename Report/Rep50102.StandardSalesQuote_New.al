@@ -485,6 +485,9 @@ report 50102 "Standard Sales - Quote"
             column(Currencylbl; Currencylbl)
             {
             }
+            column(DraftCheck; DraftCheck)
+            {
+            }
             dataitem(Line; "Sales Line")
             {
                 DataItemLink = "Document No." = field("No.");
@@ -656,7 +659,6 @@ report 50102 "Standard Sales - Quote"
                     OnAfterCalculateSalesTax(Header, Line, TotalAmount, TotalAmountVAT, TotalAmountInclVAT);
 
                     FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
-
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
                     FirstLineHasBeenOutput := true;
@@ -1028,6 +1030,7 @@ report 50102 "Standard Sales - Quote"
                     end;
                 if ShippingAgent.Get(Header."Shipping Agent Code") then;
                 if ShippingAgentService.Get(Header."Shipping Agent Code", Header."Shipping Agent Service Code") then;
+                if Header.Status = Status::Released then DraftCheck := true;
                 TotalSubTotal := 0;
                 TotalInvDiscAmount := 0;
                 TotalAmount := 0;
@@ -1243,6 +1246,8 @@ report 50102 "Standard Sales - Quote"
         ShippingAgent: Record "Shipping Agent";
         ShippingAgentService: Record "Shipping Agent Services";
         ItemRec: Record Item;
+        DraftCheck: Boolean;
+        Leadtimetxt: Text[50];
 
     protected var
         GLSetup: Record "General Ledger Setup";

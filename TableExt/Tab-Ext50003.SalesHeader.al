@@ -64,6 +64,15 @@ tableextension 50003 "SalesHeader Ext" extends "Sales Header"
             Caption = 'Approval User';
             ToolTip = 'Specifies the User who approved the Sales Quote';
         }
+        field(50011; "Shipping Date Confirmed"; Boolean)
+        {
+            Caption = 'Shipping Date Confirmed';
+            Editable = false;
+        }
+        field(50012; "Invoice Email"; Text[300])
+        {
+            Caption = 'Invoice Email';
+        }
     }
 
     trigger OnInsert()
@@ -77,5 +86,6 @@ tableextension 50003 "SalesHeader Ext" extends "Sales Header"
         if UserSetup.Get(UserId) then
             "Estimator Role" := Format(UserSetup."User Role");
     end;
+
 
 }

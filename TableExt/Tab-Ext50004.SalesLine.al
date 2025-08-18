@@ -147,5 +147,6 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
                     end;
             end;
         }
+
     }
 }

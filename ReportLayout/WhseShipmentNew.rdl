@@ -2222,6 +2222,9 @@ End Function
         <Field Name="HeaderNo_WhseShptHeader">
           <DataField>HeaderNo_WhseShptHeader</DataField>
         </Field>
+        <Field Name="SystemCreatedAt">
+          <DataField>SystemCreatedAt</DataField>
+        </Field>
         <Field Name="CompanyName">
           <DataField>CompanyName</DataField>
         </Field>
@@ -2293,9 +2296,6 @@ End Function
         </Field>
         <Field Name="ShippingAgentService_code">
           <DataField>ShippingAgentService_code</DataField>
-        </Field>
-        <Field Name="SystemCreatedAt">
-          <DataField>SystemCreatedAt</DataField>
         </Field>
         <Field Name="ShipToAddress1">
           <DataField>ShipToAddress1</DataField>

@@ -29,6 +29,9 @@ report 50108 "Whse. - Shipment"
             column(HeaderNo_WhseShptHeader; "No.")
             {
             }
+            column(SystemCreatedAt; SystemCreatedAt)
+            {
+            }
             dataitem("Integer"; "Integer")
             {
                 DataItemTableView = sorting(Number) where(Number = const(1));
@@ -116,9 +119,7 @@ report 50108 "Whse. - Shipment"
                 column(ShippingAgentService_code; ShippingAgentService.Code)
                 {
                 }
-                column(SystemCreatedAt; SalesHeader.SystemCreatedAt)
-                {
-                }
+
                 column(ShipToAddress1; ShipToAddress[1])
                 {
                 }
