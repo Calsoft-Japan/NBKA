@@ -45,7 +45,7 @@ report 50100 "Create Warehouse Shipment New"
     }
     requestpage
     {
-        SaveValues = true;
+        // SaveValues = true;
 
         layout
         {
@@ -84,6 +84,8 @@ report 50100 "Create Warehouse Shipment New"
     begin
         SingleInstance.ClearWarehouseRequestDate();
     end;
+
+
 
     var
         WhseShptHeader: Record "Warehouse Shipment Header";

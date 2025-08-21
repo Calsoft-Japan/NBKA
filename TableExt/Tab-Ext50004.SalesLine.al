@@ -109,6 +109,21 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             Caption = 'Shipping Date';
             DataClassification = ToBeClassified;
         }
+        field(50016; "Lead Time text"; Text[50])
+        {
+            Caption = 'Lead Time';
+            DataClassification = ToBeClassified;
+            trigger OnValidate()
+            var
+                Intvar: Integer;
+            begin
+                if Rec."Lead Time text" <> '' then begin
+                    if not Evaluate(Intvar, Rec."Lead Time text") then
+                        Error('Enter a numerical value');
+                end;
+            end;
+        }
+
 
         modify("Line Discount %")
         {

@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-14T15:59:30.9846896Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-08-20T15:50:53.5749458Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1002,13 +1002,13 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                     <Width>2.07342cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.24981cm</Width>
+                                    <Width>1.79907cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>2.16162cm</Width>
+                                    <Width>1.66499cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>1.96759cm</Width>
+                                    <Width>2.82847cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -1784,7 +1784,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                               <Top>8.7987cm</Top>
                               <Left>0.21678cm</Left>
                               <Height>1.2cm</Height>
-                              <Width>17.8852cm</Width>
+                              <Width>17.79871cm</Width>
                               <ZIndex>6</ZIndex>
                               <Style>
                                 <Border>

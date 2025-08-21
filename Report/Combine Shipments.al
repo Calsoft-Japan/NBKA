@@ -107,14 +107,14 @@ report 50111 "Combine Shipments NBK"
                 begin
                     Window.Update(3, "No.");
 
+                    if IsCompletlyInvoiced() then
+                        CurrReport.Skip();
+
                     if not (Invoiceemail.Contains("Sales Shipment Header"."Sell-to E-Mail")) then
                         if Invoiceemail = '' then
                             Invoiceemail := "Sales Shipment Header"."Sell-to E-Mail"
                         else
                             Invoiceemail := Invoiceemail + ';' + "Sales Shipment Header"."Sell-to E-Mail";
-
-                    if IsCompletlyInvoiced() then
-                        CurrReport.Skip();
 
                     if OnlyStdPmtTerms then begin
                         Cust.Get("Bill-to Customer No.");
@@ -292,10 +292,11 @@ report 50111 "Combine Shipments NBK"
 
     trigger OnPostReport()
     begin
-        if SalesHeader."No." <> '' then begin
-            SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));
-            SalesHeader.Modify();
-        end;
+        if not PostInv then
+            if SalesHeader."No." <> '' then begin
+                SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));
+                SalesHeader.Modify();
+            end;
 
         OnBeforePostReport();
     end;
@@ -381,8 +382,12 @@ report 50111 "Combine Shipments NBK"
         Clear(SalesPost);
         NoOfSalesInv := NoOfSalesInv + 1;
         ShouldPostInv := PostInv;
+
         OnFinalizeSalesInvHeaderOnAfterCalcShouldPostInv(SalesHeader, NoOfSalesInv, ShouldPostInv);
         if ShouldPostInv then begin
+            SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));  //For Auto Posting 
+            SalesHeader.Modify();
+            Commit();
             Clear(SalesPost);
             if not SalesPost.Run(SalesHeader) then
                 NoOfSalesInvErrors := NoOfSalesInvErrors + 1;

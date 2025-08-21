@@ -1,5 +1,19 @@
 pageextension 50020 "Sales Quote Subform Ext 2" extends "Sales Quote Subform"
 {
+    layout
+    {
+        addafter("Gross Profit Rate %")
+        {
+            field("Lead Time text"; Rec."Lead Time text")
+            {
+                ApplicationArea = All;
+            }
+        }
+        modify("Lead Time")
+        {
+            Visible = false;
+        }
+    }
     actions
     {
         addafter("Dimensions")
@@ -23,7 +37,8 @@ pageextension 50020 "Sales Quote Subform Ext 2" extends "Sales Quote Subform"
                             PgSalesQuoteCal.GetRecord(QuPrice);
                             Rec."Quantity (min)" := QuPrice."Quantity (min)";
                             Rec."Quantity (max)" := QuPrice."Quantity (max)";
-                            Rec."Lead Time" := QuPrice."Lead Time";
+                            //Rec."Lead Time" := QuPrice."Lead Time";
+                            Rec."Lead Time text" := Format(QuPrice."Lead Time");
                             Rec."Gross Profit Rate %" := QuPrice."Gross Profit Rate %";
                             Rec."Gross Profit Rate Updated" := QuPrice."Gross Profit Rate Updated";
                             Rec.Validate("Unit of Measure Code", QuPrice."Unit Type");//Rec."Unit of Measure Code" := QuPrice."Unit Type";

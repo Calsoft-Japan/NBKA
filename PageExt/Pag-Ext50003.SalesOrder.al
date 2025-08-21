@@ -28,16 +28,29 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
             {
                 ApplicationArea = All;
             }
-            field("Invoice Email"; Rec."Invoice Email")
-            {
-                ApplicationArea = all;
-            }
         }
 
         modify("Assigned User ID")
         {
             Editable = false;
         }
+        modify("Shipping Agent Code")
+        {
+            Editable = false;
+        }
+        modify("Shipping Agent Service Code")
+        {
+            Editable = false;
+        }
+        modify("Payment Terms Code")
+        {
+            Editable = false;
+        }
+        modify("Payment Method Code")
+        {
+            Editable = false;
+        }
+
     }
     local procedure SetAllShipDatesFlag()
     var
@@ -49,19 +62,20 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
         SalesLine.SetRange("Document Type", Rec."Document Type");
         SalesLine.SetRange("Document No.", Rec."No.");
         SalesLine.SetRange(Type, SalesLine.Type::Item);
-        if SalesLine.FindSet() then
+        if SalesLine.FindSet() then begin
             repeat
                 if SalesLine."Shipping Date" = 0D then begin
                     AllFilled := false;
                 end;
             until (SalesLine.Next() = 0) or (not AllFilled);
-
+        end else
+            AllFilled := false;
         Rec.Validate("Shipping Date Confirmed", AllFilled);
-        Rec.Modify();
-        CurrPage.Update();
+        if Rec."No." <> '' then
+            Rec.Modify();
     end;
 
-    trigger OnAfterGetRecord()
+    trigger OnOpenPage()
     begin
         SetAllShipDatesFlag();
     end;

@@ -20,7 +20,7 @@
     {
       "id": "d04cb6c5-68c8-41d7-8e25-824b48e14f04",
       "name": "Warehouse Insight Advanced WMS",
-      "version": "2.0.0.0",
+      "version": "2.15.9315.1",
       "publisher": "Insight Works"
     },
     {
@@ -39,6 +39,12 @@
       "id": "9c55319d-f3b9-441b-9956-0a0a04decd4b",
       "name": "Dynamic Ship: Integrated Shipping",
       "version": "2.0.0.0",
+      "publisher": "Insight Works"
+    },
+    {
+      "id": "e9938095-cd5b-45c0-b6c1-f0dd777ddd95",
+      "name": "Warehouse Insight: NBK America Ext.",
+      "version": "1.0.250808.0",
       "publisher": "Insight Works"
     }
   ],

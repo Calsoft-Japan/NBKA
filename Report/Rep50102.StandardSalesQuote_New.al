@@ -627,7 +627,7 @@ report 50102 "Standard Sales - Quote"
                 column(Leadtimelbl; Leadtimelbl)
                 {
                 }
-                column(Lead_Time; "Lead Time")
+                column(Lead_Time; Leadtimetxt)
                 {
                 }
                 column(Item_Netweight; ItemRec."Net Weight")
@@ -659,6 +659,12 @@ report 50102 "Standard Sales - Quote"
                     OnAfterCalculateSalesTax(Header, Line, TotalAmount, TotalAmountVAT, TotalAmountInclVAT);
 
                     FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
+                    if Line."Lead Time text" = '' then
+                        Leadtimetxt := 'Under confirmation'
+                    else if line."Lead Time text" = '0' then
+                        Leadtimetxt := 'In-stock'
+                    else
+                        Leadtimetxt := "Lead Time text" + ' business day(s)';
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
                     FirstLineHasBeenOutput := true;
