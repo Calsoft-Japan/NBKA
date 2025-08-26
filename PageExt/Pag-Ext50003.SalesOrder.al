@@ -52,33 +52,7 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
         }
 
     }
-    local procedure SetAllShipDatesFlag()
-    var
-        SalesLine: Record "Sales Line";
-        AllFilled: Boolean;
-    begin
-        AllFilled := true;
 
-        SalesLine.SetRange("Document Type", Rec."Document Type");
-        SalesLine.SetRange("Document No.", Rec."No.");
-        SalesLine.SetRange(Type, SalesLine.Type::Item);
-        if SalesLine.FindSet() then begin
-            repeat
-                if SalesLine."Shipping Date" = 0D then begin
-                    AllFilled := false;
-                end;
-            until (SalesLine.Next() = 0) or (not AllFilled);
-        end else
-            AllFilled := false;
-        Rec.Validate("Shipping Date Confirmed", AllFilled);
-        if Rec."No." <> '' then
-            Rec.Modify();
-    end;
-
-    trigger OnOpenPage()
-    begin
-        SetAllShipDatesFlag();
-    end;
 }
 
 
