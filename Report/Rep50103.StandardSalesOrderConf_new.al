@@ -633,6 +633,9 @@ report 50103 "Standard Sales - Order Conf."
                 column(Item_PN; ItemRec."P/N")
                 {
                 }
+                column(Shipping_Date_line; shippingdateLine)
+                {
+                }
 
                 dataitem(AssemblyLine; "Assembly Line")
                 {
@@ -693,6 +696,12 @@ report 50103 "Standard Sales - Order Conf."
                     OnLineOnAfterGetRecordOnAfterCalcTotals(Header, Line, TotalAmount, TotalAmountVAT, TotalAmountInclVAT);
 
                     FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
+
+                    Clear(ShippingDateLine);
+                    if Line."Shipping Date" <> 0D then
+                        ShippingDateLine := Format(Line."Shipping Date", 0, '<Month>/<Day>/<Year4>')
+                    else
+                        ShippingDateLine := 'TBA';
 
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
@@ -1218,6 +1227,7 @@ report 50103 "Standard Sales - Order Conf."
     end;
 
     var
+        shippingdateLine: Text;
         GLSetup: Record "General Ledger Setup";
         CompanyBankAccount: Record "Bank Account";
         DummyCompanyInfo: Record "Company Information";

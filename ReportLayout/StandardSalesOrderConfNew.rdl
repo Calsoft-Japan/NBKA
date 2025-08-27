@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-14T15:29:16.7530167Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-08-27T15:07:01.5955830Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -155,7 +155,7 @@
                               <Top>6.06059cm</Top>
                               <Left>0.20732cm</Left>
                               <Height>1.71139cm</Height>
-                              <Width>16.96409cm</Width>
+                              <Width>16.9641cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1720,7 +1720,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!ShipmentDate_Lbl.Value</Value>
+                                                    <Value>=Fields!Shippingdatelbl.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontWeight>Bold</FontWeight>
@@ -2035,10 +2035,9 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!ShipmentDate_Line.Value</Value>
+                                                    <Value>=Fields!Shipping_Date_line.Value</Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
-                                                      <Format>M/d/yyyy</Format>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>
@@ -2059,6 +2058,7 @@
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
+                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell>
@@ -3025,6 +3025,9 @@ End Function
         </Field>
         <Field Name="Item_PN">
           <DataField>Item_PN</DataField>
+        </Field>
+        <Field Name="Shipping_Date_line">
+          <DataField>Shipping_Date_line</DataField>
         </Field>
         <Field Name="LineNo_AssemblyLine">
           <DataField>LineNo_AssemblyLine</DataField>
