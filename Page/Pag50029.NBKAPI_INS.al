@@ -72,33 +72,12 @@ page 50029 "NBKAPI_INS"
                 {
                     ApplicationArea = All;
                 }
-                field(CART2; Rec.CART2)
-                {
-                    ApplicationArea = All;
-                }
                 field(JUCH1; Rec.JUCH1)
                 {
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(JUCH2; Rec.JUCH2)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field(SEHNCD; Rec.SEHNCD)
-                {
-                    ApplicationArea = All;
-                }
                 field(TKHAC; Rec.TKHAC)
-                {
-                    ApplicationArea = All;
-                }
-                field(QTY; Rec.QTY)
-                {
-                    ApplicationArea = All;
-                }
-                field(UNITPRICE; Rec.UNITPRICE)
                 {
                     ApplicationArea = All;
                 }
@@ -107,10 +86,6 @@ page 50029 "NBKAPI_INS"
                     ApplicationArea = All;
                 }
                 field(AMOUNT; Rec.AMOUNT)
-                {
-                    ApplicationArea = All;
-                }
-                field(REQUESTDATE; Rec.REQUESTDATE)
                 {
                     ApplicationArea = All;
                 }
@@ -219,15 +194,22 @@ page 50029 "NBKAPI_INS"
                     ApplicationArea = All;
                 }
             }
+            part(salesLine; "NBKAPI_INS_LINE")
+            {
+                ApplicationArea = All;
+                Caption = 'MTNA IF POLines';
+                EntityName = 'NBKAPI_INS_LINE';
+                EntitySetName = 'salesLine';
+                SubPageLink = "Header Entry No." = field("Entry No.");
+            }
         }
     }
 
+    var
+        RecTmpNBKAPITBL_INS: Record NBKAPITBL_INS temporary;
+
     trigger OnInsertRecord(BelowxRec: Boolean): Boolean
     var
-        RecCustomer: Record Customer;
-        RecItem: Record Item;
-        RecSalesHeader: Record "Sales Header";
-        RecSalesLine: Record "Sales Line";
         HasError: Boolean;
         ErrMsg: Text;
     begin
@@ -238,16 +220,53 @@ page 50029 "NBKAPI_INS"
             HasError := true;
             ErrMsg += 'TOKUCD must not be blank.';
         end;
-        if Rec.SEHNCD = '' then begin
-            HasError := true;
-            ErrMsg += 'SEHNCD must not be blank.';
+        if HasError then begin
+            Rec.P_RTCD := '99';
+            Rec.P_ERRCD := 'NBKAPI_INS';
+            Rec.P_ERRMSG := ErrMsg;
         end;
-        if not HasError then begin
-            RecCustomer.Reset();
-            if RecCustomer.Get(Rec.TOKUCD) then begin
-                RecItem.Reset();
-                RecItem.SetRange("P/N", Rec.SEHNCD);
-                if RecItem.FindFirst() then begin
+        if Rec.Insert(true) then begin
+            if (not HasError) then begin
+                RecTmpNBKAPITBL_INS.Init();
+                RecTmpNBKAPITBL_INS.TransferFields(Rec);
+                RecTmpNBKAPITBL_INS.Insert();
+            end;
+            exit(false);
+        end
+        else begin
+            exit(false);
+        end;
+    end;
+
+    trigger OnAfterGetRecord()
+    var
+        RecNBKAPITBL_INS_LINE: Record NBKAPITBL_INS_LINE;
+        RecCustomer: Record Customer;
+        RecSalesHeader: Record "Sales Header";
+        RecSalesLine: Record "Sales Line";
+        HasError: Boolean;
+        ErrMsg: Text;
+    begin
+        RecTmpNBKAPITBL_INS.SetRange("Entry No.", Rec."Entry No.");
+        if RecTmpNBKAPITBL_INS.FindFirst() then begin
+            HasError := false;
+            ErrMsg := '';
+            if Rec.P_RTCD = '' then begin
+                RecNBKAPITBL_INS_LINE.Reset();
+                RecNBKAPITBL_INS_LINE.SetRange("Header Entry No.", Rec."Entry No.");
+                if RecNBKAPITBL_INS_LINE.IsEmpty() then begin
+                    exit;
+                    HasError := true;
+                    ErrMsg := 'There is no valid input line data.';
+                end;
+            end
+            else begin
+                HasError := true;
+            end;
+            RecTmpNBKAPITBL_INS.Delete();
+            if not HasError then begin
+                RecCustomer.Reset();
+                if RecCustomer.Get(Rec.TOKUCD) then begin
                     RecCustomer.Validate("Name", Rec.TNAME);
                     RecCustomer.Validate("Address", Rec.TADDRESS);
                     RecCustomer.Validate("Address 2", Rec.TADDRESS2);
@@ -259,54 +278,51 @@ page 50029 "NBKAPI_INS"
                     RecCustomer.Validate("Contact", Rec.TCONTACT);
                     RecCustomer.Modify(true);
                     RecSalesHeader.Reset();
-                    if InsertSalesOrderHeader(Rec, RecItem, RecSalesHeader, ErrMsg) then begin
+                    if InsertSalesOrder(RecNBKAPITBL_INS_LINE, RecSalesHeader, ErrMsg) then begin
                         Commit();
                         RecSalesLine.Reset();
                         RecSalesLine.SetRange("Document No.", RecSalesHeader."No.");
                         if RecSalesLine.FindFirst() then begin
                             Rec.JUCH1 := RecSalesHeader."No.";
-                            Rec.JUCH2 := RecSalesLine."Line No.";
                             Rec.P_RTCD := '00';
                             Rec.P_ERRCD := '';
                             Rec.P_ERRMSG := '';
+                            Rec.Modify(true);
                         end else begin
                             Rec.P_RTCD := '99';
                             Rec.P_ERRCD := 'NBKAPI_INS';
                             Rec.P_ERRMSG := 'Can''t find insertted Sales Line';
+                            Rec.Modify(true);
                         end;
                     end
                     else begin
                         Rec.P_RTCD := '99';
                         Rec.P_ERRCD := 'NBKAPI_INS';
                         Rec.P_ERRMSG := 'Can''t insert the Sales Order, the detailed error information is: ' + GetLastErrorText();
+                        Rec.Modify(true);
                     end;
                 end else begin
                     Rec.P_RTCD := '99';
                     Rec.P_ERRCD := 'NBKAPI_INS';
-                    Rec.P_ERRMSG := 'Item with this P/N [' + Rec.SEHNCD + '] does  not exist.';
+                    Rec.P_ERRMSG := 'Customer [' + Rec.TOKUCD + '] does not exist.';
+                    Rec.Modify(true);
                 end;
-            end else begin
+            end
+            else begin
                 Rec.P_RTCD := '99';
                 Rec.P_ERRCD := 'NBKAPI_INS';
-                Rec.P_ERRMSG := 'Customer [' + Rec.TOKUCD + '] does not exist.';
+                if (Rec.P_ERRMSG = '') and (ErrMsg <> '') then begin
+                    Rec.P_ERRMSG := ErrMsg;
+                end;
+                Rec.Modify(true);
             end;
-        end
-        else begin
-            Rec.P_RTCD := '99';
-            Rec.P_ERRCD := 'NBKAPI_INS';
-            Rec.P_ERRMSG := ErrMsg;
-        end;
-        if Rec.Insert(true) then begin
-            exit(false);
-        end
-        else begin
-            exit(false);
         end;
     end;
 
     [TryFunction]
-    local procedure InsertSalesOrderHeader(RecINS: Record NBKAPITBL_INS; RecItem: Record Item; var RecSalesHeader: Record "Sales Header"; var errorMsg: Text)
+    local procedure InsertSalesOrder(var RecNBKAPITBL_INS_LINE: Record NBKAPITBL_INS_LINE; var RecSalesHeader: Record "Sales Header"; var errorMsg: Text)
     var
+        RecItem: Record Item;
         RecSalesLine: Record "Sales Line";
         RecDSPkgOpt: Record "DSHIP Package Options";
         PayAccNo: Text;
@@ -314,55 +330,59 @@ page 50029 "NBKAPI_INS"
     begin
         RecSalesHeader.Init();
         RecSalesHeader.Validate("Document Type", RecSalesHeader."Document Type"::Order);
-        RecSalesHeader.Validate("Sell-to Customer No.", RecINS.TOKUCD);
-        RecSalesHeader.Validate("Sell-to Customer Name", RecINS.TNAME);
-        RecSalesHeader.Validate("Sell-to Address", RecINS.TADDRESS);
-        RecSalesHeader.Validate("Sell-to Address 2", RecINS.TADDRESS2);
-        RecSalesHeader.Validate("Sell-to Country/Region Code", RecINS.TCOUNTRY);
-        RecSalesHeader.Validate("Sell-to City", RecINS.TCITY);
-        RecSalesHeader.Validate("Sell-to County", RecINS.TSTATE);
-        RecSalesHeader.Validate("Sell-to Post Code", RecINS.TPOSTCODE);
-        RecSalesHeader.Validate("Sell-to Phone No.", RecINS.TTELNO);
-        RecSalesHeader.Validate("Sell-to Contact", RecINS.TCONTACT);
-        RecSalesHeader.Validate("Order Date", RecINS.ORDERDATE);
-        RecSalesHeader.Validate("Requested Delivery Date", RecINS.REQUESTDATE);
-        RecSalesHeader.Validate("External Document No.", RecINS.TKHAC);
-        RecSalesHeader.Validate("Your Reference", RecINS.CART1);
+        RecSalesHeader.Validate("Sell-to Customer No.", Rec.TOKUCD);
+        RecSalesHeader.Validate("Sell-to Customer Name", Rec.TNAME);
+        RecSalesHeader.Validate("Sell-to Address", Rec.TADDRESS);
+        RecSalesHeader.Validate("Sell-to Address 2", Rec.TADDRESS2);
+        RecSalesHeader.Validate("Sell-to Country/Region Code", Rec.TCOUNTRY);
+        RecSalesHeader.Validate("Sell-to City", Rec.TCITY);
+        RecSalesHeader.Validate("Sell-to County", Rec.TSTATE);
+        RecSalesHeader.Validate("Sell-to Post Code", Rec.TPOSTCODE);
+        RecSalesHeader.Validate("Sell-to Phone No.", Rec.TTELNO);
+        RecSalesHeader.Validate("Sell-to Contact", Rec.TCONTACT);
+        RecSalesHeader.Validate("Order Date", Rec.ORDERDATE);
+        RecSalesHeader.Validate("External Document No.", Rec.TKHAC);
+        RecSalesHeader.Validate("Your Reference", Rec.CART1);
         RecSalesHeader.Validate("EC Order", true);
-        RecSalesHeader.Validate("Payment Method Code", RecINS.PAYMENT);
+        RecSalesHeader.Validate("Payment Method Code", Rec.PAYMENT);
         RecSalesHeader.Validate("Tax Liable", true);
-        RecSalesHeader.Validate("Ship-to Code", RecINS.NONYCD);
-        RecSalesHeader.Validate("Ship-to Name", RecINS.NNAME);
-        RecSalesHeader.Validate("Ship-to Address", RecINS.NADDRESS);
-        RecSalesHeader.Validate("Ship-to Address 2", RecINS.NADDRESS2);
-        RecSalesHeader.Validate("Ship-to Country/Region Code", RecINS.NCOUNTRY);
-        RecSalesHeader.Validate("Ship-to City", RecINS.NCITY);
-        RecSalesHeader.Validate("Ship-to County", RecINS.NSTATE);
-        RecSalesHeader.Validate("Ship-to Post Code", RecINS.NPOSTCODE);
-        RecSalesHeader.Validate("Ship-to Phone No.", RecINS.NTELNO);
-        RecSalesHeader.Validate("Ship-to Contact", RecINS.NCONTACT);
-        RecSalesHeader.Validate("Shipping Agent Code", RecINS.SHIPAGENT);
+        RecSalesHeader.Validate("Ship-to Code", Rec.NONYCD);
+        RecSalesHeader.Validate("Ship-to Name", Rec.NNAME);
+        RecSalesHeader.Validate("Ship-to Address", Rec.NADDRESS);
+        RecSalesHeader.Validate("Ship-to Address 2", Rec.NADDRESS2);
+        RecSalesHeader.Validate("Ship-to Country/Region Code", Rec.NCOUNTRY);
+        RecSalesHeader.Validate("Ship-to City", Rec.NCITY);
+        RecSalesHeader.Validate("Ship-to County", Rec.NSTATE);
+        RecSalesHeader.Validate("Ship-to Post Code", Rec.NPOSTCODE);
+        RecSalesHeader.Validate("Ship-to Phone No.", Rec.NTELNO);
+        RecSalesHeader.Validate("Ship-to Contact", Rec.NCONTACT);
+        RecSalesHeader.Validate("Shipping Agent Code", Rec.SHIPAGENT);
 
         //CR: FDD303/Validate new field
-        RecSalesHeader.Validate("Shipping Agent Service Code", RecINS.SHIPSERVICE);
+        RecSalesHeader.Validate("Shipping Agent Service Code", Rec.SHIPSERVICE);
         //End CR: FDD303/Validate new field
 
         RecSalesHeader.Insert(true);
-        RecSalesLine.Init();
         LineNo := 0;
-        LineNo += 10000;
-        RecSalesLine.Validate("Document Type", RecSalesLine."Document Type"::Order);
-        RecSalesLine.Validate("Document No.", RecSalesHeader."No.");
-        RecSalesLine.Validate("Line No.", LineNo);
-        RecSalesLine.Validate(Type, RecSalesLine.Type::Item);
-        RecSalesLine.Validate("No.", RecItem."No.");
-        RecSalesLine.Validate("P/N", RecItem."P/N");
-        RecSalesLine.Validate(Quantity, RecINS.QTY);
-        RecSalesLine.Validate("Unit Price", RecINS.UNITPRICE);
-        RecSalesLine.Validate("Amount Including VAT", RecINS.AMOUNT);
-        RecSalesLine.Validate("Requested Delivery Date", RecINS.REQUESTDATE);
-        RecSalesLine.Insert(True);
-        if RecINS.FREIGHT > 0 then begin
+        RecNBKAPITBL_INS_LINE.FindSet();
+        repeat
+            RecItem.Reset();
+            RecItem.SetRange("P/N", RecNBKAPITBL_INS_LINE.SEHNCD);
+            RecItem.FindFirst();
+            RecSalesLine.Init();
+            LineNo := RecNBKAPITBL_INS_LINE.JUCH2;
+            RecSalesLine.Validate("Document Type", RecSalesLine."Document Type"::Order);
+            RecSalesLine.Validate("Document No.", RecSalesHeader."No.");
+            RecSalesLine.Validate("Line No.", LineNo);
+            RecSalesLine.Validate(Type, RecSalesLine.Type::Item);
+            RecSalesLine.Validate("No.", RecItem."No.");
+            RecSalesLine.Validate("P/N", RecItem."P/N");
+            RecSalesLine.Validate(Quantity, RecNBKAPITBL_INS_LINE.QTY);
+            RecSalesLine.Validate("Unit Price", RecNBKAPITBL_INS_LINE.UNITPRICE);
+            RecSalesLine.Validate("Requested Delivery Date", RecNBKAPITBL_INS_LINE.REQUESTDATE);
+            RecSalesLine.Insert(True);
+        until RecNBKAPITBL_INS_LINE.Next() = 0;
+        if Rec.FREIGHT > 0 then begin
             LineNo += 10000;
             RecSalesLine.Init();
             RecSalesLine.Validate("Document No.", RecSalesHeader."No.");
@@ -371,15 +391,15 @@ page 50029 "NBKAPI_INS"
             RecSalesLine.Validate(Type, RecSalesLine.Type::"Charge (Item)");
             RecSalesLine.Validate("No.", 'JB-FREIGHT');
             RecSalesLine.Validate(Quantity, 1);
-            RecSalesLine.Validate("Unit Price", RecINS.FREIGHT);
-            RecSalesLine.Validate("Amount Including VAT", RecINS.FREIGHT);
+            RecSalesLine.Validate("Unit Price", Rec.FREIGHT);
+            RecSalesLine.Validate("Amount Including VAT", Rec.FREIGHT);
             RecSalesLine.Insert(True);
         end;
         PayAccNo := '';
-        if RecINS.SHIPAGENT = 'UPS' then begin
+        if Rec.SHIPAGENT = 'UPS' then begin
             PayAccNo := 'UPSACCT';
         end
-        else if RecINS.SHIPAGENT = 'FEDEX' then begin
+        else if Rec.SHIPAGENT = 'FEDEX' then begin
             PayAccNo := 'FEDEXACCT';
         end;
         if PayAccNo <> '' then begin

@@ -21,6 +21,23 @@ page 50028 "NBK_INS"
                 {
                     ApplicationArea = All;
                     Editable = false;
+                    AssistEdit = true;
+
+                    trigger OnAssistEdit()
+                    var
+                        PagNBK_INS_LINE: Page "NBK_INS_LINE";
+                        RecNBKAPITBL_INS_LINE: Record "NBKAPITBL_INS_LINE";
+                    begin
+                        if Rec.IsEmpty() = false then begin
+                            RecNBKAPITBL_INS_LINE.Reset();
+                            RecNBKAPITBL_INS_LINE.SetRange("Header Entry No.", Rec."Entry No.");
+                            if RecNBKAPITBL_INS_LINE.FindFirst() then begin
+                                PagNBK_INS_LINE.SetTableView(RecNBKAPITBL_INS_LINE);
+                                PagNBK_INS_LINE.SetRecord(RecNBKAPITBL_INS_LINE);
+                                PagNBK_INS_LINE.RunModal();
+                            end
+                        end;
+                    end;
                 }
                 field(Createddatetime; Rec."Created datetime")
                 {
@@ -67,37 +84,12 @@ page 50028 "NBK_INS"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(CART2; Rec.CART2)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
                 field(JUCH1; Rec.JUCH1)
                 {
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(JUCH2; Rec.JUCH2)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field(SEHNCD; Rec.SEHNCD)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
                 field(TKHAC; Rec.TKHAC)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field(QTY; Rec.QTY)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field(UNITPRICE; Rec.UNITPRICE)
                 {
                     ApplicationArea = All;
                     Editable = false;
@@ -108,11 +100,6 @@ page 50028 "NBK_INS"
                     Editable = false;
                 }
                 field(AMOUNT; Rec.AMOUNT)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
-                field(REQUESTDATE; Rec.REQUESTDATE)
                 {
                     ApplicationArea = All;
                     Editable = false;
