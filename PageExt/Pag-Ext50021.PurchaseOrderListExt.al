@@ -112,6 +112,26 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 PurchaseOrderNo := CellText;
                 SplitPurchaseOrderNo(PurchaseOrderNo, PurchaseOrderHeaderNo, PurchaseOrderLineNo);
                 GetNextDocumentSeq(PurchaseOrderHeaderNo, CreatedDateTime, CurrentDocumentSeq);
+                RecPurchaseHeader.Reset();
+                if (PurchaseOrderHeaderNo <> '') and RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) then begin
+                    ReOpened := false;
+                    if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
+                        ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
+                        ReOpened := true;
+                    end;
+                    RecPurchaseLine.Reset();
+                    RecPurchaseLine.SetRange("Document Type", RecPurchaseHeader."Document Type");
+                    RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
+                    if not RecPurchaseLine.IsEmpty() then begin
+                        RecPurchaseLine.ModifyAll("Qty. to Invoice", 0, true);
+                    end;
+                end
+                else begin
+                    CurrentPOHasError := true;
+                    WholeFileHasError := true;
+                    ErrorMsg := StrSubstNo('The value [%1] for [Purchase Order No] Colunn in File Line [%2] has no match records.', PurchaseOrderHeaderNo, X);
+                    SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
+                end;
             end
             else begin
                 PurchaseOrderHeaderNo := NextPurchaseOrderHeaderNo;
@@ -119,75 +139,68 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 CurrentDocumentSeq := NextDocumentSeq;
             end;
             if (not CurrentPOHasError) then begin
-                if (PurchaseOrderHeaderNo <> '') and (PurchaseOrderLineNo > 0) and (not CurrentPOHasError) then begin
-                    if RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) then begin
-                        ReOpened := false;
-                        if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
-                            ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
-                            ReOpened := true;
-                        end;
-                        CellText := GetValueAtCell(X, 11, 0);
-                        ShipmenmtDate := CellText.Trim().Substring(5, 2) + '/' + CellText.Trim().Substring(7, 2) + '/' + CellText.Trim().Substring(1, 4);
-                        if Evaluate(PostingDate, ShipmenmtDate.Trim()) then begin
-                            RecPurchaseHeader.Validate("Posting Date", PostingDate);
-                            CellText := GetValueAtCell(X, 3, 0);
-                            InvoiceNo := CellText.Trim();
-                            if InvoiceNo <> '' then begin
-                                RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo);
-                                if RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo) then begin
-                                    CellText := GetValueAtCell(X, 6, 0);
-                                    Quantity := CellText;
-                                    if Evaluate(QuantityValue, Quantity.Trim()) then begin
-                                        RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
-                                        CellText := GetValueAtCell(X, 9, 0);
-                                        DCost := CellText;
-                                        if Evaluate(DUnitCost, DCost.Trim()) then begin
-                                            RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
-                                            RecPurchaseLine.Modify();
-                                            RecPurchaseHeader.Modify();
-                                            if ReOpened then begin
-                                                ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
-                                            end;
-                                            ErrorMsg := '';
-                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
-                                        end else begin
-                                            CurrentPOHasError := true;
-                                            WholeFileHasError := true;
-                                            ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
-                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
+                if (PurchaseOrderLineNo > 0) then begin
+                    CellText := GetValueAtCell(X, 11, 0);
+                    ShipmenmtDate := CellText.Trim().Substring(5, 2) + '/' + CellText.Trim().Substring(7, 2) + '/' + CellText.Trim().Substring(1, 4);
+                    if Evaluate(PostingDate, ShipmenmtDate.Trim()) then begin
+                        RecPurchaseHeader.Validate("Posting Date", PostingDate);
+                        CellText := GetValueAtCell(X, 3, 0);
+                        InvoiceNo := CellText.Trim();
+                        if InvoiceNo <> '' then begin
+                            RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo);
+                            if RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo) then begin
+                                CellText := GetValueAtCell(X, 6, 0);
+                                Quantity := CellText;
+                                if Evaluate(QuantityValue, Quantity.Trim()) then begin
+                                    RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
+                                    CellText := GetValueAtCell(X, 9, 0);
+                                    DCost := CellText;
+                                    if Evaluate(DUnitCost, DCost.Trim()) then begin
+                                        RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
+                                        RecPurchaseLine.Modify();
+                                        RecPurchaseHeader.Modify();
+                                        if ReOpened then begin
+                                            ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
                                         end;
-                                    end else begin
+                                        ErrorMsg := '';
+                                        SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
+                                    end
+                                    else begin
                                         CurrentPOHasError := true;
                                         WholeFileHasError := true;
-                                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Quantity] in File Line [%2] is not a valid Decimal.', Quantity, X);
+                                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
                                         SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                     end;
                                 end
                                 else begin
                                     CurrentPOHasError := true;
                                     WholeFileHasError := true;
-                                    ErrorMsg := StrSubstNo('The value [%1] for Cloumn [ShipmentDate] in File Line [%2] is not a valid Date.', CellText, X);
+                                    ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Quantity] in File Line [%2] is not a valid Decimal.', Quantity, X);
                                     SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                 end;
-                            end else begin
+                            end
+                            else begin
                                 CurrentPOHasError := true;
                                 WholeFileHasError := true;
-                                ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Invoice_Number] in File Line [%2] is not valid.', InvoiceNo, X);
+                                ErrorMsg := StrSubstNo('The value [%1] for Cloumn [ShipmentDate] in File Line [%2] is not a valid Date.', CellText, X);
                                 SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                             end;
-                        end else begin
+                        end
+                        else begin
                             CurrentPOHasError := true;
                             WholeFileHasError := true;
-                            ErrorMsg := StrSubstNo('The value [%1] for Cloumn [ShipmentDate] in File Line [%2] is not a valid Date.', CellText, X);
+                            ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Invoice_Number] in File Line [%2] is not valid.', InvoiceNo, X);
                             SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                         end;
-                    end else begin
+                    end
+                    else begin
                         CurrentPOHasError := true;
                         WholeFileHasError := true;
-                        ErrorMsg := StrSubstNo('The value [%1] for [Purchase Order No] Colunn in File Line [%2] has no match records.', PurchaseOrderHeaderNo, X);
+                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [ShipmentDate] in File Line [%2] is not a valid Date.', CellText, X);
                         SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                     end;
-                end else begin
+                end
+                else begin
                     ErrorMsg := StrSubstNo('There is import error occured at other lines for PO [%1] in [Purchase Order No] Colunn in File Line [%2].', PurchaseOrderHeaderNo, X);
                     SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                 end;
@@ -203,27 +216,40 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 SplitPurchaseOrderNo(NextPurchaseOrderNo, NextPurchaseOrderHeaderNo, NextPurchaseOrderLineNo);
             end;
             if (x = TotalRows) or ((NextPurchaseOrderHeaderNo <> '') and (PurchaseOrderHeaderNo <> NextPurchaseOrderHeaderNo)) then begin
-                if RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) and (not CurrentPOHasError) then begin
-                    RecPurchaseHeader.Receive := false;
-                    RecPurchaseHeader.Invoice := true;
-                    RecPurchaseHeader.Modify();
-                    Commit();
-                    if not PurPost.RUN(RecPurchaseHeader) then begin
-                        CurrentPOHasError := true;
-                        WholeFileHasError := true;
-                        ErrorMsg := StrSubstNo('Post to invoice failured for PO [%1], the detailed error message is [%2].', PurchaseOrderHeaderNo, GetLastErrorText());
-                    end;
-                end
-                else begin
+                RecPurchaseHeader.Receive := false;
+                RecPurchaseHeader.Invoice := true;
+                RecPurchaseHeader.Modify();
+                Commit();
+                if not PurPost.RUN(RecPurchaseHeader) then begin
                     CurrentPOHasError := true;
                     WholeFileHasError := true;
-                    ErrorMsg := StrSubstNo('The value [%1] for [Purchase Order No] Colunn in Line [%2] has no match records.', PurchaseOrderHeaderNo, X);
+                    ErrorMsg := StrSubstNo('Post to invoice failured for PO [%1], the detailed error message is [%2].', PurchaseOrderHeaderNo, GetLastErrorText());
                 end;
                 if (CurrentPOHasError) then begin
                     SaveLogMessage(PurchaseOrderHeaderNo, 0, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                 end;
                 CurrentPOHasError := false;
                 GetNextDocumentSeq(NextPurchaseOrderHeaderNo, CreatedDateTime, NextDocumentSeq);
+                RecPurchaseHeader.Reset();
+                if (NextPurchaseOrderHeaderNo <> '') and RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, NextPurchaseOrderHeaderNo) then begin
+                    ReOpened := false;
+                    if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
+                        ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
+                        ReOpened := true;
+                    end;
+                    RecPurchaseLine.Reset();
+                    RecPurchaseLine.SetRange("Document Type", RecPurchaseHeader."Document Type");
+                    RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
+                    if not RecPurchaseLine.IsEmpty() then begin
+                        RecPurchaseLine.ModifyAll("Qty. to Invoice", 0, true);
+                    end;
+                end
+                else if x <> TotalRows then begin
+                    CurrentPOHasError := true;
+                    WholeFileHasError := true;
+                    ErrorMsg := StrSubstNo('The value [%1] for [Purchase Order No] Colunn in File Line [%2] has no match records.', NextPurchaseOrderHeaderNo, X);
+                    SaveLogMessage(NextPurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
+                end;
             end;
         end;
         if (WholeFileHasError) then begin
