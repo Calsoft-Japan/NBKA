@@ -95,6 +95,7 @@ page 50021 "Quote Price Calculation"
                 field("Gross Profit Rate Updated"; Rec."Gross Profit Rate Updated")
                 {
                     ToolTip = 'Specifies the value of the Gross Profit Rate % Updated field.', Comment = '%';
+                    Editable = false;
                 }
                 field("Quote Unit Price"; Rec."Quote Unit Price")
                 {
@@ -127,6 +128,7 @@ page 50021 "Quote Price Calculation"
                 Error('Quantity(min) must be entered in order to enter Quantity (max).');
 
             Rec."Quote Unit Price" := (Rec."Purchase Unit Price(USD)" + (Rec."Purchase Shipping Costs" / Rec."Quantity (min)")) * ((100 + Rec."Expenses Rate %") / 100) * ((100 + Rec."Gross Profit Rate %") / 100);
+            Rec."Quote Unit Price" := Round(Rec."Quote Unit Price", 0.01);
             if Rec."Quantity (max)" <> 0 then
                 QAmount := Rec."Quote Unit Price" * Rec."Quantity (max)"
             else
