@@ -231,6 +231,7 @@ table 50021 "Quote Price Calculation"
 
         if (Rec."Quantity (min)" <> 0) then begin
             Rec."Quote Unit Price" := (Rec."Purchase Unit Price(USD)" + (Rec."Purchase Shipping Costs" / Rec."Quantity (min)")) * ((100 + Rec."Expenses Rate %") / 100) * ((100 + Rec."Gross Profit Rate %") / 100);
+            Rec."Quote Unit Price" := Round(Rec."Quote Unit Price", 0.01);
             if Rec."Quantity (max)" <> 0 then
                 QAmount := Rec."Quote Unit Price" * Rec."Quantity (max)"
             else
