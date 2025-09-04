@@ -18,6 +18,9 @@ report 50109 "CertificateofConformanceReport"
             column(SellToCustomerName; "Sell-to Customer Name")
             {
             }
+            column(ShiptoName; "Ship-to Name")
+            {
+            }
             column(DocumentNo; "No.")
             {
             }
@@ -74,6 +77,12 @@ report 50109 "CertificateofConformanceReport"
                 column(CustomerPOLbl; CustomerPOLbl)
                 {
                 }
+                column(CustomerPartLbl; CustomerPartLbl)
+                {
+                }
+                column(ItemReferenceNo; "Item Reference No.")
+                {
+                }
                 column(NBKPartLbl; NBKPartLbl)
                 {
                 }
@@ -81,6 +90,9 @@ report 50109 "CertificateofConformanceReport"
                 {
                 }
                 column(Colan; Colan)
+                {
+                }
+                column(ShiptoPONo; "Ship-to PO No.")
                 {
                 }
                 // Custom Fields from Company Information
@@ -114,7 +126,7 @@ report 50109 "CertificateofConformanceReport"
     }
     requestpage
     {
-        SaveValues = true;
+        // SaveValues = true;
 
         layout
         {
@@ -154,6 +166,7 @@ report 50109 "CertificateofConformanceReport"
         Colan: Label ':';
         SalesShipmentNo: Code[20];
         LineNo: Text;
+        CustomerPartLbl: Label 'Customer Part#';
 
     trigger OnPreReport()
     begin

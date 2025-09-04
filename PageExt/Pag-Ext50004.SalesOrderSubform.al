@@ -55,6 +55,11 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
                 ApplicationArea = All;
                 Caption = 'Shipping Date';
             }
+            field("Ship-to PO No."; Rec."Ship-to PO No.")
+            {
+                ApplicationArea = all;
+                ToolTip = 'End user''s PO number';
+            }
         }
     }
 

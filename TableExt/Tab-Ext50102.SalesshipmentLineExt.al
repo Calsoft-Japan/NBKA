@@ -11,5 +11,12 @@ tableextension 50102 SalesshipmentLineExt extends "Sales Shipment Line"
             Caption = 'Certificate of Conformance';
             DataClassification = ToBeClassified;
         }
+        field(50017; "Ship-to PO No."; Code[30])
+        {
+            Caption = 'Ship-to PO No.';
+            DataClassification = ToBeClassified;
+            ToolTip = 'End user''s PO number';
+
+        }
     }
 }

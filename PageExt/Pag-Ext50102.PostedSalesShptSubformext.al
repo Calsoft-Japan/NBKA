@@ -14,6 +14,12 @@ pageextension 50102 PostedSalesShptSubformext extends "Posted Sales Shpt. Subfor
                 Editable = false;
                 ToolTip = 'Gets the certificate of conformance value from sales line';
             }
+            field("Ship-to PO No."; Rec."Ship-to PO No.")
+            {
+                ApplicationArea = all;
+                ToolTip = 'End user''s PO number';
+            }
+
         }
     }
     actions

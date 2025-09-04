@@ -205,6 +205,17 @@ codeunit 50100 EventSubscriber
         end;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post", OnBeforePostSalesDoc, '', false, false)]
+    local procedure OnBeforePostSalesDoc(var SalesHeader: Record "Sales Header"; CommitIsSuppressed: Boolean; PreviewMode: Boolean; var HideProgressWindow: Boolean; var IsHandled: Boolean; var CalledBy: Integer)
+    begin
+        if SalesHeader.Ship then begin
+            if SalesHeader."Special Order Work" and Not SalesHeader."Special Order Work Completed" then
+                Error('Special Order Work is required, but it is not completed.');
+            if SalesHeader."Special Shipping Work" and not SalesHeader."Special Shipping Completed" then
+                Error('Special Shipping Work is required, but it is not completed.');
+        end;
+    end;
+
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Post (Yes/No)", OnAfterConfirmPost, '', false, false)]
     local procedure OnAfterConfirmPost(var SalesHeader: Record "Sales Header")
     begin
