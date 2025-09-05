@@ -241,4 +241,11 @@ codeunit 50100 EventSubscriber
         if ShipToOptions = 2 then
             Error('custom address is not allowed');
     end;
+
+    [EventSubscriber(ObjectType::Report, Report::"Copy Sales Document", OnAfterValidateIncludeHeader, '', false, false)]
+    local procedure OnAfterValidateIncludeHeader(var IncludeHeader: Boolean; var RecalculateLines: Boolean)
+    begin
+        IncludeHeader := true;
+        RecalculateLines := false;
+    end;
 }

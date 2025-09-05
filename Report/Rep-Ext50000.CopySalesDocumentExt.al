@@ -12,4 +12,5 @@ reportextension 50000 CopySalesDocumentExt extends "Copy Sales Document"
             RecalculateLines := false;
         end;
     }
+
 }
