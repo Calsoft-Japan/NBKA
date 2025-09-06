@@ -325,12 +325,15 @@ page 50029 "NBKAPI_INS"
         RecItem: Record Item;
         RecSalesLine: Record "Sales Line";
         RecDSPkgOpt: Record "DSHIP Package Options";
+        RecCompanyInfo: Record "Company Information";
         PayAccNo: Text;
         LineNo: Integer;
     begin
         RecSalesHeader.Init();
         RecSalesHeader.Validate("Document Type", RecSalesHeader."Document Type"::Order);
         RecSalesHeader.Validate("Sell-to Customer No.", Rec.TOKUCD);
+        RecSalesHeader.Insert(true);
+
         RecSalesHeader.Validate("Sell-to Customer Name", Rec.TNAME);
         RecSalesHeader.Validate("Sell-to Address", Rec.TADDRESS);
         RecSalesHeader.Validate("Sell-to Address 2", Rec.TADDRESS2);
@@ -345,7 +348,10 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Your Reference", Rec.CART1);
         RecSalesHeader.Validate("EC Order", true);
         RecSalesHeader.Validate("Payment Method Code", Rec.PAYMENT);
-        RecSalesHeader.Validate("Tax Liable", true);
+        RecCompanyInfo.Get();
+        if (Rec.RESELLER = '') and (Rec.TSTATE = RecCompanyInfo.County) then begin
+            RecSalesHeader.Validate("Tax Liable", true);
+        end;
         RecSalesHeader.Validate("Ship-to Code", Rec.NONYCD);
         RecSalesHeader.Validate("Ship-to Name", Rec.NNAME);
         RecSalesHeader.Validate("Ship-to Address", Rec.NADDRESS);
@@ -357,12 +363,9 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Ship-to Phone No.", Rec.NTELNO);
         RecSalesHeader.Validate("Ship-to Contact", Rec.NCONTACT);
         RecSalesHeader.Validate("Shipping Agent Code", Rec.SHIPAGENT);
-
-        //CR: FDD303/Validate new field
         RecSalesHeader.Validate("Shipping Agent Service Code", Rec.SHIPSERVICE);
-        //End CR: FDD303/Validate new field
+        RecSalesHeader.Modify(true);
 
-        RecSalesHeader.Insert(true);
         LineNo := 0;
         RecNBKAPITBL_INS_LINE.FindSet();
         repeat
@@ -388,8 +391,8 @@ page 50029 "NBKAPI_INS"
             RecSalesLine.Validate("Document No.", RecSalesHeader."No.");
             RecSalesLine.Validate("Document Type", RecSalesLine."Document Type"::Order);
             RecSalesLine.Validate("Line No.", LineNo);
-            RecSalesLine.Validate(Type, RecSalesLine.Type::"Charge (Item)");
-            RecSalesLine.Validate("No.", 'JB-FREIGHT');
+            RecSalesLine.Validate(Type, RecSalesLine.Type::Resource);
+            RecSalesLine.Validate("No.", 'SHIPPING');
             RecSalesLine.Validate(Quantity, 1);
             RecSalesLine.Validate("Unit Price", Rec.FREIGHT);
             RecSalesLine.Validate("Amount Including VAT", Rec.FREIGHT);
@@ -397,10 +400,10 @@ page 50029 "NBKAPI_INS"
         end;
         PayAccNo := '';
         if Rec.SHIPAGENT = 'UPS' then begin
-            PayAccNo := 'UPSACCT';
+            PayAccNo := Rec.UPSACCOUNT;
         end
         else if Rec.SHIPAGENT = 'FEDEX' then begin
-            PayAccNo := 'FEDEXACCT';
+            PayAccNo := Rec.FDXACCOUNT;
         end;
         if PayAccNo <> '' then begin
             RecDSPkgOpt.Reset();
