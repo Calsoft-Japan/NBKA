@@ -7,6 +7,7 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
             field("EC Order"; Rec."EC Order")
             {
                 ApplicationArea = All;
+                Editable = false;
             }
             field("Special Order Work"; Rec."Special Order Work")
             {

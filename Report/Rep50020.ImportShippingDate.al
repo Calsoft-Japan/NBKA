@@ -86,7 +86,7 @@ report 50021 "Import Shipping Date"
                         AddLogMessage(SplitValues.Get(1), LineNo, false, 'Import error by Import Shipping Date in [Invalid Receipt Date]', CreatedDateTime, CurrentDocumentSeq);
                     end
                     else begin
-                        InitialDate := ReceiptDate + 2;
+                        InitialDate := ReceiptDate + 5;
                         PurchaseLine.Reset();
                         PurchaseLine.SetRange("Document No.", SplitValues.Get(1));
                         PurchaseLine.SetRange("Line No.", LineNo);

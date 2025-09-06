@@ -66,7 +66,7 @@ codeunit 50001 "Sales Order Event Handler"
 
             if SalesLine.FindSet() then begin
                 repeat
-                    if (SalesLine.Type = SalesLine.Type::"Charge (Item)") and (SalesLine."No." = 'JB-FREIGHT') then begin
+                    if (SalesLine.Type = SalesLine.Type::Resource) then begin
                         SalesHeader."Shipping Advice" := SalesHeader."Shipping Advice"::Complete;
                         SalesHeader.Modify();
                         break;
