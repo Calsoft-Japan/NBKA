@@ -231,15 +231,19 @@ codeunit 50100 EventSubscriber
     [EventSubscriber(ObjectType::Page, page::"Sales Order", OnBeforeValidateShipToOptions, '', false, false)]
     local procedure OnBeforeValidateShipToOptions(var SalesHeader: Record "Sales Header"; ShipToOptions: Option "Default (Sell-to Address)","Alternate Shipping Address","Custom Address"; var IsHandled: Boolean)
     begin
-        if ShipToOptions = 2 then
-            Error('custom address is not allowed');
+        IF NOT SalesHeader."EC Order" THEN begin
+            if ShipToOptions = 2 then
+                Error('custom address is not allowed');
+        END;
     end;
 
     [EventSubscriber(ObjectType::Page, page::"Sales Quote", OnBeforeValidateShipToOptions, '', false, false)]
     local procedure OnBeforeValidateShipToOptionsQuote(var SalesHeader: Record "Sales Header"; ShipToOptions: Option "Default (Sell-to Address)","Alternate Shipping Address","Custom Address"; var IsHandled: Boolean)
     begin
-        if ShipToOptions = 2 then
-            Error('custom address is not allowed');
+        IF NOT SalesHeader."EC Order" THEN begin
+            if ShipToOptions = 2 then
+                Error('custom address is not allowed');
+        END;
     end;
 
     [EventSubscriber(ObjectType::Report, Report::"Copy Sales Document", OnAfterValidateIncludeHeader, '', false, false)]
