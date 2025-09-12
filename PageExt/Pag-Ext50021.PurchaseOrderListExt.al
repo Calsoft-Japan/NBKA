@@ -147,7 +147,8 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                         CellText := GetValueAtCell(X, 3, 0);
                         InvoiceNo := CellText.Trim();
                         if InvoiceNo <> '' then begin
-                            RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo);
+                            RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo + '-' + Format(x - 1));
+                            RecPurchaseHeader.Validate("Your Reference", InvoiceNo);
                             if RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo) then begin
                                 CellText := GetValueAtCell(X, 6, 0);
                                 Quantity := CellText;
