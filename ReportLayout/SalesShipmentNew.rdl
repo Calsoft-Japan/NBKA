@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-27T16:54:20.4103614Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-09-11T14:44:15.2176885Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -155,7 +155,7 @@
                               <Top>6.13426cm</Top>
                               <Left>0.12384cm</Left>
                               <Height>1.71139cm</Height>
-                              <Width>16.66639cm</Width>
+                              <Width>16.66638cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1059,7 +1059,7 @@
                                     <Paragraph>
                                       <TextRuns>
                                         <TextRun>
-                                          <Value>=Fields!ShippingAgentService_Description.Value</Value>
+                                          <Value>=Fields!ShippingAgentService_Code.Value</Value>
                                           <Style>
                                             <FontFamily>Segoe UI</FontFamily>
                                             <FontSize>8pt</FontSize>
@@ -1537,6 +1537,7 @@
                                               <PaddingBottom>2pt</PaddingBottom>
                                             </Style>
                                           </Textbox>
+                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell>
@@ -2188,6 +2189,9 @@ End Function
         <Field Name="ShippingAgentService_Description">
           <DataField>ShippingAgentService_Description</DataField>
         </Field>
+        <Field Name="ShippingAgentService_Code">
+          <DataField>ShippingAgentService_Code</DataField>
+        </Field>
         <Field Name="PackageTrackingNoLbl">
           <DataField>PackageTrackingNoLbl</DataField>
         </Field>
@@ -2229,6 +2233,12 @@ End Function
         </Field>
         <Field Name="TempSalesShptLineNo">
           <DataField>TempSalesShptLineNo</DataField>
+        </Field>
+        <Field Name="Description_ShptLine">
+          <DataField>Description_ShptLine</DataField>
+        </Field>
+        <Field Name="ItemRefNo_ShptLine">
+          <DataField>ItemRefNo_ShptLine</DataField>
         </Field>
         <Field Name="TempSalesShptLineUOM">
           <DataField>TempSalesShptLineUOM</DataField>
@@ -2299,14 +2309,8 @@ End Function
         <Field Name="Grossweightlbl">
           <DataField>Grossweightlbl</DataField>
         </Field>
-        <Field Name="Description_ShptLine">
-          <DataField>Description_ShptLine</DataField>
-        </Field>
         <Field Name="Item_PN">
           <DataField>Item_PN</DataField>
-        </Field>
-        <Field Name="ItemRefNo_ShptLine">
-          <DataField>ItemRefNo_ShptLine</DataField>
         </Field>
         <Field Name="Item_Netweight">
           <DataField>Item_Netweight</DataField>

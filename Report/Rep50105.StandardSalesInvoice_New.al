@@ -316,7 +316,7 @@ report 50105 "Standard Sales - Invoice"
             column(BilltoCustomerNo_Lbl; FieldCaption("Bill-to Customer No."))
             {
             }
-            column(DocumentDate; Format("Document Date", 0, 4))
+            column(DocumentDate; "Document Date")
             {
             }
             column(DocumentDate_Lbl; FieldCaption("Document Date"))

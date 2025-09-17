@@ -295,6 +295,9 @@ report 50104 "Sales Shipment"
                     column(ShippingAgentService_Description; ShippingAgentService.Description)
                     {
                     }
+                    column(ShippingAgentService_Code; ShippingAgentService.Code)
+                    {
+                    }
                     column(PackageTrackingNoLbl; PackageTrackingNoLbl)
                     {
                     }
@@ -338,6 +341,12 @@ report 50104 "Sales Shipment"
                         {
                         }
                         column(TempSalesShptLineNo; TempSalesShipmentLine."Line No.")
+                        {
+                        }
+                        column(Description_ShptLine; TempSalesShipmentLine.Description)
+                        {
+                        }
+                        column(ItemRefNo_ShptLine; TempSalesShipmentLine."Item Reference No.")
                         {
                         }
                         column(TempSalesShptLineUOM; TempSalesShipmentLine."Unit of Measure")
@@ -403,15 +412,11 @@ report 50104 "Sales Shipment"
                         column(Grossweightlbl; Grossweightlbl)
                         {
                         }
-                        column(Description_ShptLine; "Sales Shipment Line".Description)
-                        {
-                        }
+
                         column(Item_PN; ItemRec."P/N")
                         {
                         }
-                        column(ItemRefNo_ShptLine; "Sales Shipment Line"."Item Reference No.")
-                        {
-                        }
+
                         column(Item_Netweight; ItemRec."Net Weight")
                         {
                         }

@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-08-20T15:50:53.5749458Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-09-11T14:27:55.1829174Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -45,13 +45,13 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>3.24405cm</Width>
+                                    <Width>5.95345cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>3.24405cm</Width>
+                                    <Width>5.95345cm</Width>
                                   </TablixColumn>
                                   <TablixColumn>
-                                    <Width>3.24405cm</Width>
+                                    <Width>5.95345cm</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
@@ -151,7 +151,7 @@
                               <Top>6.39573cm</Top>
                               <Left>0.15515cm</Left>
                               <Height>1.71139cm</Height>
-                              <Width>9.73215cm</Width>
+                              <Width>17.86034cm</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -1964,7 +1964,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                   <Top>1.19357cm</Top>
                                   <Left>0.02485cm</Left>
                                   <Height>0.40597cm</Height>
-                                  <Width>3.2689cm</Width>
+                                  <Width>4.97987cm</Width>
                                   <ZIndex>3</ZIndex>
                                   <Style>
                                     <Border>
@@ -2227,6 +2227,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                             <FontFamily>Segoe UI</FontFamily>
                                             <FontSize>26pt</FontSize>
                                             <FontWeight>Bold</FontWeight>
+                                            <Color>Red</Color>
                                           </Style>
                                         </TextRun>
                                       </TextRuns>
