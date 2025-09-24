@@ -44,6 +44,8 @@ codeunit 50020 "Export PO To Vendor"
         RecPurchaseLine: Record "Purchase Line";
         RecSalesHeader: Record "Sales Header";
         TmpRecSalesHeader: Record "Sales Header" temporary;
+        RecSalesLine: Record "Sales Line";
+        TmpRecSalesLine: Record "Sales Line" temporary;
         RecItem: Record Item;
         TmpRecItem: Record Item temporary;
         RecDSHIPPO: Record "DSHIP Package Options";
@@ -60,10 +62,41 @@ codeunit 50020 "Export PO To Vendor"
         repeat
             HasRecord := false;
             Clear(BigTxtEdiContents);
-            BigTxtEdiContents.AddText('"PurchaseOrderNo","Line","PO-LINE","P/N","ProductNo","Supplier","Quantity","UnitPrice","AmountPrice","OrderDate","DeliveryDate",'
-                + '"DropShipFlg","ShippingAgent","ShippingAccount","CustomerPurchaseOrderNo","CustomerCode","CustomerName","CustomerPhoneNo","CustomerPostCode",'
-                + '"CustomerCountry","CustomerState","CustomerCity","CustomerAddress1","CustomerAddress2","ShipToCode","ShipToName","ShipToPhoneNo","ShipToPostCode",'
-                + '"ShipToCountry","ShipToState","ShipToCity","ShipToAddress1","ShipToAddress2"' + c_LineSeparator);
+            BigTxtEdiContents.AddText('"PurchaseOrderNo",'//A
+                + '"Line",'//B
+                + '"PO-LINE",'//C
+                + '"P/N",'//D
+                + '"ProductNo",'//E
+                + '"Supplier",'//F
+                + '"Quantity",'//G
+                + '"UnitPrice",'//H
+                + '"AmountPrice",'//I
+                + '"OrderDate",'//J
+                + '"DeliveryDate",'//K
+                + '"DropShipFlg",'//L
+                + '"CompleteShipFlg",'//M
+                + '"ShippingAgent",'//N
+                + '"ShippingAccount",'//O
+                + '"Ship-toPONo",'//P
+                + '"CustomerCode",'//Q
+                + '"CustomerName",'//R
+                + '"CustomerPhoneNo",'//S
+                + '"CustomerPostCode",'//T
+                + '"CustomerCountry",'//U
+                + '"CustomerState",'//V
+                + '"CustomerCity",'//W
+                + '"CustomerAddress1",'//X
+                + '"CustomerAddress2",'//Y
+                + '"ShipToCode",'//Z
+                + '"ShipToName",'//AA
+                + '"ShipToPhoneNo",'//AB
+                + '"ShipToPostCode",'//AC
+                + '"ShipToCountry",'//AD
+                + '"ShipToState",'//AE
+                + '"ShipToCity",'//AF
+                + '"ShipToAddress1",'//AG
+                + '"ShipToAddress2"'//AH
+                + c_LineSeparator);
             RecPurchaseHeader.Reset();
             RecPurchaseHeader.SetRange("Document Type", RecPurchaseHeader."Document Type"::Order);
             RecPurchaseHeader.SetRange(Status, RecPurchaseHeader.Status::Released);
@@ -82,6 +115,9 @@ codeunit 50020 "Export PO To Vendor"
                             TmpRecSalesHeader.Reset();
                             TmpRecSalesHeader.Init();
                             Clear(TmpRecSalesHeader);
+                            TmpRecSalesLine.Reset();
+                            TmpRecSalesLine.Init();
+                            Clear(TmpRecSalesLine);
                             TmpRecDSHIPPO.Reset();
                             TmpRecDSHIPPO.Init();
                             clear(TmpRecDSHIPPO);
@@ -89,6 +125,25 @@ codeunit 50020 "Export PO To Vendor"
                             if RecPurchaseLine."Drop Shipment" then begin
                                 if RecSalesHeader.Get(RecSalesHeader."Document Type"::Order, RecPurchaseLine."Sales Order No.") then begin
                                     TmpRecSalesHeader.TransferFields(RecSalesHeader);
+                                    RecSalesLine.Reset();
+                                    if RecSalesLine.Get(RecSalesLine."Document Type"::Order, RecPurchaseLine."Sales Order No.", RecPurchaseLine."Sales Order Line No.") then begin
+                                        TmpRecSalesLine.TransferFields(RecSalesLine);
+                                    end;
+                                    RecDSHIPPO.Reset();
+                                    RecDSHIPPO.SetRange("Document Type", RecDSHIPPO."Document Type"::"Sales Order");
+                                    RecDSHIPPO.SetRange("Document No.", RecSalesHeader."No.");
+                                    if RecDSHIPPO.FindFirst() then begin
+                                        TmpRecDSHIPPO.TransferFields(RecDSHIPPO);
+                                    end;
+                                end;
+                            end
+                            else if RecPurchaseLine."Special Order" then begin
+                                if RecSalesHeader.Get(RecSalesHeader."Document Type"::Order, RecPurchaseLine."Special Order Sales No.") then begin
+                                    TmpRecSalesHeader.TransferFields(RecSalesHeader);
+                                    RecSalesLine.Reset();
+                                    if RecSalesLine.Get(RecSalesLine."Document Type"::Order, RecPurchaseLine."Special Order Sales No.", RecPurchaseLine."Special Order Sales Line No.") then begin
+                                        TmpRecSalesLine.TransferFields(RecSalesLine);
+                                    end;
                                     RecDSHIPPO.Reset();
                                     RecDSHIPPO.SetRange("Document Type", RecDSHIPPO."Document Type"::"Sales Order");
                                     RecDSHIPPO.SetRange("Document No.", RecSalesHeader."No.");
@@ -108,39 +163,41 @@ codeunit 50020 "Export PO To Vendor"
                             + '%1%13%1%14%1%15%1%16%1%17%1%18%1%19%1%20%1%21%1%22'
                             + '%1%23%1%24%1%25%1%26%1%27%1%28%1%29%1%30%1%31%1%32'
                             + '%1%33%1%34%1%35%2', c_FieldSeparator, c_LineSeparator,
-                            EscapeCSVValue(RecPurchaseLine."Document No."),
-                            RecPurchaseLine."Line No.",
-                            EscapeCSVValue(StrSubstNo('%1-%2', RecPurchaseLine."Document No.", RecPurchaseLine."Line No.")),
-                            EscapeCSVValue(TmpRecItem."P/N"),
-                            EscapeCSVValue(TmpRecItem.Description),
-                            EscapeCSVValue(RecPurchaseHeader."Buy-from Vendor Name"),
-                            Format(RecPurchaseLine.Quantity, 0, '<Sign><Integer><Decimals>'),
-                            Format(RecPurchaseLine."Direct Unit Cost", 0, '<Sign><Integer><Decimals>'),
-                            Format(RecPurchaseLine."Line Amount", 0, '<Sign><Integer><Decimals>'),
-                            Format(RecPurchaseHeader."Order Date", 0, '<Year4><Month,2><Day,2>'),
-                            Format(RecPurchaseLine."Expected Receipt Date", 0, '<Year4><Month,2><Day,2>'),
-                            FormatBooleanAsText(RecPurchaseLine."Drop Shipment"),
-                            EscapeCSVValue(TmpRecSalesHeader."Shipping Agent Code"),
-                            EscapeCSVValue(RecDSHIPPO."Payment Account No."),
-                            EscapeCSVValue(TmpRecSalesHeader."External Document No."),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Customer No."),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Customer Name"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Phone No."),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Post Code"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Country/Region Code"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to County"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to City"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Address"),
-                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Address 2"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Contact"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Name"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Phone No."),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Post Code"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Country/Region Code"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to County"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to City"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Address"),
-                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Address 2")));
+                            EscapeCSVValue(RecPurchaseLine."Document No."),//A
+                            RecPurchaseLine."Line No.",//B
+                            EscapeCSVValue(StrSubstNo('%1-%2', RecPurchaseLine."Document No.", RecPurchaseLine."Line No.")),//C
+                            EscapeCSVValue(TmpRecItem."P/N"),//D
+                            EscapeCSVValue(TmpRecItem.Description),//E
+                            EscapeCSVValue(RecPurchaseHeader."Buy-from Vendor Name"),//F
+                            Format(RecPurchaseLine.Quantity, 0, '<Sign><Integer><Decimals>'),//G
+                            Format(RecPurchaseLine."Direct Unit Cost", 0, '<Sign><Integer><Decimals>'),//H
+                            Format(RecPurchaseLine."Line Amount", 0, '<Sign><Integer><Decimals>'),//I
+                            Format(RecPurchaseHeader."Order Date", 0, '<Year4><Month,2><Day,2>'),//J
+                            Format(RecPurchaseLine."Expected Receipt Date", 0, '<Year4><Month,2><Day,2>'),//K
+                            FormatBooleanAsText(RecPurchaseLine."Drop Shipment"),//L
+                            FormatBooleanAsText(TmpRecSalesHeader."Shipping Advice" = RecSalesHeader."Shipping Advice"::Complete),//M
+                            EscapeCSVValue(TmpRecSalesHeader."Shipping Agent Code"),//N
+                            EscapeCSVValue(TmpRecDSHIPPO."Payment Account No."),//O
+                            EscapeCSVValue(TmpRecSalesLine."Ship-to PO No."),//P
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Customer No."),//Q
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Customer Name"),//R
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Phone No."),//S
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Post Code"),//T
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Country/Region Code"),//U
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to County"),//V
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to City"),//W
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Address"),//X
+                            EscapeCSVValue(TmpRecSalesHeader."Sell-to Address 2"),//Y
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Contact"),//Z
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Name"),//AA
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Phone No."),//AB
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Post Code"),//AC
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Country/Region Code"),//AD
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to County"),//AE
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to City"),//AF
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Address"),//AG
+                            EscapeCSVValue(TmpRecSalesHeader."Ship-to Address 2"//AH
+                            )));
                         until RecPurchaseLine.Next() = 0;
                     end;
                 until RecPurchaseHeader.Next() = 0;
@@ -238,14 +295,14 @@ codeunit 50020 "Export PO To Vendor"
             CuEmailMessage.Create(EmailToList, EmailSubject, EmailBody, true, EmailCCList, EmailBCCList);
             CuEmailMessage.AddAttachment(FileName, 'text/plain', InStream);
         end;
-        CuEmailAccount.GetAllAccounts(TempCuEmailAccount);
+        /*CuEmailAccount.GetAllAccounts(TempCuEmailAccount);
         TempCuEmailAccount.Reset;
-        TempCuEmailAccount.SetRange(Name, 'DefaultSMTP');
+        TempCuEmailAccount.SetRange(Name, 'DefaultSMTP');*/
         isSent := false;
-        if TempCuEmailAccount.FindFirst() then
+        /*if TempCuEmailAccount.FindFirst() then
             isSent := CuEmail.Send(CuEmailMessage, TempCuEmailAccount."Account Id", TempCuEmailAccount.Connector)
-        else
-            isSent := CuEmail.Send(CuEmailMessage);
+        else*/
+        isSent := CuEmail.Send(CuEmailMessage);
         exit(isSent);
     end;
 
