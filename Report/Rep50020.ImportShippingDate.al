@@ -47,6 +47,7 @@ report 50021 "Import Shipping Date"
         SplitValues: List of [Text];
         Position: Integer;
         LineNo: Integer;
+        DateCounter: Integer;
 
         ErrorMsg: Text;
         ReceiptDate: Date;
@@ -86,7 +87,8 @@ report 50021 "Import Shipping Date"
                         AddLogMessage(SplitValues.Get(1), LineNo, false, 'Import error by Import Shipping Date in [Invalid Receipt Date]', CreatedDateTime, CurrentDocumentSeq);
                     end
                     else begin
-                        InitialDate := ReceiptDate + 5;
+                        InitialDate := ReceiptDate;
+                        DateCounter := 1;
                         PurchaseLine.Reset();
                         PurchaseLine.SetRange("Document No.", SplitValues.Get(1));
                         PurchaseLine.SetRange("Line No.", LineNo);
@@ -94,8 +96,12 @@ report 50021 "Import Shipping Date"
                             PurchaseLine."Promised Receipt Date" := ReceiptDate;
                             PurchaseLine.Modify();
 
-                            while not IsWorkingDay(InitialDate) DO begin
+                            while DateCounter <= 5 DO begin
                                 InitialDate := InitialDate + 1;
+                                while not IsWorkingDay(InitialDate) DO begin
+                                    InitialDate := InitialDate + 1;
+                                end;
+                                DateCounter := DateCounter + 1;
                             end;
 
                             if PurchaseLine."Drop Shipment" then begin
