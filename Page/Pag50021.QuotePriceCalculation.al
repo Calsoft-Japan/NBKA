@@ -121,6 +121,9 @@ page 50021 "Quote Price Calculation"
     begin
         if CloseAction = Action::LookupOK then begin
             //===================Calculation Logic===========================================
+            if (Rec."Unit Type" = '') then
+                Error('Unit Type must be entered.');
+
             if (Rec."Quantity (min)" = 0) then
                 Error('Quantity(min) must be entered.');
 
