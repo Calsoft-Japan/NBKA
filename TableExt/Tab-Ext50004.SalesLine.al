@@ -102,6 +102,14 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             Caption = 'Discount Rate';
             DataClassification = ToBeClassified;
             ToolTip = 'Specifies the discount percentage';
+
+            trigger OnValidate()
+            begin
+                if ("Discount Rate" <> 0) and (Rec."Discount Rate" <> xRec."Discount Rate") then begin
+                    "Line Discount %" := "Discount Rate";
+                    Modify();
+                end;
+            end;
         }
 
         field(50015; "Shipping Date"; Date)

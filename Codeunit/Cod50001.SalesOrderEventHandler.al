@@ -41,6 +41,16 @@ codeunit 50001 "Sales Order Event Handler"
                     if (not SalesLine."Special Product") and (SalesLine."Line Discount %" <> 0) then
                         Error('Discount Price Calculation is not completed.');
                 until SalesLine.Next() = 0;
+
+            //  Zero Quantity Check
+            SalesLine.Reset();
+            SalesLine.SetRange("Document Type", SalesHeader."Document Type");
+            SalesLine.SetRange("Document No.", SalesHeader."No.");
+            SalesLine.SetFilter(Type, '%1|%2', SalesLine.Type::Item, SalesLine.Type::Resource);
+            SalesLine.SetFilter(Quantity, '=0');
+            if SalesLine.FindFirst() then
+                Error('Quantity must not be zero in Sales Lines.');
+
         end;
     end;
 

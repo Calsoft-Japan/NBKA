@@ -42,6 +42,7 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 Caption = 'Discount Rate';
+                Editable = false;
             }
         }
         addafter("Amount Including VAT")

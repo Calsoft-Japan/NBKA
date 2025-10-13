@@ -137,6 +137,7 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                                 Rec.Validate(Quantity, QuPrice."Quantity (max)") //Rec.Quantity := QuPrice."Quantity (max)"
                             else
                                 Rec.Validate(Quantity, QuPrice."Quantity (min)");//Rec.Quantity := QuPrice."Quantity (min)";
+                            Rec.Validate("Line Discount %", 0);
                             Rec.Validate("Unit Price", QuPrice."Quote Unit Price");//Rec."Unit Price" := QuPrice."Quote Amount Price";
                         end;
                     end else
