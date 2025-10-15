@@ -77,15 +77,9 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
                 var
                     CalcPrice: Codeunit "Discount Price";
                     SalesHeader: Record "Sales Header";
-                    DocTotals: Codeunit "Document Totals";//N:to recalculate totals after price change
-
                 begin
                     if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
                         CalcPrice.RunForDocument(SalesHeader);
-
-                    CurrPage.SaveRecord(); // N:ensures all changes are committed
-                    CurrPage.Update(false); // N:refreshes the subform totals and header totals
-
                 end;
             }
         }

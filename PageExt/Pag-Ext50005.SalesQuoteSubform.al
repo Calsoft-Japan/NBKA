@@ -105,10 +105,6 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                 begin
                     if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
                         CalcPrice.RunForDocument(SalesHeader);
-
-                    // NEW: commit line changes and refresh UI (subform-safe totals update)
-                    CurrPage.SaveRecord();
-                    CurrPage.Update(false);
                 end;
             }
 
@@ -124,12 +120,10 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                 var
                     PgSalesQuoteCal: Page "Quote Price Calculation";
                     QuPrice: Record "Quote Price Calculation" temporary;
-
                 begin
                     if (Rec."Document Type" = Rec."Document Type"::Quote) and (Rec.Type = Rec.Type::Item) then begin// and (Rec."Unit Price" = 0) 
                         PgSalesQuoteCal.InitPage(Rec);
                         PgSalesQuoteCal.LookupMode(true);
-
                         if PgSalesQuoteCal.RunModal() = Action::LookupOK then begin
                             PgSalesQuoteCal.GetRecord(QuPrice);
                             Rec."Quantity (min)" := QuPrice."Quantity (min)";
@@ -139,20 +133,13 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                             Rec."Gross Profit Rate %" := QuPrice."Gross Profit Rate %";
                             Rec."Gross Profit Rate Updated" := QuPrice."Gross Profit Rate Updated";
                             Rec.Validate("Unit of Measure Code", QuPrice."Unit Type");//Rec."Unit of Measure Code" := QuPrice."Unit Type";
-
                             if QuPrice."Quantity (max)" <> 0 then
                                 Rec.Validate(Quantity, QuPrice."Quantity (max)") //Rec.Quantity := QuPrice."Quantity (max)"
-
                             else
                                 Rec.Validate(Quantity, QuPrice."Quantity (min)");//Rec.Quantity := QuPrice."Quantity (min)";
                             Rec.Validate("Line Discount %", 0);
                             Rec.Validate("Unit Price", QuPrice."Quote Unit Price");//Rec."Unit Price" := QuPrice."Quote Amount Price";
-
-                            // NEW: ensure totals reflect these changes immediately
-                            CurrPage.SaveRecord();
-                            CurrPage.Update(false);
                         end;
-
                     end else
                         Message(StrSubstNo('%1 is not a special item.(Doc Type: %2,Rec Type: %3,Unit Price: %4)', Rec."No.", Format(Rec."Document Type"), Format(Rec.Type), Format(Rec."Unit Price")));
                 end;
