@@ -246,10 +246,21 @@ codeunit 50100 EventSubscriber
         END;
     end;
 
+
     [EventSubscriber(ObjectType::Report, Report::"Copy Sales Document", OnAfterValidateIncludeHeader, '', false, false)]
     local procedure OnAfterValidateIncludeHeader(var IncludeHeader: Boolean; var RecalculateLines: Boolean)
     begin
         IncludeHeader := true;
         RecalculateLines := false;
     end;
+
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesHeaderDone', '', false, false)]
+    local procedure OnAfterCopySalesHeaderDone(var ToSalesHeader: Record "Sales Header"; OldSalesHeader: Record "Sales Header"; FromSalesHeader: Record "Sales Header"; FromSalesShipmentHeader: Record "Sales Shipment Header"; FromSalesInvoiceHeader: Record "Sales Invoice Header"; FromReturnReceiptHeader: Record "Return Receipt Header"; FromSalesCrMemoHeader: Record "Sales Cr.Memo Header"; FromSalesHeaderArchive: Record "Sales Header Archive"; FromDocType: Enum "Sales Document Type From")
+    begin
+        if (ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::Order) or (ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::Quote) then begin
+            ToSalesHeader."Order Date" := Today;
+            ToSalesHeader."Document Date" := Today;
+        end;
+    end;
+
 }

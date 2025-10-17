@@ -1,6 +1,7 @@
 namespace NBKA.NBKA;
 
 using Microsoft.Projects.RoleCenters;
+using System.Utilities;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.Request;
 using System.Threading;
@@ -47,11 +48,13 @@ codeunit 50002 WhseRcptAutomation
     procedure DeleteWarehouseRcpt()
     var
         WhseRcptHdr: Record "Warehouse Receipt Header";
+        ConfirmMgt: Codeunit "Confirm Management";
     begin
         WhseRcptHdr.Reset();
         if WhseRcptHdr.FindSet() then
             repeat
                 WhseRcptHdr.Delete(true);
             until WhseRcptHdr.Next() = 0;
+
     end;
 }
