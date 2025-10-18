@@ -289,7 +289,7 @@ report 50102 "Standard Sales - Quote"
             column(BilltoCustomerNo_Lbl; FieldCaption("Bill-to Customer No."))
             {
             }
-            column(DocumentDate; "Document Date")
+            column(DocumentDate; QuoteDateTxt)
             {
             }
             column(DocumentDate_Lbl; FieldCaption("Document Date"))
@@ -301,13 +301,13 @@ report 50102 "Standard Sales - Quote"
             column(DueDate_Lbl; FieldCaption("Due Date"))
             {
             }
-            column(QuoteValidToDate; "Quote Valid Until Date")
+            column(QuoteValidToDate; ValidToTxt)
             {
             }
             column(QuoteValidToDate_Lbl; QuoteValidToDateLbl)
             {
             }
-            column(DocumentNo; "No.")
+            column(DocumentNo; QuoteNoTxt)
             {
             }
             column(DocumentNo_Lbl; InvNoLbl)
@@ -1037,6 +1037,15 @@ report 50102 "Standard Sales - Quote"
                 if ShippingAgent.Get(Header."Shipping Agent Code") then;
                 if ShippingAgentService.Get(Header."Shipping Agent Code", Header."Shipping Agent Service Code") then;
                 if Header.Status = Status::Released then DraftCheck := true;
+                if Header.Status <> Status::Released then begin
+                    QuoteNoTxt := 'Quote is not approved!';
+                    QuoteDateTxt := 'TBD';
+                    ValidToTxt := 'TBD';
+                end else begin
+                    QuoteNoTxt := "No.";
+                    QuoteDateTxt := Format("Order Date", 0, '<Month>/<Day>/<Year4>');
+                    ValidToTxt := Format("Quote Valid Until Date", 0, '<Month>/<Day>/<Year4>');
+                end;
                 TotalSubTotal := 0;
                 TotalInvDiscAmount := 0;
                 TotalAmount := 0;
@@ -1254,6 +1263,10 @@ report 50102 "Standard Sales - Quote"
         ItemRec: Record Item;
         DraftCheck: Boolean;
         Leadtimetxt: Text[50];
+        QuoteNoTxt: Text[100];
+        QuoteDateTxt: Text[100];
+        ValidToTxt: Text[100];
+
 
     protected var
         GLSetup: Record "General Ledger Setup";
