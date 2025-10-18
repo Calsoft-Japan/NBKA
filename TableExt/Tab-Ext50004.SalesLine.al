@@ -175,8 +175,25 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
                         Rec."Web Product No." := Item."Web Product No.";
                         Rec."Special Product" := Item."Special Product";
                     end;
+                    
+                if Rec."Special Product" then begin
+                    Rec.Validate("Line Discount %", 0);
+                    Rec."Original Discount %" := 0;
+                    Rec."Discount Rate" := 0;
+                end;
             end;
         }
 
+        modify(Quantity)
+        {
+            trigger OnAfterValidate()
+            begin
+                if Rec."Special Product" then begin
+                    Rec.Validate("Line Discount %", 0);
+                    Rec."Original Discount %" := 0;
+                    Rec."Discount Rate" := 0;
+                end;
+            end;
+        }
     }
 }
