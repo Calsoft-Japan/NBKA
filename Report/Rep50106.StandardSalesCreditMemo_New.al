@@ -29,7 +29,7 @@ using System.Utilities;
 
 report 50106 "Standard Sales - Credit Memo"
 {
-    Caption = 'Sales - Credit Memo-NBK';
+    Caption = 'Sales Credit Memo';
     RDLCLayout = './ReportLayout/StandardSalesCreditMemoNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;

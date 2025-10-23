@@ -24,7 +24,7 @@ report 50107 "Purchase Order"
     RDLCLayout = './ReportLayout/PurchaseOrderNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Purchase Order(Report) - NBK';
+    Caption = 'Purchase Order';
 
     dataset
     {

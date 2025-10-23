@@ -28,7 +28,7 @@ report 50104 "Sales Shipment"
     RDLCLayout = './ReportLayout/SalesShipmentNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Sales Shipment(Report) - NBK';
+    Caption = 'Packing slip';
 
     dataset
     {

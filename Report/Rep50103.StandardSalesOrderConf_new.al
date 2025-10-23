@@ -34,7 +34,7 @@ report 50103 "Standard Sales - Order Conf."
     RDLCLayout = './ReportLayout/StandardSalesOrderConfNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Sales Order confirmation (Report) - NBK';
+    Caption = 'Sales Order';
     dataset
     {
         dataitem(Header; "Sales Header")

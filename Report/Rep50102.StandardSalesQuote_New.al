@@ -32,7 +32,7 @@ report 50102 "Standard Sales - Quote"
     RDLCLayout = './ReportLayout/StandardSalesQuoteNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Sales Quote (Report) - NBK';
+    Caption = 'Sales Quote';
     dataset
     {
         dataitem(Header; "Sales Header")

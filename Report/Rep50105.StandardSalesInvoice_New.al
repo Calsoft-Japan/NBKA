@@ -38,7 +38,7 @@ report 50105 "Standard Sales - Invoice"
     RDLCLayout = './ReportLayout/StandardSalesInvoiceNew.rdl';
     ApplicationArea = All;
     UsageCategory = ReportsAndAnalysis;
-    Caption = 'Standard Sales - Invoice- NBK';
+    Caption = 'Sales Invoice';
 
     dataset
     {

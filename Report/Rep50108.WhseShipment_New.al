@@ -17,7 +17,7 @@ report 50108 "Whse. - Shipment"
     DefaultLayout = RDLC;
     RDLCLayout = './ReportLayout/WhseShipmentNew.rdl';
     ApplicationArea = all;
-    Caption = 'Warehouse Shipment-NBK';
+    Caption = 'Warehouse Shipment';
     UsageCategory = Documents;
 
     dataset

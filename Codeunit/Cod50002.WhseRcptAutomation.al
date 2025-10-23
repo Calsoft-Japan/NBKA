@@ -1,6 +1,7 @@
 namespace NBKA.NBKA;
 
 using Microsoft.Projects.RoleCenters;
+using Microsoft.Warehouse.Comment;
 using System.Utilities;
 using Microsoft.Warehouse.Document;
 using Microsoft.Warehouse.Request;
@@ -48,13 +49,25 @@ codeunit 50002 WhseRcptAutomation
     procedure DeleteWarehouseRcpt()
     var
         WhseRcptHdr: Record "Warehouse Receipt Header";
-        ConfirmMgt: Codeunit "Confirm Management";
+        WhseRcptLine: Record "Warehouse Receipt Line";
+        WhseCommentLine: Record "Warehouse Comment Line";
     begin
         WhseRcptHdr.Reset();
         if WhseRcptHdr.FindSet() then
             repeat
-                WhseRcptHdr.Delete(true);
-            until WhseRcptHdr.Next() = 0;
+                WhseRcptLine.Reset();
+                WhseRcptLine.SetRange("No.", WhseRcptHdr."No.");
+                if WhseRcptLine.FindSet() then
+                    WhseRcptLine.DeleteAll();
 
+                WhseCommentLine.Reset();
+                WhseCommentLine.SetRange("Table Name", WhseCommentLine."Table Name"::"Whse. Receipt");
+                WhseCommentLine.SetRange(Type, WhseCommentLine.Type::" ");
+                WhseCommentLine.SetRange("No.", WhseRcptHdr."No.");
+                if WhseCommentLine.FindSet() then
+                    WhseCommentLine.DeleteAll();
+
+                WhseRcptHdr.Delete();
+            until WhseRcptHdr.Next() = 0;
     end;
 }

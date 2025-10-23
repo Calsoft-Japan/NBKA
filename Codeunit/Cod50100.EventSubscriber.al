@@ -256,11 +256,22 @@ codeunit 50100 EventSubscriber
 
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnAfterCopySalesHeaderDone', '', false, false)]
     local procedure OnAfterCopySalesHeaderDone(var ToSalesHeader: Record "Sales Header"; OldSalesHeader: Record "Sales Header"; FromSalesHeader: Record "Sales Header"; FromSalesShipmentHeader: Record "Sales Shipment Header"; FromSalesInvoiceHeader: Record "Sales Invoice Header"; FromReturnReceiptHeader: Record "Return Receipt Header"; FromSalesCrMemoHeader: Record "Sales Cr.Memo Header"; FromSalesHeaderArchive: Record "Sales Header Archive"; FromDocType: Enum "Sales Document Type From")
+    var
+        Paymentterms: Record "Payment Terms";
     begin
         if (ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::Order) or (ToSalesHeader."Document Type" = ToSalesHeader."Document Type"::Quote) then begin
             ToSalesHeader."Order Date" := Today;
             ToSalesHeader."Document Date" := Today;
+            Paymentterms.Get((ToSalesHeader."Payment Terms Code"));
+            ToSalesHeader."Due Date" := CalcDate(Paymentterms."Due Date Calculation", Today);
         end;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Line", 'OnValidateNoOnCopyFromTempSalesLine', '', false, false)]
+    local procedure OnValidateNoOnCopyFromTempSalesLine(var SalesLine: Record "Sales Line"; var TempSalesLine: Record "Sales Line" temporary; xSalesLine: Record "Sales Line"; CurrentFieldNo: Integer)
+    begin
+        if SalesLine.Type = SalesLine.Type::Item then
+            SalesLine."Ship-to PO No." := TempSalesLine."Ship-to PO No.";
     end;
 
 }
