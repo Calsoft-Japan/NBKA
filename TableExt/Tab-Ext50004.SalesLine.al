@@ -106,7 +106,8 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             trigger OnValidate()
             begin
                 if ("Discount Rate" <> 0) and (Rec."Discount Rate" <> xRec."Discount Rate") then begin
-                    "Line Discount %" := "Discount Rate";
+                    //"Line Discount %" := "Discount Rate";
+                    Rec.Validate("Line Discount %", "Discount Rate");
                     Modify();
                 end;
             end;
@@ -175,7 +176,7 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
                         Rec."Web Product No." := Item."Web Product No.";
                         Rec."Special Product" := Item."Special Product";
                     end;
-                    
+
                 if Rec."Special Product" then begin
                     Rec.Validate("Line Discount %", 0);
                     Rec."Original Discount %" := 0;

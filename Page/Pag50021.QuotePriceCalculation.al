@@ -161,6 +161,8 @@ page 50021 "Quote Price Calculation"
         GroProRate.Reset();
         if GroProRate.Get(SalesHeader."Customer Disc. Group", Itm."Item Disc. Group") then;
 
+
+
         Rec.Init();
         Rec."Quote No." := SalesLine."Document No.";
         Rec."Quote Line No." := SalesLine."Line No.";
@@ -174,6 +176,7 @@ page 50021 "Quote Price Calculation"
         Rec."Expenses Rate %" := Vendor."Expenses Rate %";
         Rec."Gross Profit Rate %" := GroProRate."Gross Profit Rate %";
         Rec."Item Category" := Itm."Item Disc. Group";
+        rec."Unit Type" := SalesLine."Unit of Measure Code";
         Rec.Insert();
 
         SetTableView(Rec);

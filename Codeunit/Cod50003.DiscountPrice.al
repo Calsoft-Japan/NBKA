@@ -37,7 +37,9 @@ codeunit 50003 "Discount Price"
 
                     if PriceMatchFound then begin
                         SalesLine."Line Discount %" := 0;
-                        SalesLine."Discount Rate" := 0;
+                        //   SalesLine.Validate("Line Discount %", 0);
+                        SalesLine.Validate("Discount Rate", 0);
+                        //SalesLine."Discount Rate" := 0;
                         SalesLine.Modify(true);
                     end else begin
                         TempOriginalPrice := SalesLine."Original Price";
