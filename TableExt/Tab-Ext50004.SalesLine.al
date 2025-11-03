@@ -104,11 +104,13 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             ToolTip = 'Specifies the discount percentage';
 
             trigger OnValidate()
+            var
+                salesheader: Record "Sales Header";
             begin
                 if ("Discount Rate" <> 0) and (Rec."Discount Rate" <> xRec."Discount Rate") then begin
-                    //"Line Discount %" := "Discount Rate";
-                    Rec.Validate("Line Discount %", "Discount Rate");
-                    Modify();
+                    // "Line Discount %" := "Discount Rate";
+                    Validate("Line Discount %", "Discount Rate");
+                    // Validate("Line Discount %", "Original Discount %");
                 end;
             end;
         }
@@ -146,7 +148,7 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
             trigger OnAfterValidate()
             begin
                 if not Rec."Special Product" then begin
-                    Rec."Original Discount %" := Rec."Line Discount %";
+                    //Rec."Original Discount %" := Rec."Line Discount %";
                     Rec."Discount Rate" := Rec."Line Discount %";
                 end;
             end;
