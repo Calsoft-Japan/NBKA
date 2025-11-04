@@ -105,6 +105,8 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
                 begin
                     if SalesHeader.Get(Rec."Document Type", Rec."Document No.") then
                         CalcPrice.RunForDocument(SalesHeader);
+                    CalculateTotals();
+                    CurrPage.Update(true);
                 end;
             }
 
