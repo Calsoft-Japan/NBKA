@@ -1,12 +1,12 @@
-//FDD301 page for the NBKAPI INS.
+//FDD301 page for the NBKAPI INS LINE.
 page 50038 "NBK_INS_LINE"
 {
     ApplicationArea = All;
-    Caption = 'NBK_INS';
+    Caption = 'NBK_INS_LINE';
     PageType = List;
     ODataKeyFields = "Entry No.";
     SourceTable = "NBKAPITBL_INS_LINE";
-    UsageCategory = Administration;
+    //UsageCategory = Administration;
     DeleteAllowed = false;
     ModifyAllowed = false;
     InsertAllowed = false;

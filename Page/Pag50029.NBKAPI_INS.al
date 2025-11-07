@@ -344,7 +344,7 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Sell-to Phone No.", Rec.TTELNO);
         RecSalesHeader.Validate("Sell-to Contact", Rec.TCONTACT);
         RecSalesHeader.Validate("Order Date", Rec.ORDERDATE);
-        RecSalesHeader.Validate("External Document No.", Rec.TKHAC);
+        //RecSalesHeader.Validate("External Document No.", Rec.TKHAC);
         RecSalesHeader.Validate("Your Reference", Rec.CART1);
         RecSalesHeader.Validate("EC Order", true);
         RecSalesHeader.Validate("Payment Method Code", Rec.PAYMENT);
@@ -383,6 +383,7 @@ page 50029 "NBKAPI_INS"
             RecSalesLine.Validate(Quantity, RecNBKAPITBL_INS_LINE.QTY);
             RecSalesLine.Validate("Unit Price", RecNBKAPITBL_INS_LINE.UNITPRICE);
             RecSalesLine.Validate("Requested Delivery Date", RecNBKAPITBL_INS_LINE.REQUESTDATE);
+            RecSalesLine.Validate("Ship-to PO No.", Rec.TKHAC);
             RecSalesLine.Insert(True);
         until RecNBKAPITBL_INS_LINE.Next() = 0;
         if Rec.FREIGHT > 0 then begin
