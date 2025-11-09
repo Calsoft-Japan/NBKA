@@ -30,5 +30,31 @@ pageextension 50100 CompanyInfoPageExtension extends "Company Information"
                 end;
             }
         }
+
+        addafter(IBAN)
+        {
+            field("NBK Check Address"; Rec."NBK Check Address")
+            {
+                ApplicationArea = all;
+            }
+            field("NBK Check City"; Rec."NBK Check City")
+            {
+                ApplicationArea = all;
+            }
+            field("NBK Check State"; Rec."NBK Check State")
+            {
+                ApplicationArea = all;
+            }
+            field("NBK Check Zip Code"; Rec."NBK Check Zip Code")
+            {
+                ApplicationArea = all;
+            }
+            field("NBK Check Country"; Rec."NBK Check Country")
+            {
+                ApplicationArea = all;
+            }
+
+        }
+
     }
 }

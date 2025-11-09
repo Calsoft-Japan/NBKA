@@ -29,6 +29,30 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
             {
                 ApplicationArea = All;
             }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemCreatedBy; GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemModifiedBy; GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
         }
 
         modify("Assigned User ID")
@@ -53,6 +77,15 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
         }
 
     }
+    local procedure GetUserName(UserSecurityId: Guid): Text
+    var
+        User: Record User;
+    begin
+        if User.Get(UserSecurityId) then
+            exit(User."User Name")
+        else
+            exit('');
+    end;
 
 }
 

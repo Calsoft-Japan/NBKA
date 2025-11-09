@@ -89,6 +89,21 @@ report 50105 "Standard Sales - Invoice"
             column(CompanyGiroNo; CompanyInfo."Giro No.")
             {
             }
+            column(CompanyInfo_Nbkadd; CompanyInfo."NBK Check Address")
+            {
+            }
+            column(CompanyInfo_Nbkcityadd; NbkCompanyaddress)
+            {
+            }
+            // column(CompanyInfo_NbkState; CompanyInfo."NBK Check State")
+            // {
+            // }
+            // column(CompanyInfo_NbkZip; CompanyInfo."NBK Check Zip Code")
+            // {
+            // }
+            // column(CompanyInfo_Nbkcountry; CompanyInfo."NBK Check Country")
+            // {
+            // }
             column(CompanyGiroNo_Lbl; CompanyInfoGiroNoLbl)
             {
             }
@@ -1449,6 +1464,7 @@ report 50105 "Standard Sales - Invoice"
         GLSetup.Get();
         CompanyInfo.SetAutoCalcFields(Picture);
         CompanyInfo.Get();
+        NbkCompanyaddress := CompanyInfo."NBK Check City" + ', ' + CompanyInfo."NBK Check State" + ' ' + CompanyInfo."NBK Check Zip Code" + ', ' + CompanyInfo."NBK Check Country";
         SalesSetup.Get();
         CompanyInfo.VerifyAndSetPaymentInfo();
 
@@ -1484,6 +1500,7 @@ report 50105 "Standard Sales - Invoice"
     end;
 
     var
+        NbkCompanyaddress: Text[100];
         Contact: Record Contact;
         GLSetup: Record "General Ledger Setup";
         DummyCompanyInfo: Record "Company Information";

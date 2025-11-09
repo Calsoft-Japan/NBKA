@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-09-11T14:31:10.6475087Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-11-09T17:04:51.3222932Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1515,8 +1515,7 @@
                                         <Paragraph>
                                           <TextRuns>
                                             <TextRun>
-                                              <Value>=Fields!CompanyAddress3.Value &amp; ", " &amp;  
- Fields!CompanyAddress4.Value</Value>
+                                              <Value>=Fields!CompanyInfo_Nbkcityadd.Value</Value>
                                               <Style>
                                                 <FontFamily>Segoe UI</FontFamily>
                                                 <FontSize>8pt</FontSize>
@@ -1578,7 +1577,7 @@
                                         <Paragraph>
                                           <TextRuns>
                                             <TextRun>
-                                              <Value>=Fields!CompanyAddress2.Value</Value>
+                                              <Value>=Fields!CompanyInfo_Nbkadd.Value</Value>
                                               <Style>
                                                 <FontFamily>Segoe UI</FontFamily>
                                                 <FontSize>8pt</FontSize>
@@ -2577,6 +2576,12 @@ End Function
         </Field>
         <Field Name="CompanyGiroNo">
           <DataField>CompanyGiroNo</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Nbkadd">
+          <DataField>CompanyInfo_Nbkadd</DataField>
+        </Field>
+        <Field Name="CompanyInfo_Nbkcityadd">
+          <DataField>CompanyInfo_Nbkcityadd</DataField>
         </Field>
         <Field Name="CompanyGiroNo_Lbl">
           <DataField>CompanyGiroNo_Lbl</DataField>
