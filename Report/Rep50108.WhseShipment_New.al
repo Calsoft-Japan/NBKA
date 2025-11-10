@@ -1,18 +1,5 @@
-// ------------------------------------------------------------------------------------------------
-// Copyright (c) Microsoft Corporation. All rights reserved.
-// Licensed under the MIT License. See License.txt in the project root for license information.
-// ------------------------------------------------------------------------------------------------
-namespace Microsoft.Warehouse.Document;
 
-using Microsoft.Inventory.Location;
-using System.Text;
-using Microsoft.Foundation.Shipping;
-using Microsoft.Foundation.Address;
-using Microsoft.Warehouse.Activity;
-using Microsoft.Sales.Document;
-using System.Utilities;
-
-report 50108 "Whse. - Shipment"
+report 50108 "Whse. - Shipment New"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './ReportLayout/WhseShipmentNew.rdl';

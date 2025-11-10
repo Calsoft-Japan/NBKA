@@ -139,10 +139,12 @@ report 50109 "CertificateofConformanceReport"
                     field(SalesShipmentNo; SalesShipmentNo)
                     {
                         Caption = 'Shipment No.';
+                        ApplicationArea = all;
                     }
                     field(LineNo; LineNo)
                     {
                         Caption = 'Line No.';
+                        ApplicationArea = all;
                     }
                 }
             }

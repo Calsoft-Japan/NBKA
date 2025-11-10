@@ -57,17 +57,20 @@ report 50100 "Create Warehouse Shipment New"
 
                     field("Do Not Fill Qty. to Handle"; DoNotFillQtytoHandle)
                     {
+                        ApplicationArea = all;
                         Caption = 'Do not fill Qty. to Handle';
                         ToolTip = 'Specifies if the Quantity to Handle field in the warehouse document is prefilled according to the source document quantities.';
                     }
                     field("Reserved Stock Only"; ReservedFromStock)
                     {
+                        ApplicationArea = all;
                         Caption = 'Reserved stock only';
                         ToolTip = 'Specifies if you want to include only source document lines that are fully or partially reserved from current stock.';
                         ValuesAllowed = " ", "Full and Partial", Full;
                     }
                     field(ToBeShippedBY; ToBeShippedBY)
                     {
+                        ApplicationArea = all;
                         Caption = 'To Be Shipped By';
                         ToolTip = 'Specifies if the To Be Shipped By field in the warehouse document is create source document on the date.';
                     }

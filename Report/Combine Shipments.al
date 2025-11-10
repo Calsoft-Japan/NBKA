@@ -1,13 +1,3 @@
-namespace Microsoft.Sales.Document;
-
-using Microsoft.Finance.GeneralLedger.Setup;
-using Microsoft.Finance.VAT.Calculation;
-using Microsoft.Foundation.PaymentTerms;
-using Microsoft.Sales.Customer;
-using Microsoft.Sales.History;
-using Microsoft.Sales.Posting;
-using Microsoft.Sales.Setup;
-using System.Globalization;
 
 report 50111 "Combine Shipments NBK"
 {

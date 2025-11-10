@@ -1,32 +1,5 @@
-namespace Microsoft.Sales.Document;
 
-using Microsoft.Bank.BankAccount;
-using Microsoft.CRM.Contact;
-using Microsoft.Inventory.Item;
-using Microsoft.CRM.Interaction;
-using Microsoft.CRM.Segment;
-using Microsoft.CRM.Team;
-using Microsoft.Finance.Currency;
-using Microsoft.Finance.GeneralLedger.Setup;
-using Microsoft.Finance.SalesTax;
-using Microsoft.Finance.VAT.Calculation;
-using Microsoft.Finance.VAT.Clause;
-using Microsoft.Foundation.Address;
-using Microsoft.Foundation.Company;
-using Microsoft.Foundation.PaymentTerms;
-using Microsoft.Foundation.Reporting;
-using Microsoft.Foundation.Shipping;
-using Microsoft.Inventory.Location;
-using Microsoft.Sales.Customer;
-using Microsoft.Sales.Posting;
-using Microsoft.Sales.Setup;
-using Microsoft.Utilities;
-using System.Email;
-using System.Globalization;
-using System.Text;
-using System.Utilities;
-
-report 50102 "Standard Sales - Quote"
+report 50102 "Standard Sales - Quote New"
 {
     DefaultLayout = RDLC;
     RDLCLayout = './ReportLayout/StandardSalesQuoteNew.rdl';
