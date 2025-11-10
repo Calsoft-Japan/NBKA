@@ -95,15 +95,6 @@ report 50105 "Standard Sales - Invoice"
             column(CompanyInfo_Nbkcityadd; NbkCompanyaddress)
             {
             }
-            // column(CompanyInfo_NbkState; CompanyInfo."NBK Check State")
-            // {
-            // }
-            // column(CompanyInfo_NbkZip; CompanyInfo."NBK Check Zip Code")
-            // {
-            // }
-            // column(CompanyInfo_Nbkcountry; CompanyInfo."NBK Check Country")
-            // {
-            // }
             column(CompanyGiroNo_Lbl; CompanyInfoGiroNoLbl)
             {
             }
