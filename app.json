@@ -40,6 +40,12 @@
       "name": "Dynamic Ship: Integrated Shipping",
       "version": "2.0.0.0",
       "publisher": "Insight Works"
+    },
+    {
+      "id": "f4b69b55-c90d-4937-8f53-2742898fa948",
+      "name": "Continia Document Output",
+      "version": "1.0.0.0",
+      "publisher": "Continia Software"
     }
   ],
   "screenshots": [],

@@ -186,6 +186,7 @@ page 50026 "NBKAPI_INSTOKUCD"
         RecCustomer.Validate("Gen. Bus. Posting Group", 'DEFAULT');
         RecCustomer.Validate("Customer Posting Group", 'DEFAULT');
         RecCustomer.Validate("Location Code", 'NBKAM');
+        RecCustomer.Validate("CDO Send Code", 'EMAIL');
         if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
