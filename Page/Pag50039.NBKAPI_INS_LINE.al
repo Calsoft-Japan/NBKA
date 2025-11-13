@@ -79,6 +79,10 @@ page 50039 "NBKAPI_INS_LINE"
                 {
                     ApplicationArea = All;
                 }
+                field(TKHAC; Rec.TKHAC)
+                {
+                    ApplicationArea = All;
+                }
             }
         }
     }

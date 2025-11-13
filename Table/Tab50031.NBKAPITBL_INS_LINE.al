@@ -57,7 +57,11 @@ table 50031 "NBKAPITBL_INS_LINE"
         {
             Caption = 'REQUESTDATE';
         }
-        field(12; "JUCH2"; Integer)
+        field(12; "TKHAC"; Code[35])
+        {
+            Caption = 'TKHAC';
+        }
+        field(13; "JUCH2"; Integer)
         {
             Caption = 'JUCH2';
         }

@@ -89,11 +89,6 @@ page 50028 "NBK_INS"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(TKHAC; Rec.TKHAC)
-                {
-                    ApplicationArea = All;
-                    Editable = false;
-                }
                 field(FREIGHT; Rec.FREIGHT)
                 {
                     ApplicationArea = All;

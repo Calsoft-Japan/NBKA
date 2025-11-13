@@ -77,10 +77,6 @@ page 50029 "NBKAPI_INS"
                     ApplicationArea = All;
                     Editable = false;
                 }
-                field(TKHAC; Rec.TKHAC)
-                {
-                    ApplicationArea = All;
-                }
                 field(FREIGHT; Rec.FREIGHT)
                 {
                     ApplicationArea = All;
@@ -383,7 +379,7 @@ page 50029 "NBKAPI_INS"
             RecSalesLine.Validate(Quantity, RecNBKAPITBL_INS_LINE.QTY);
             RecSalesLine.Validate("Unit Price", RecNBKAPITBL_INS_LINE.UNITPRICE);
             RecSalesLine.Validate("Requested Delivery Date", RecNBKAPITBL_INS_LINE.REQUESTDATE);
-            RecSalesLine.Validate("Ship-to PO No.", Rec.TKHAC);
+            RecSalesLine.Validate("Ship-to PO No.", RecNBKAPITBL_INS_LINE.TKHAC);
             RecSalesLine.Insert(True);
         until RecNBKAPITBL_INS_LINE.Next() = 0;
         if Rec.FREIGHT > 0 then begin

@@ -72,6 +72,11 @@ page 50038 "NBK_INS_LINE"
                     ApplicationArea = All;
                     Editable = false;
                 }
+                field(TKHAC; Rec.TKHAC)
+                {
+                    ApplicationArea = All;
+                    Editable = false;
+                }
             }
         }
     }
