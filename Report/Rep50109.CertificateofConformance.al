@@ -115,6 +115,8 @@ report 50109 "CertificateofConformanceReport"
                 begin
                     if LineNo <> '' then
                         "Sales Shipment Line".SetFilter("Line No.", LineNo);
+                    "Sales Shipment Line".SetFilter(Quantity, '<>%1', 0);
+
                 end;
             }
             trigger OnPreDataItem()

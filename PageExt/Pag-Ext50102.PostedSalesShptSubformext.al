@@ -36,9 +36,11 @@ pageextension 50102 PostedSalesShptSubformext extends "Posted Sales Shpt. Subfor
                     CocReport: Report CertificateofConformanceReport;
                 begin
                     Rec.TestField("Certificate of Conformance", true);
-                    Clear(CocReport);
-                    CocReport.SetFilters(Rec."Document No.", Format(Rec."Line No."));
-                    CocReport.Run();
+                    if Rec.Quantity <> 0 then begin
+                        Clear(CocReport);
+                        CocReport.SetFilters(Rec."Document No.", Format(Rec."Line No."));
+                        CocReport.Run();
+                    end;
                 end;
             }
         }
