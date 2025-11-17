@@ -348,7 +348,7 @@ page 50029 "NBKAPI_INS"
         if (Rec.RESELLER = '') and (Rec.TSTATE = RecCompanyInfo.County) then begin
             RecSalesHeader.Validate("Tax Liable", true);
         end;
-        RecSalesHeader.Validate("Ship-to Code", Rec.NONYCD);
+        //RecSalesHeader.Validate("Ship-to Code", Rec.NONYCD);
         RecSalesHeader.Validate("Ship-to Name", Rec.NNAME);
         RecSalesHeader.Validate("Ship-to Address", Rec.NADDRESS);
         RecSalesHeader.Validate("Ship-to Address 2", Rec.NADDRESS2);
@@ -360,6 +360,7 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Ship-to Contact", Rec.NCONTACT);
         RecSalesHeader.Validate("Shipping Agent Code", Rec.SHIPAGENT);
         RecSalesHeader.Validate("Shipping Agent Service Code", Rec.SHIPSERVICE);
+        RecSalesHeader.Validate("Shipping Advice", RecSalesHeader."Shipping Advice"::Complete);
         RecSalesHeader.Modify(true);
 
         LineNo := 0;
