@@ -1422,7 +1422,9 @@ report 50105 "Standard Sales - Invoice New"
         GLSetup.Get();
         CompanyInfo.SetAutoCalcFields(Picture);
         CompanyInfo.Get();
-        NbkCompanyaddress := CompanyInfo."NBK Check City" + ', ' + CompanyInfo."NBK Check State" + ' ' + CompanyInfo."NBK Check Zip Code" + ', ' + CompanyInfo."NBK Check Country";
+        if CountryRec.Get(CompanyInfo."NBK Check Country") then
+            CountryName := CountryRec.Name;
+        NbkCompanyaddress := CompanyInfo."NBK Check City" + ', ' + CompanyInfo."NBK Check State" + ' ' + CompanyInfo."NBK Check Zip Code" + ', ' + CountryName;
         SalesSetup.Get();
         CompanyInfo.VerifyAndSetPaymentInfo();
 
@@ -1458,6 +1460,8 @@ report 50105 "Standard Sales - Invoice New"
     end;
 
     var
+        Countryrec: Record "Country/Region";
+        CountryName: Text;
         NbkCompanyaddress: Text[100];
         Contact: Record Contact;
         GLSetup: Record "General Ledger Setup";

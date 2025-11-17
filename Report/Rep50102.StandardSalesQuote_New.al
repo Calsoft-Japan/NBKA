@@ -632,12 +632,15 @@ report 50102 "Standard Sales - Quote New"
                     OnAfterCalculateSalesTax(Header, Line, TotalAmount, TotalAmountVAT, TotalAmountInclVAT);
 
                     FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
-                    if Line."Lead Time text" = '' then
-                        Leadtimetxt := 'Under confirmation'
-                    else if line."Lead Time text" = '0' then
-                        Leadtimetxt := 'In-stock'
-                    else
-                        Leadtimetxt := "Lead Time text" + ' business day(s)';
+                    if line.Type = line.Type::Item then begin
+                        if Line."Lead Time text" = '' then
+                            Leadtimetxt := 'Under confirmation'
+                        else if line."Lead Time text" = '0' then
+                            Leadtimetxt := 'In-stock'
+                        else
+                            Leadtimetxt := "Lead Time text" + ' business day(s)';
+                    end else
+                        Leadtimetxt := '';
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
                     FirstLineHasBeenOutput := true;

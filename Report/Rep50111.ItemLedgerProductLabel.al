@@ -9,7 +9,7 @@ report 50112 ItemLedgerProductLabel
     Caption = 'ItemLedgerProductLabel';
     UsageCategory = ReportsAndAnalysis;
     DefaultLayout = RDLC;
-    RDLCLayout = './ReportLayout/ItemLedgerProductLabel.rdl';
+    RDLCLayout = './ReportLayout/ItemLedgerProductLabelNew.rdl';
     dataset
     {
         dataitem(ItemLedgerEntry; "Item Ledger Entry")
@@ -17,7 +17,7 @@ report 50112 ItemLedgerProductLabel
             column(ItemNo; "Item No.")
             {
             }
-            column(Item_Description; Description)
+            column(Item_Description; "Item Description")
             {
             }
             column(Item_RemainingQuantity; "Remaining Quantity")
@@ -40,6 +40,7 @@ report 50112 ItemLedgerProductLabel
             }
             trigger OnAfterGetRecord()
             begin
+                CalcFields("Item Description");
                 Clear(trecBarcode);
                 Clear(BarcodeTxt);
                 BarcodeTxt := "Item No." + '_' + Format("Remaining Quantity");

@@ -46,8 +46,9 @@ tableextension 50000 "Item Ext" extends "Item"
 
     trigger OnInsert()
     begin
-        Rec.Validate(Blocked, true);
+        //Rec.Validate(Blocked, true);
     end;
+
 
 
     procedure UpdateBlockedField(var ItemRec: Record "Item")

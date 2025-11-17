@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-11-13T19:26:31.1397755Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-11-13T20:21:25.1116036Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -30,12 +30,12 @@
             <TablixBody>
               <TablixColumns>
                 <TablixColumn>
-                  <Width>2.11112in</Width>
+                  <Width>2.77779in</Width>
                 </TablixColumn>
               </TablixColumns>
               <TablixRows>
                 <TablixRow>
-                  <Height>1.34806in</Height>
+                  <Height>1.20084in</Height>
                   <TablixCells>
                     <TablixCell>
                       <CellContents>
@@ -46,7 +46,7 @@
                               <Value>=Fields!fldBarcode.Value</Value>
                               <MIMEType>image/bmp</MIMEType>
                               <Sizing>Fit</Sizing>
-                              <Top>0.82584in</Top>
+                              <Top>0.68834in</Top>
                               <Left>0.04584in</Left>
                               <Height>0.5in</Height>
                               <Width>0.5in</Width>
@@ -65,7 +65,7 @@
                                     <TextRun>
                                       <Value>=Fields!Item_Description.Value</Value>
                                       <Style>
-                                        <FontSize>12pt</FontSize>
+                                        <FontSize>8pt</FontSize>
                                         <FontWeight>Bold</FontWeight>
                                       </Style>
                                     </TextRun>
@@ -78,8 +78,8 @@
                               <rd:DefaultName>trecItems__No__2_</rd:DefaultName>
                               <Top>0.025in</Top>
                               <Left>0.0375in</Left>
-                              <Height>0.24806in</Height>
-                              <Width>2.06944in</Width>
+                              <Height>0.18973in</Height>
+                              <Width>2.74029in</Width>
                               <ZIndex>1</ZIndex>
                               <Style>
                                 <Border>
@@ -96,15 +96,17 @@
                               <Value>=Fields!CompanyInfo_pic.Value</Value>
                               <MIMEType>image/bmp</MIMEType>
                               <Sizing>FitProportional</Sizing>
-                              <Top>0.82584in</Top>
-                              <Left>1.61112in</Left>
+                              <Top>0.68834in</Top>
+                              <Left>1.54862in</Left>
                               <Height>0.5in</Height>
-                              <Width>0.5in</Width>
+                              <Width>1.22917in</Width>
                               <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
                                 </Border>
+                                <PaddingLeft>5pt</PaddingLeft>
+                                <PaddingTop>1pt</PaddingTop>
                               </Style>
                             </Image>
                             <Textbox Name="Textbox1">
@@ -116,6 +118,7 @@
                                     <TextRun>
                                       <Value>=Fields!Item_RemainingQuantity.Value &amp; " " &amp; Fields!Item_Unit_of_Measure_Code.Value</Value>
                                       <Style>
+                                        <FontSize>8pt</FontSize>
                                         <Format>0.00;(0.00);''</Format>
                                       </Style>
                                     </TextRun>
@@ -124,11 +127,43 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox1</rd:DefaultName>
-                              <Top>0.405in</Top>
-                              <Left>0.88196in</Left>
-                              <Height>0.17361in</Height>
-                              <Width>1.22916in</Width>
+                              <Top>0.35917in</Top>
+                              <Left>1.54862in</Left>
+                              <Height>0.25in</Height>
+                              <Width>1.22917in</Width>
                               <ZIndex>3</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Textbox Name="Textbox3">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value />
+                                      <Style>
+                                        <FontSize>8pt</FontSize>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox3</rd:DefaultName>
+                              <Top>0.35917in</Top>
+                              <Left>0.0375in</Left>
+                              <Height>0.25in</Height>
+                              <Width>1.51112in</Width>
+                              <ZIndex>4</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -156,11 +191,11 @@
                                 </Paragraph>
                               </Paragraphs>
                               <rd:DefaultName>Textbox2</rd:DefaultName>
-                              <Top>1.01056in</Top>
+                              <Top>0.87306in</Top>
                               <Left>0.58751in</Left>
                               <Height>0.15278in</Height>
                               <Width>0.78611in</Width>
-                              <ZIndex>4</ZIndex>
+                              <ZIndex>5</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -175,6 +210,7 @@
                           <KeepTogether>true</KeepTogether>
                           <Style />
                         </Rectangle>
+                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>
@@ -199,18 +235,18 @@
               </TablixMembers>
             </TablixRowHierarchy>
             <DataSetName>DataSet_Result</DataSetName>
-            <Height>1.34806in</Height>
-            <Width>2.11112in</Width>
+            <Height>1.20084in</Height>
+            <Width>2.77779in</Width>
             <DataElementOutput>NoOutput</DataElementOutput>
             <Style>
               <FontSize>8pt</FontSize>
             </Style>
           </Tablix>
         </ReportItems>
-        <Height>1.36056in</Height>
+        <Height>1.20084in</Height>
         <Style />
       </Body>
-      <Width>2.12501in</Width>
+      <Width>2.77779in</Width>
       <Page>
         <PageHeight>1.5in</PageHeight>
         <PageWidth>3in</PageWidth>
