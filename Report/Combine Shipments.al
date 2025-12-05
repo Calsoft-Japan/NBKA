@@ -100,11 +100,6 @@ report 50111 "Combine Shipments NBK"
                     if IsCompletlyInvoiced() then
                         CurrReport.Skip();
 
-                    if not (Invoiceemail.Contains("Sales Shipment Header"."Sell-to E-Mail")) then
-                        if Invoiceemail = '' then
-                            Invoiceemail := "Sales Shipment Header"."Sell-to E-Mail"
-                        else
-                            Invoiceemail := Invoiceemail + ';' + "Sales Shipment Header"."Sell-to E-Mail";
 
                     if OnlyStdPmtTerms then begin
                         Cust.Get("Bill-to Customer No.");
@@ -161,6 +156,9 @@ report 50111 "Combine Shipments NBK"
                     Error(Text001);
                 if VATDateReq = 0D then
                     Error(VATDateEmptyErr);
+
+                // FilterText := GetFilter(SalesOrderHeader."Sell-to Customer No.");
+                // FilterText2 := GetFilter(SalesOrderHeader."Bill-to Customer No.");
 
                 Window.Open(
                   Text002 +
@@ -282,12 +280,6 @@ report 50111 "Combine Shipments NBK"
 
     trigger OnPostReport()
     begin
-        if not PostInv then
-            if SalesHeader."No." <> '' then begin
-                SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));
-                SalesHeader.Modify();
-            end;
-
         OnBeforePostReport();
     end;
 
@@ -357,6 +349,7 @@ report 50111 "Combine Shipments NBK"
         if HasError then
             NoOfSalesInvErrors += 1;
 
+
         if (not HasAmount) or HasError then begin
             OnFinalizeSalesInvHeaderOnBeforeDelete(SalesHeader);
             SalesHeader.Delete(true);
@@ -375,9 +368,6 @@ report 50111 "Combine Shipments NBK"
 
         OnFinalizeSalesInvHeaderOnAfterCalcShouldPostInv(SalesHeader, NoOfSalesInv, ShouldPostInv);
         if ShouldPostInv then begin
-            SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));  //For Auto Posting 
-            SalesHeader.Modify();
-            Commit();
             Clear(SalesPost);
             if not SalesPost.Run(SalesHeader) then
                 NoOfSalesInvErrors := NoOfSalesInvErrors + 1;
@@ -387,6 +377,12 @@ report 50111 "Combine Shipments NBK"
     local procedure InsertSalesInvHeader()
     var
         IsHandled: Boolean;
+        SalesHeaderRec: Record "Sales Header";
+        SalesShipmentHeaderRec: Record "Sales Shipment Header";
+        SalesShipmentLineRec: Record "Sales Shipment Line";
+        DueDate: Date;
+        PmtDiscDate: Date;
+        PmtDiscPct: Decimal;
     begin
         IsHandled := false;
         OnBeforeInsertSalesInvHeader(SalesHeader, SalesOrderHeader, "Sales Shipment Header", "Sales Shipment Line", NoOfSalesInv, HasAmount, IsHandled);
@@ -410,6 +406,59 @@ report 50111 "Combine Shipments NBK"
             SalesHeader."Shortcut Dimension 1 Code" := SalesOrderHeader."Shortcut Dimension 1 Code";
             SalesHeader."Shortcut Dimension 2 Code" := SalesOrderHeader."Shortcut Dimension 2 Code";
             SalesHeader."Dimension Set ID" := SalesOrderHeader."Dimension Set ID";
+
+            Clear(Invoiceemail);
+            SalesHeaderRec.Reset();
+            SalesHeaderRec.SetRange("Sell-to Customer No.", SalesOrderHeader."Sell-to Customer No.");
+            SalesHeaderRec.SetRange("Bill-to Customer No.", SalesOrderHeader."Bill-to Customer No.");
+            SalesHeaderRec.SetRange("Document Type", SalesHeaderRec."Document Type"::Order);
+            SalesHeaderRec.SetRange("Combine Shipments", true);
+            if SalesHeaderRec.FindFirst() then
+                repeat
+                    SalesShipmentHeaderRec.Reset();
+                    SalesShipmentHeaderRec.SetRange("Order No.", SalesHeaderRec."No.");
+                    if SalesShipmentHeaderRec.FindFirst() then
+                        repeat
+
+                            if OnlyStdPmtTerms then begin
+                                Cust.Get(SalesShipmentHeaderRec."Bill-to Customer No.");
+                                PmtTerms.Get(Cust."Payment Terms Code");
+                                if PmtTerms.Code = SalesShipmentHeaderRec."Payment Terms Code" then begin
+                                    DueDate := CalcDate(PmtTerms."Due Date Calculation", SalesShipmentHeaderRec."Document Date");
+                                    PmtDiscDate := CalcDate(PmtTerms."Discount Date Calculation", SalesShipmentHeaderRec."Document Date");
+                                    PmtDiscPct := PmtTerms."Discount %";
+                                    if (DueDate = SalesShipmentHeaderRec."Due Date") and
+                                       (PmtDiscDate = SalesShipmentHeaderRec."Pmt. Discount Date") and
+                                       (PmtDiscPct = SalesShipmentHeaderRec."Payment Discount %")
+                                    then begin
+                                        SalesShipmentLineRec.Reset();
+                                        SalesShipmentLineRec.SetRange("Document No.", SalesShipmentHeaderRec."No.");
+                                        SalesShipmentLineRec.SetFilter("Qty. Shipped Not Invoiced", '<>0');
+                                        if not SalesShipmentLineRec.IsEmpty() then
+                                            if not (Invoiceemail.Contains(SalesShipmentHeaderRec."Sell-to E-Mail")) then
+                                                if Invoiceemail = '' then
+                                                    Invoiceemail := SalesShipmentHeaderRec."Sell-to E-Mail"
+                                                else
+                                                    Invoiceemail := Invoiceemail + ';' + SalesShipmentHeaderRec."Sell-to E-Mail";
+                                    end;
+                                end;
+                            end else begin
+                                SalesShipmentLineRec.Reset();
+                                SalesShipmentLineRec.SetRange("Document No.", SalesShipmentHeaderRec."No.");
+                                SalesShipmentLineRec.SetFilter("Qty. Shipped Not Invoiced", '<>0');
+                                if not SalesShipmentLineRec.IsEmpty() then
+                                    if not (Invoiceemail.Contains(SalesShipmentHeaderRec."Sell-to E-Mail")) then
+                                        if Invoiceemail = '' then
+                                            Invoiceemail := SalesShipmentHeaderRec."Sell-to E-Mail"
+                                        else
+                                            Invoiceemail := Invoiceemail + ';' + SalesShipmentHeaderRec."Sell-to E-Mail";
+                            end;
+
+                        until SalesShipmentHeaderRec.Next() = 0;
+                until SalesHeaderRec.Next() = 0;
+
+            SalesHeader."Invoice Email" := CopyStr(Invoiceemail, 1, MaxStrLen(SalesHeader."Invoice Email"));
+
             OnBeforeSalesInvHeaderModify(SalesHeader, SalesOrderHeader);
             SalesHeader.Modify();
             Commit();
@@ -418,7 +467,8 @@ report 50111 "Combine Shipments NBK"
         OnAfterInsertSalesInvHeader(SalesHeader, "Sales Shipment Header");
     end;
 
-    local procedure InsertInventoryLineFromShipmentLine(var SalesShipmentLine: Record "Sales Shipment Line")
+    local procedure InsertInventoryLineFromShipmentLine(var
+                                                            SalesShipmentLine: Record "Sales Shipment Line")
     var
         IsHandled: Boolean;
     begin
