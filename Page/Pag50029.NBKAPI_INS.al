@@ -322,6 +322,7 @@ page 50029 "NBKAPI_INS"
         RecSalesLine: Record "Sales Line";
         RecDSPkgOpt: Record "DSHIP Package Options";
         RecCompanyInfo: Record "Company Information";
+        ReleaseSalDoc: Codeunit "Release Sales Document";
         PayAccNo: Text;
         LineNo: Integer;
     begin
@@ -411,6 +412,8 @@ page 50029 "NBKAPI_INS"
                 RecDSPkgOpt.Modify(true);
             end;
         end;
+        RecSalesHeader.SetHideValidationDialog(true);
+        ReleaseSalDoc.PerformManualRelease(RecSalesHeader);
     end;
 
 }
