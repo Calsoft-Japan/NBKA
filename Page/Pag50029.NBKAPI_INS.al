@@ -323,8 +323,10 @@ page 50029 "NBKAPI_INS"
         RecDSPkgOpt: Record "DSHIP Package Options";
         RecCompanyInfo: Record "Company Information";
         ReleaseSalDoc: Codeunit "Release Sales Document";
+        RecDSSet: Record "DSHIP Setup";
         PayAccNo: Text;
         LineNo: Integer;
+        OldDSAVB: Enum "DSHIP Address Val. Behaviour";
     begin
         RecSalesHeader.Init();
         RecSalesHeader.Validate("Document Type", RecSalesHeader."Document Type"::Order);
@@ -412,8 +414,14 @@ page 50029 "NBKAPI_INS"
                 RecDSPkgOpt.Modify(true);
             end;
         end;
+        RecDSSet.Get();
+        OldDSAVB := RecDSSet."Automated Validation Behaviour";
+        RecDSSet."Automated Validation Behaviour" := RecDSSet."Automated Validation Behaviour"::"No Validation";
+        RecDSSet.Modify();
         RecSalesHeader.SetHideValidationDialog(true);
         ReleaseSalDoc.PerformManualRelease(RecSalesHeader);
+        RecDSSet."Automated Validation Behaviour" := OldDSAVB;
+        RecDSSet.Modify();
     end;
 
 }
