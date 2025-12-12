@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-11-13T20:21:25.1116036Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2025-12-08T18:09:43.9249621Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -116,7 +116,7 @@
                                 <Paragraph>
                                   <TextRuns>
                                     <TextRun>
-                                      <Value>=Fields!Item_RemainingQuantity.Value &amp; " " &amp; Fields!Item_Unit_of_Measure_Code.Value</Value>
+                                      <Value>=Fields!Item_RemainingQuantity.Value &amp; "   " &amp; Fields!Item_Unit_of_Measure_Code.Value</Value>
                                       <Style>
                                         <FontSize>8pt</FontSize>
                                         <Format>0.00;(0.00);''</Format>
@@ -210,7 +210,6 @@
                           <KeepTogether>true</KeepTogether>
                           <Style />
                         </Rectangle>
-                        <rd:Selected>true</rd:Selected>
                       </CellContents>
                     </TablixCell>
                   </TablixCells>

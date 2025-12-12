@@ -319,6 +319,7 @@ report 50104 "Sales Shipment New"
                         column(TempSalesShptLineNo; TempSalesShipmentLine."Line No.")
                         {
                         }
+
                         column(Description_ShptLine; TempSalesShipmentLine.Description)
                         {
                         }
@@ -382,6 +383,9 @@ report 50104 "Sales Shipment New"
                         column(ShippedQtylbl; ShippedQtylbl)
                         {
                         }
+                        column(Unitlbl; Unitlbl)
+                        {
+                        }
                         column(UnitWeightlbl; UnitWeightlbl)
                         {
                         }
@@ -399,7 +403,12 @@ report 50104 "Sales Shipment New"
                         column(Item_TarrifNo; ItemRec."Tariff No.")
                         {
                         }
-
+                        column(TempSalesShipmentLine_ShiptopoNo; TempSalesShipmentLine."Ship-to PO No.")
+                        {
+                        }
+                        column(PoNolbl; PoNolbl)
+                        {
+                        }
                         dataitem(AsmLoop; "Integer")
                         {
                             DataItemTableView = sorting(Number);
@@ -796,11 +805,13 @@ report 50104 "Sales Shipment New"
         NBKProductNolbl: Label 'NBK Product No.';
         CustomerProductNolbl: Label 'Customer Product No.';
         HtsCodelbl: Label 'HTS Code';
-        ShippedQtylbl: Label 'Shipped Quantity';
+        ShippedQtylbl: Label 'Shipped Qty.';
         UnitWeightlbl: Label 'Unit weight (lbs)';
+        Unitlbl: Label 'Unit';
         Grossweightlbl: Label 'Gross weight (lbs)';
         ShiptoAddrLbl: Label 'Ship-to Address';
         ShipmentNolbl: Label 'Shipment No.';
+        PoNolbl: label 'PO NO.';
         ShippingAgent: Record "Shipping Agent";
         ShippingAgentService: Record "Shipping Agent Services";
         ItemRec: Record Item;

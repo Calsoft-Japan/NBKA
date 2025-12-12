@@ -453,6 +453,10 @@ report 50103 "Standard Sales -Order Conf.New"
             {
 
             }
+            column(ShippingAgentService_Code; ShippingAgentService.Code)
+            {
+
+            }
             column(ShippingAgentServicelbl; ShippingAgentServicelbl)
             {
             }
@@ -514,6 +518,12 @@ report 50103 "Standard Sales -Order Conf.New"
                 {
                 }
                 column(ItemNo_Line; "No.")
+                {
+                }
+                column(ShiptoPONo_Line; "Ship-to PO No.")
+                {
+                }
+                column(PoNolbl; PoNolbl)
                 {
                 }
                 column(ItemNo_Line_Lbl; FieldCaption("No."))
@@ -669,10 +679,13 @@ report 50103 "Standard Sales -Order Conf.New"
                     FormatDocument.SetSalesLine(Line, FormattedQuantity, FormattedUnitPrice, FormattedVATPct, FormattedLineAmount);
 
                     Clear(ShippingDateLine);
-                    if Line."Shipping Date" <> 0D then
-                        ShippingDateLine := Format(Line."Shipping Date", 0, '<Month>/<Day>/<Year4>')
-                    else
-                        ShippingDateLine := 'TBA';
+                    if Line.Type = Line.Type::Item then begin
+                        if Line."Shipping Date" <> 0D then
+                            ShippingDateLine := Format(Line."Shipping Date", 0, '<Month>/<Day>/<Year4>')
+                        else
+                            ShippingDateLine := 'TBA';
+                    end;
+
 
                     if FirstLineHasBeenOutput then
                         Clear(DummyCompanyInfo.Picture);
@@ -1198,6 +1211,7 @@ report 50103 "Standard Sales -Order Conf.New"
     end;
 
     var
+        PoNolbl: Label 'PO No.';
         shippingdateLine: Text;
         GLSetup: Record "General Ledger Setup";
         CompanyBankAccount: Record "Bank Account";

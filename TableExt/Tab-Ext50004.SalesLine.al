@@ -134,7 +134,7 @@ tableextension 50004 "SalesLine Ext" extends "Sales Line"
                 end;
             end;
         }
-        field(50017; "Ship-to PO No."; Code[30])
+        field(50017; "Ship-to PO No."; Code[100])
         {
             Caption = 'Ship-to PO No.';
             DataClassification = ToBeClassified;

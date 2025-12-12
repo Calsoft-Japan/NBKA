@@ -733,6 +733,9 @@ report 50105 "Standard Sales - Invoice New"
                 column(SalesShipmentHeader_ExternalDocNo; SalesShipmentHeader."External Document No.")
                 {
                 }
+                column(SalesShipmentHeader_ShiptoPONo; "Ship-to PO No.")
+                {
+                }
                 dataitem(ShipmentLine; "Sales Shipment Buffer")
                 {
                     DataItemTableView = sorting("Document No.", "Line No.", "Entry No.");

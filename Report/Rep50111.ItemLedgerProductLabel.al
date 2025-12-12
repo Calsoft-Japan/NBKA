@@ -20,7 +20,7 @@ report 50112 ItemLedgerProductLabel
             column(Item_Description; "Item Description")
             {
             }
-            column(Item_RemainingQuantity; "Remaining Quantity")
+            column(Item_RemainingQuantity; Quantity_Rec)
             {
             }
             column(Item_Unit_of_Measure_Code; "Unit of Measure Code")
@@ -43,7 +43,9 @@ report 50112 ItemLedgerProductLabel
                 CalcFields("Item Description");
                 Clear(trecBarcode);
                 Clear(BarcodeTxt);
-                BarcodeTxt := "Item No." + '_' + Format("Remaining Quantity");
+                if not OverwriteLblQty then
+                    Quantity_Rec := "Remaining Quantity";
+                BarcodeTxt := "Item No." + '_' + Format(Quantity_Rec);
 
                 cuWHICommon.Create2DBarcode(trecBarcode, BarcodeTxt, recWHISetup."Barcode Dot Size", recWHISetup."Barcode Margin Size", recWHISetup."Barcode Image Size");
             end;
@@ -68,6 +70,20 @@ report 50112 ItemLedgerProductLabel
                     {
                         ApplicationArea = all;
                         Caption = 'Entry No.';
+                    }
+
+                    field(OverwriteLblQty; OverwriteLblQty)
+                    {
+                        ApplicationArea = all;
+                        Caption = 'Overwrite Label Quantity';
+                    }
+
+                    field(Quantity_Rec; Quantity_Rec)
+                    {
+                        ApplicationArea = all;
+                        Caption = 'Quantity';
+                        Editable = OverwriteLblQty;
+                        DecimalPlaces = 0 : 0;
                     }
                 }
             }
@@ -96,4 +112,6 @@ report 50112 ItemLedgerProductLabel
         BarcodeTxt: Text;
         recWHISetup: Record "WHI Setup";
         EntryNoFilter: Text;
+        Quantity_Rec: Decimal;
+        OverwriteLblQty: Boolean;
 }
