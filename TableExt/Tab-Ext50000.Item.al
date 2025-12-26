@@ -10,7 +10,7 @@ tableextension 50000 "Item Ext" extends "Item"
 
             begin
                 // Call the procedure to update blocked status
-                // Changed by FDD V1.2
+                // Changed by FDD 001 V1.2
                 //UpdateBlockedField(Rec);
                 UpdateSalesBlockedField(Rec);
             end;
@@ -25,7 +25,7 @@ tableextension 50000 "Item Ext" extends "Item"
 
             begin
                 // Call the procedure to update blocked status
-                // Changed by FDD V1.2
+                // Changed by FDD 001 V1.2
                 //UpdateBlockedField(Rec);
                 UpdateSalesBlockedField(Rec);
             end;
@@ -55,7 +55,7 @@ tableextension 50000 "Item Ext" extends "Item"
         Rec.Validate("Sales Blocked", true);
     end;
 
-    // Added by FDD V1.2 start
+    // Added by FDD 001 V1.2 start
     procedure UpdateSalesBlockedField(var ItemRec: Record "Item")
     begin
         //Check if today is within the Effective and Expiration date range
@@ -75,7 +75,7 @@ tableextension 50000 "Item Ext" extends "Item"
                 ItemRec.Modify();
         end;
     end;
-    // Added by FDD V1.2 end
+    // Added by FDD 001 V1.2 end
 
     procedure UpdateBlockedField(var ItemRec: Record "Item")
 
