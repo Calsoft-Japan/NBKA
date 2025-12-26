@@ -104,9 +104,10 @@ report 50113 GetSalesOrdersNew
             }
         }
 
-        actions
-        {
-        }
+        trigger OnOpenPage()
+        begin
+            SalesHeaderStatus := SalesHeaderStatus::Released;
+        end;
     }
 
     labels
