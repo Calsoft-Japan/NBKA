@@ -274,4 +274,30 @@ codeunit 50100 EventSubscriber
             SalesLine."Ship-to PO No." := TempSalesLine."Ship-to PO No.";
     end;
 
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Shipment Line", 'OnBeforeInsertInvLineFromShptLine', '', false, false)]
+    local procedure OnBeforeInsertInvLineFromShptLine(var SalesShptLine: Record "Sales Shipment Line"; var SalesLine: Record "Sales Line"; SalesOrderLine: Record "Sales Line"; var IsHandled: Boolean; var TransferOldExtTextLines: Codeunit "Transfer Old Ext. Text Lines")
+    var
+        SalesShipmentHeader: Record "Sales Shipment Header";
+    begin
+        SalesShipmentHeader.Get(SalesShptLine."Document No.");
+        SalesLine."Package Tracking No." := SalesShipmentHeader."Shipping Agent Code" + ' ' + SalesShipmentHeader."Package Tracking No.";
+    end;
+
+    // //Requisition Worksheet>>
+    // procedure SetIsHandledValue(IsHandled: Boolean)
+    // begin
+    //     Clear(RequisitionIsHandled);
+    //     RequisitionIsHandled := IsHandled;
+    // end;
+
+    // [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", OnBeforeOnAfterGetRecord, '', False, false)]
+    // local procedure OnBeforeOnAfterGetRecord(SalesLine: Record "Sales Line"; var IsHandled: Boolean)
+    // begin
+    //     IsHandled := RequisitionIsHandled;
+    // end;
+
+    // //Requisition Worksheet<<
+    var
+        RequisitionIsHandled: Boolean;
 }

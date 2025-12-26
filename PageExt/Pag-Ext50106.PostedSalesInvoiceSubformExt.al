@@ -15,6 +15,11 @@ pageextension 50106 PostedSalesInvoiceSubformExt extends "Posted Sales Invoice S
                 ToolTip = 'End user''s PO number';
 
             }
+
+        }
+        modify("Package Tracking No.")
+        {
+            Visible = true;
         }
     }
 

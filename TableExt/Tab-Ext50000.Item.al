@@ -31,6 +31,23 @@ tableextension 50000 "Item Ext" extends "Item"
         field(50002; "P/N"; Code[50])
         {
             ToolTip = 'Specifies P/N of the item';
+            trigger OnValidate()
+            var
+                ItemRec: Record Item;
+            begin
+                if "P/N" = '' then
+                    exit;
+
+                ItemRec.Reset();
+                ItemRec.SetRange("P/N", "P/N");
+                ItemRec.SetFilter("No.", '<>%1', "No.");
+
+                if ItemRec.FindFirst() then
+                    Error(
+                        'P/N %1 is already used by Item %2.', "P/N", ItemRec."No.");
+            end;
+
+
         }
 
         field(50003; "Web Product No."; Code[50])
@@ -42,6 +59,11 @@ tableextension 50000 "Item Ext" extends "Item"
         {
             ToolTip = 'Specifies if the item is special product';
         }
+    }
+    fieldgroups
+    {
+        addlast(DropDown; "P/N")
+        { }
     }
 
     trigger OnInsert()
