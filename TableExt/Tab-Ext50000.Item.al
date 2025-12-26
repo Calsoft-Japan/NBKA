@@ -10,7 +10,9 @@ tableextension 50000 "Item Ext" extends "Item"
 
             begin
                 // Call the procedure to update blocked status
-                UpdateBlockedField(Rec);
+                // Changed by FDD 001 V1.2
+                //UpdateBlockedField(Rec);
+                UpdateSalesBlockedField(Rec);
             end;
 
         }
@@ -23,7 +25,9 @@ tableextension 50000 "Item Ext" extends "Item"
 
             begin
                 // Call the procedure to update blocked status
-                UpdateBlockedField(Rec);
+                // Changed by FDD 001 V1.2
+                //UpdateBlockedField(Rec);
+                UpdateSalesBlockedField(Rec);
             end;
 
         }
@@ -69,9 +73,31 @@ tableextension 50000 "Item Ext" extends "Item"
     trigger OnInsert()
     begin
         //Rec.Validate(Blocked, true);
+        // Changed by FDD V1.2
+        Rec.Validate("Sales Blocked", true);
     end;
 
+    // Added by FDD 001 V1.2 start
+    procedure UpdateSalesBlockedField(var ItemRec: Record "Item")
+    begin
+        //Check if today is within the Effective and Expiration date range
+        if (ItemRec."Effective Date" <> 0D) and (ItemRec."Expiration Date" <> 0D) then begin
 
+            // Validate that Effective Date is not after Expiration Date
+            if ItemRec."Effective Date" > ItemRec."Expiration Date" then
+                Error('Effective Date must not be after Expiration Date');
+
+            if (ItemRec."Effective Date" <= Today) and (ItemRec."Expiration Date" >= Today) then
+                ItemRec.Validate("Sales Blocked", false)
+            else
+                ItemRec.Validate("Sales Blocked", true);
+
+            // Only modify the record if Sales Blocked status is changed
+            if ItemRec."Sales Blocked" <> Rec."Sales Blocked" then
+                ItemRec.Modify();
+        end;
+    end;
+    // Added by FDD 001 V1.2 end
 
     procedure UpdateBlockedField(var ItemRec: Record "Item")
 

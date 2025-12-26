@@ -411,6 +411,12 @@ page 50029 "NBKAPI_INS"
             RecDSPkgOpt.RetrievePackageOptions("DSHIP Document Type"::"Sales Order", RecSalesHeader."No.", RecSalesHeader."No.");
             if not RecDSPkgOpt.IsEmpty() then begin
                 RecDSPkgOpt."Payment Account No." := PayAccNo;
+                /*Added for FDD V1.8 start*/
+                RecDSPkgOpt."Payment Type" := RecDSPkgOpt."Payment Type"::THIRD_PARTY;
+                RecDSPkgOpt."Payment Postal Code" := Rec.TPOSTCODE;
+                RecDSPkgOpt."Payment Province" := Rec.TSTATE;
+                RecDSPkgOpt."Payment Country Code" := Rec.TCOUNTRY;
+                /*Added for FDD V1.8 end*/
                 RecDSPkgOpt.Modify(true);
             end;
         end;
