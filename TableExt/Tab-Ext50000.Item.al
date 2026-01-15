@@ -77,6 +77,16 @@ tableextension 50000 "Item Ext" extends "Item"
         Rec.Validate("Sales Blocked", true);
     end;
 
+    trigger OnBeforeInsert()
+    begin
+        TestField("Item Disc. Group");
+    end;
+
+    trigger OnBeforeModify()
+    begin
+        TestField("Item Disc. Group");
+    end;
+
     // Added by FDD 001 V1.2 start
     procedure UpdateSalesBlockedField(var ItemRec: Record "Item")
     begin
