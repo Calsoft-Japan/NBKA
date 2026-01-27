@@ -23,6 +23,26 @@ pageextension 50015 SalesquoteExt extends "Sales Quote"
         {
             Editable = false;
         }
+        modify("Sell-to Customer No.")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Customer Name")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Contact No.")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Contact")
+        {
+            ShowMandatory = true;
+        }
+        modify("Quote Valid Until Date")
+        {
+            ShowMandatory = true;
+        }
         addlast(General)
         {
             field(SystemCreatedAt; Rec.SystemCreatedAt)

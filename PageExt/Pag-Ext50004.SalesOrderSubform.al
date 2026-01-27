@@ -26,6 +26,22 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
             Visible = false;
             Editable = false;
         }
+        modify("Unit of Measure Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Purchasing Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Unit Price")
+        {
+            ShowMandatory = true;
+        }
+        modify("Requested Delivery Date")
+        {
+            ShowMandatory = true;
+        }
         addafter("Line Discount %")
         {
             field("Original Price"; Rec."Original Price")
@@ -55,11 +71,13 @@ pageextension 50004 "SalesLine Ext" extends "Sales Order Subform"
             {
                 ApplicationArea = All;
                 Caption = 'Shipping Date';
+                ShowMandatory = true;
             }
             field("Ship-to PO No."; Rec."Ship-to PO No.")
             {
                 ApplicationArea = all;
                 ToolTip = 'End user''s PO number';
+                ShowMandatory = true;
             }
         }
     }

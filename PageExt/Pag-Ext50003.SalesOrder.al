@@ -75,6 +75,41 @@ pageextension 50003 "SalesOrderExt" extends "Sales Order"
         {
             Editable = false;
         }
+        modify("Sell-to Customer No.")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Customer Name")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Contact No.")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to Contact")
+        {
+            ShowMandatory = true;
+        }
+        modify("Sell-to E-Mail")
+        {
+            ShowMandatory = true;
+        }
+        modify(ShippingOptions)
+        {
+            ShowMandatory = true;
+        }
+        modify(BillToOptions)
+        {
+            ShowMandatory = true;
+        }
+        modify("Shipping Advice")
+        {
+            ShowMandatory = true;
+        }
+
+
+
 
     }
     local procedure GetUserName(UserSecurityId: Guid): Text
