@@ -165,6 +165,7 @@ page 50026 "NBKAPI_INSTOKUCD"
     var
         errorMsg: Text;
         RecCompanyInfo: Record "Company Information";
+        RecTaxArea: Record "Tax Area";
         NoSeries: Codeunit "No. Series";
     begin
         RecCustomer.Init();
@@ -187,6 +188,16 @@ page 50026 "NBKAPI_INSTOKUCD"
         RecCustomer.Validate("Customer Posting Group", 'DEFAULT');
         RecCustomer.Validate("Location Code", 'NBKAM');
         RecCustomer.Validate("CDO Send Code", 'EMAIL');
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.4 Start*/
+        RecCustomer.Validate("Customer Disc. Group", 'B2C');
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.4 End*/
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 Start*/
+        RecCustomer.Validate("Combine Shipments", true);
+        RecTaxArea.Reset();
+        if RecTaxArea.Get(RecINSTOKUCD.TPOSTCODE) then begin
+            RecCustomer.Validate("Tax Area Code", RecINSTOKUCD.TPOSTCODE);
+        end;
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 End*/
         if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
