@@ -318,6 +318,7 @@ page 50029 "NBKAPI_INS"
     [TryFunction]
     local procedure InsertSalesOrder(var RecNBKAPITBL_INS_LINE: Record NBKAPITBL_INS_LINE; var RecSalesHeader: Record "Sales Header"; var errorMsg: Text)
     var
+        RecTaxArea: Record "Tax Area";
         RecItem: Record Item;
         RecSalesLine: Record "Sales Line";
         RecDSPkgOpt: Record "DSHIP Package Options";
@@ -364,6 +365,13 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Shipping Agent Code", Rec.SHIPAGENT);
         RecSalesHeader.Validate("Shipping Agent Service Code", Rec.SHIPSERVICE);
         RecSalesHeader.Validate("Shipping Advice", RecSalesHeader."Shipping Advice"::Complete); //Added since V1.3
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.9 Start*/
+        RecSalesHeader.Validate("Combine Shipments", true);
+        RecTaxArea.Reset();
+        if RecTaxArea.Get(Rec.TPOSTCODE) then begin
+            RecSalesHeader.Validate("Tax Area Code", Rec.TPOSTCODE);
+        end;
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 End*/
         RecSalesHeader.Modify(true);
 
         LineNo := 0;
