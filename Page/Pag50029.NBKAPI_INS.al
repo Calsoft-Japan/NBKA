@@ -371,7 +371,10 @@ page 50029 "NBKAPI_INS"
         if RecTaxArea.Get(Rec.TPOSTCODE) then begin
             RecSalesHeader.Validate("Tax Area Code", Rec.TPOSTCODE);
         end;
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 End*/
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.9 End*/
+        /*1/26/2015 Channing.Zhou Added based on FDD V2.0 Start*/
+        RecSalesHeader.Validate("Tax Exemption No.", Rec.RESELLER);
+        /*1/26/2015 Channing.Zhou Added based on FDD V2.0 End*/
         RecSalesHeader.Modify(true);
 
         LineNo := 0;
