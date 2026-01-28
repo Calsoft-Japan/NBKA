@@ -284,6 +284,12 @@ codeunit 50100 EventSubscriber
         SalesLine."Package Tracking No." := SalesShipmentHeader."Shipping Agent Code" + ' ' + SalesShipmentHeader."Package Tracking No.";
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Item Templ. Mgt.", 'OnApplyTemplateOnBeforeItemModify', '', false, false)]
+    local procedure OnApplyTemplateOnBeforeItemModify(var Item: Record Item; ItemTempl: Record "Item Templ."; var IsHandled: Boolean; UpdateExistingValues: Boolean)
+    begin
+        Item."Special Product" := ItemTempl."Special Product";
+    end;
+
     // //Requisition Worksheet>>
     // procedure SetIsHandledValue(IsHandled: Boolean)
     // begin

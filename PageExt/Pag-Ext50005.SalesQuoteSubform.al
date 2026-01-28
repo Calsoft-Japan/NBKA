@@ -24,6 +24,22 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
             Visible = false;
             Editable = false;
         }
+        modify(Type)
+        {
+            ShowMandatory = true;
+        }
+        modify(Quantity)
+        {
+            ShowMandatory = true;
+        }
+        modify("Unit of Measure Code")
+        {
+            ShowMandatory = true;
+        }
+        modify("Unit Price")
+        {
+            ShowMandatory = true;
+        }
         addafter("Line Discount %")
         {
             field("Original Price"; Rec."Original Price")
@@ -63,6 +79,7 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
             field("Lead Time"; Rec."Lead Time")
             {
                 ApplicationArea = All;
+                ShowMandatory = true;
                 //Visible = false;//FDD003
             }
             field("Discount Rate Updated"; Rec."Discount Rate Updated")
