@@ -47,7 +47,6 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
         TotalRows: Integer;
         RecImportLogEntries: Record "Import Log Entries";
         ReleasePurchDoc: Codeunit "Release Purchase Document";
-        PurPost: Codeunit "Purch.-Post";
 
     procedure ImportInvoicesExcel()
     var
@@ -122,8 +121,16 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                     RecPurchaseLine.Reset();
                     RecPurchaseLine.SetRange("Document Type", RecPurchaseHeader."Document Type");
                     RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
+                    RecPurchaseLine.SetFilter("Quantity Received", '>%1', 0);
+                    //RecPurchaseLine.SetFilter("Qty. to Invoice", '>%1', 0);
                     if not RecPurchaseLine.IsEmpty() then begin
-                        RecPurchaseLine.ModifyAll("Qty. to Invoice", 0, true);
+                        RecPurchaseLine.FindSet();
+                        repeat
+                            RecPurchaseLine."Qty. Invoiced (Base)" := RecPurchaseLine."Quantity Invoiced" * RecPurchaseLine."Qty. per Unit of Measure";
+                            RecPurchaseLine."Qty. to Invoice" := 0;
+                            RecPurchaseLine."Qty. to Invoice (Base)" := 0;
+                            RecPurchaseLine.Modify(true);
+                        until RecPurchaseLine.Next() = 0;
                     end;
                 end
                 else begin
@@ -147,29 +154,46 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                         CellText := GetValueAtCell(X, 3, 0);
                         InvoiceNo := CellText.Trim();
                         if InvoiceNo <> '' then begin
-                            RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo + '-' + Format(x - 1));
+                            //RecPurchaseHeader.Validate("Vendor Invoice No.", InvoiceNo + '-' + Format(x - 1));
+                            RecPurchaseHeader.Validate("Vendor Invoice No.", GetNextSubInvoiceNo(RecPurchaseHeader."Buy-from Vendor No.", InvoiceNo));
                             RecPurchaseHeader.Validate("Your Reference", InvoiceNo);
                             if RecPurchaseLine.Get(RecPurchaseLine."Document Type"::Order, PurchaseOrderHeaderNo, PurchaseOrderLineNo) then begin
                                 CellText := GetValueAtCell(X, 6, 0);
                                 Quantity := CellText;
                                 if Evaluate(QuantityValue, Quantity.Trim()) then begin
-                                    RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
-                                    CellText := GetValueAtCell(X, 9, 0);
-                                    DCost := CellText;
-                                    if Evaluate(DUnitCost, DCost.Trim()) then begin
-                                        RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
-                                        RecPurchaseLine.Modify();
-                                        RecPurchaseHeader.Modify();
-                                        if ReOpened then begin
-                                            ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
+                                    if RecPurchaseLine."Quantity Received" - RecPurchaseLine."Quantity Invoiced" >= QuantityValue then begin
+                                        RecPurchaseLine.Validate("Qty. to Invoice", QuantityValue);
+                                        CellText := GetValueAtCell(X, 9, 0);
+                                        DCost := CellText;
+                                        if Evaluate(DUnitCost, DCost.Trim()) then begin
+                                            RecPurchaseLine.Validate("Direct Unit Cost", DUnitCost);
+                                            /* The codes are use to fix data issue for posting error with error message 'The binding of codeunit 90 was unsuccessful. The codeunit has already been bound.'
+                                               Keep them temporary for a while until there are no POs that can't be posted.
+                                            RecPurchaseLine."Quantity Received" := 0;
+                                            RecPurchaseLine."Qty. Received (Base)" := 0;
+                                            RecPurchaseLine."Outstanding Quantity" := RecPurchaseLine.Quantity;
+                                            RecPurchaseLine."Outstanding Qty. (Base)" := RecPurchaseLine."Quantity (Base)";
+                                            RecPurchaseLine."Qty. Rcd. Not Invoiced" := 0;
+                                            RecPurchaseLine."Qty. Rcd. Not Invoiced (Base)" := 0;*/
+                                            RecPurchaseLine.Modify();
+                                            RecPurchaseHeader.Modify();
+                                            if ReOpened then begin
+                                                ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
+                                            end;
+                                            ErrorMsg := '';
+                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
+                                        end
+                                        else begin
+                                            CurrentPOHasError := true;
+                                            WholeFileHasError := true;
+                                            ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
+                                            SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                         end;
-                                        ErrorMsg := '';
-                                        SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq);
                                     end
                                     else begin
                                         CurrentPOHasError := true;
                                         WholeFileHasError := true;
-                                        ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Unit Price] in File Line [%2] is not a valid Decimal.', DCost, X);
+                                        ErrorMsg := StrSubstNo('The Quantity [%1] for in File Line [%2] is larger than the value that can be invoiced.', QuantityValue, X);
                                         SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq);
                                     end;
                                 end
@@ -215,13 +239,18 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 CellText := GetValueAtCell(X + 1, 2, 0);
                 NextPurchaseOrderNo := CellText;
                 SplitPurchaseOrderNo(NextPurchaseOrderNo, NextPurchaseOrderHeaderNo, NextPurchaseOrderLineNo);
+            end
+            else begin
+                NextPurchaseOrderHeaderNo := '';
+                NextPurchaseOrderLineNo := 0;
             end;
             if (x = TotalRows) or ((NextPurchaseOrderHeaderNo <> '') and (PurchaseOrderHeaderNo <> NextPurchaseOrderHeaderNo)) then begin
                 RecPurchaseHeader.Receive := false;
                 RecPurchaseHeader.Invoice := true;
                 RecPurchaseHeader.Modify();
                 Commit();
-                if not PurPost.RUN(RecPurchaseHeader) then begin
+                //if not PurPost.RUN(RecPurchaseHeader) then begin
+                if not PostPurchaseHeader(RecPurchaseHeader) then begin
                     CurrentPOHasError := true;
                     WholeFileHasError := true;
                     ErrorMsg := StrSubstNo('Post to invoice failured for PO [%1], the detailed error message is [%2].', PurchaseOrderHeaderNo, GetLastErrorText());
@@ -241,8 +270,16 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                     RecPurchaseLine.Reset();
                     RecPurchaseLine.SetRange("Document Type", RecPurchaseHeader."Document Type");
                     RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
+                    RecPurchaseLine.SetFilter("Quantity Received", '>%1', 0);
+                    //RecPurchaseLine.SetFilter("Qty. to Invoice", '>%1', 0);
                     if not RecPurchaseLine.IsEmpty() then begin
-                        RecPurchaseLine.ModifyAll("Qty. to Invoice", 0, true);
+                        RecPurchaseLine.FindSet();
+                        repeat
+                            RecPurchaseLine."Qty. Invoiced (Base)" := RecPurchaseLine."Quantity Invoiced" * RecPurchaseLine."Qty. per Unit of Measure";
+                            RecPurchaseLine."Qty. to Invoice" := 0;
+                            RecPurchaseLine."Qty. to Invoice (Base)" := 0;
+                            RecPurchaseLine.Modify(true);
+                        until RecPurchaseLine.Next() = 0;
                     end;
                 end
                 else if x <> TotalRows then begin
@@ -261,6 +298,18 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
         else begin
             Message('Data import finished.');
         end;
+    end;
+
+    procedure PostPurchaseHeader(RecPurchaseHeader: Record "Purchase Header"): Boolean
+    var
+        PurchPost: Codeunit "Purch.-Post";
+        PostResult: Boolean;
+    begin
+        PostResult := false;
+        if PurchPost.RUN(RecPurchaseHeader) then begin
+            PostResult := true;
+        end;
+        exit(PostResult);
     end;
 
     procedure SplitPurchaseOrderNo(PurchaseOrderNo: Text; var PurchaseOrderHeaderNo: Code[20]; var PurchaseOrderLinNo: Integer)
@@ -325,5 +374,38 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
         IF ExcelBuf.FINDLAST THEN begin
             TotalRows := ExcelBuf."Row No.";
         end;
+    end;
+
+    procedure GetNextSubInvoiceNo(VendorNo: Code[20]; VendorInvoiceNo: Text): Code[35]
+    var
+        NextSubNo: Integer;
+        NextSubInvoiceNo: Code[35];
+        CurrentSubNo: Integer;
+        CurrentSubNoStr: Text;
+        CurrentSubNoList: list of [Text];
+        RecPurInvHeader: Record "Purch. Inv. Header";
+    begin
+        NextSubNo := 0;
+        RecPurInvHeader.Reset();
+        RecPurInvHeader.SetRange("Buy-from Vendor No.", VendorNo);
+        RecPurInvHeader.SetFilter("Vendor Invoice No.", VendorInvoiceNo + '*');
+        if not RecPurInvHeader.IsEmpty then begin
+            RecPurInvHeader.FindSet();
+            repeat
+                Clear(CurrentSubNoList);
+                CurrentSubNoStr := RecPurInvHeader."Vendor Invoice No.";
+                CurrentSubNoList := CurrentSubNoStr.Split('-');
+                if CurrentSubNoList.Count > 1 then begin
+                    if Evaluate(CurrentSubNo, CurrentSubNoList.Get(2)) then begin
+                        if NextSubNo < CurrentSubNo then begin
+                            NextSubNo := CurrentSubNo;
+                        end;
+                    end;
+                end;
+            until RecPurInvHeader.Next() = 0;
+        end;
+        NextSubNo += 1;
+        NextSubInvoiceNo := VendorInvoiceNo + '-' + Format(NextSubNo);
+        exit(NextSubInvoiceNo);
     end;
 }
