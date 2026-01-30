@@ -198,6 +198,9 @@ page 50026 "NBKAPI_INSTOKUCD"
             RecCustomer.Validate("Tax Area Code", RecINSTOKUCD.TPOSTCODE);
         end;
         /*1/26/2015 Channing.Zhou Added based on FDD V1.5 End*/
+        /*1/26/2015 Channing.Zhou Added based on FDD V1.6 Start*/
+        RecCustomer.Validate("Tax Exemption No.", RecINSTOKUCD.RESELLER);
+        /*1/26/2015 Channing.Zhou Added based on FDD 1.6 End*/
         if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
