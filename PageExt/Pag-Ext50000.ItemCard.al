@@ -78,6 +78,14 @@ pageextension 50000 "Item Card Ext" extends "Item Card"
         {
             ShowMandatory = true;
         }
+        modify("Sales Unit of Measure")
+        {
+            ShowMandatory = true;
+        }
+        modify("Put-away Unit of Measure Code")
+        {
+            ShowMandatory = true;
+        }
 
     }
 }

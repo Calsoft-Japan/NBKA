@@ -14,5 +14,9 @@ pageextension 50113 ContactCardext extends "Contact Card"
         {
             ShowMandatory = true;
         }
+        modify("E-Mail")
+        {
+            ShowMandatory = true;
+        }
     }
 }

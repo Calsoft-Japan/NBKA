@@ -79,7 +79,6 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
             field("Lead Time"; Rec."Lead Time")
             {
                 ApplicationArea = All;
-                ShowMandatory = true;
                 //Visible = false;//FDD003
             }
             field("Discount Rate Updated"; Rec."Discount Rate Updated")
@@ -101,6 +100,7 @@ pageextension 50005 "Sales Quote Subform Ext" extends "Sales Quote Subform"
             field("Lead Time text"; Rec."Lead Time text")
             {
                 ApplicationArea = All;
+                ShowMandatory = true;
             }
         }
         //===========FDD003===========
