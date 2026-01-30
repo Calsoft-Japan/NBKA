@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2025-10-16T14:55:54.5301964Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-01-30T15:25:40.0192752Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -88,7 +88,6 @@
                                             </Style>
                                           </Textbox>
                                           <ColSpan>3</ColSpan>
-                                          <rd:Selected>true</rd:Selected>
                                         </CellContents>
                                       </TablixCell>
                                       <TablixCell />
@@ -273,10 +272,14 @@
                                   <TextRuns>
                                     <TextRun>
                                       <Value>Claims: When a product shipped is found to be incorrect, a claim must be made in writing to Seller within ten days after Seller's delivery. If one does not give notice within the aforementioned limit it shall constitute unqualified acceptance and a waiver of all such claims by Buyer. 
-Returns: So long as the product is a standard one and in unused, unopened condition, Buyer can return the Products, within 30 days and Seller will issue 70% credit (taking a 30% re-stocking fee) for the Product not including freight charges, packaging costs, taxes, insurance and other incidental costs. On the return of Products from a foreign country, Seller will not be responsible for any brokerage fees and duty fees regardless of reason for return. Modified and special-order Products cannot be cancelled or returned.</Value>
+Returns: So long as the product is a standard one and in unused, unopened condition, Buyer can return the Products, within 30 days and Seller will issue 50% credit (taking a 50% re-stocking fee) for the Product not including freight charges, packaging costs, taxes, insurance and other incidental costs. On the return of Products from a foreign country, Seller will not be responsible for any brokerage fees and duty fees regardless of reason for return. Modified and special-order Products cannot be cancelled or returned.</Value>
                                       <Style>
+                                        <FontStyle>Normal</FontStyle>
                                         <FontFamily>Segoe UI</FontFamily>
                                         <FontSize>6pt</FontSize>
+                                        <FontWeight>Normal</FontWeight>
+                                        <TextDecoration>None</TextDecoration>
+                                        <Color>#000000</Color>
                                       </Style>
                                     </TextRun>
                                   </TextRuns>
