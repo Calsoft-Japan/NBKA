@@ -264,6 +264,7 @@ codeunit 50100 EventSubscriber
             ToSalesHeader."Document Date" := Today;
             Paymentterms.Get((ToSalesHeader."Payment Terms Code"));
             ToSalesHeader."Due Date" := CalcDate(Paymentterms."Due Date Calculation", Today);
+            ToSalesHeader."Assigned User ID" := UserId;
         end;
     end;
 
@@ -290,20 +291,6 @@ codeunit 50100 EventSubscriber
         Item."Special Product" := ItemTempl."Special Product";
     end;
 
-    // //Requisition Worksheet>>
-    // procedure SetIsHandledValue(IsHandled: Boolean)
-    // begin
-    //     Clear(RequisitionIsHandled);
-    //     RequisitionIsHandled := IsHandled;
-    // end;
-
-    // [EventSubscriber(ObjectType::Report, Report::"Get Sales Orders", OnBeforeOnAfterGetRecord, '', False, false)]
-    // local procedure OnBeforeOnAfterGetRecord(SalesLine: Record "Sales Line"; var IsHandled: Boolean)
-    // begin
-    //     IsHandled := RequisitionIsHandled;
-    // end;
-
-    // //Requisition Worksheet<<
     var
         RequisitionIsHandled: Boolean;
 }
