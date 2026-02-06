@@ -57,9 +57,10 @@ codeunit 50100 EventSubscriber
                         PostedPurchRcptLine.Reset();
                         PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
                         PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
-                        if PostedPurchRcptLine.FindFirst() then begin
-                            ReservedQty += PostedPurchRcptLine.Quantity;
-                        end;
+                        //  if PostedPurchRcptLine.FindFirst() then begin
+                        PostedPurchRcptLine.CalcSums(Quantity);
+                        ReservedQty += PostedPurchRcptLine.Quantity;
+
                     Until PostedPurchRcpt.Next() = 0;
             end;
             if SalesLine."Outstanding Qty. (Base)" > (ReservedQty) then IsHandled := true;
