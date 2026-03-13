@@ -60,28 +60,36 @@ table 50022 "Import Log Entries"
 
     procedure GetNextDocumentSeq(EntryType: Option "Purchase Invoice","Shipping Date"; DocumentNo: Code[20]; CreatedDatetime: DateTime; var DocumentSeq: Integer)
     var
-        RecImpLogEnt: Record "Import Log Entries";
+        //RecImpLogEnt: Record "Import Log Entries";
         CreatedDate: Date;
     begin
         CreatedDate := DT2Date(CreatedDatetime);
         DocumentSeq := 1;
-        RecImpLogEnt.Reset();
+        /*RecImpLogEnt.Reset();
         RecImpLogEnt.SetCurrentKey("Entry No.", "Entry Type", "Document No.", "Document Sequence");
         RecImpLogEnt.SetRange("Entry Type", EntryType);
         RecImpLogEnt.SetRange("Document No.", DocumentNo);
         RecImpLogEnt.SetRange("Created Datetime", CreateDateTime(CreatedDate, 000000T), CreateDateTime(CreatedDate, 235959T));
         if RecImpLogEnt.FindLast() then begin
             DocumentSeq := RecImpLogEnt."Document Sequence" + 1;
+        end;*/
+        Rec.Reset();
+        Rec.SetCurrentKey("Entry No.", "Entry Type", "Document No.", "Document Sequence");
+        Rec.SetRange("Entry Type", EntryType);
+        Rec.SetRange("Document No.", DocumentNo);
+        Rec.SetRange("Created Datetime", CreateDateTime(CreatedDate, 000000T), CreateDateTime(CreatedDate, 235959T));
+        if Rec.FindLast() then begin
+            DocumentSeq := Rec."Document Sequence" + 1;
         end;
     end;
 
     procedure SaveLogEntry(EntryType: Option "Purchase Invoice","Shipping Date"; DocumentNo: Code[20]; LineNo: Integer; CreatedDatetime: DateTime; Status: Option Success,Error; ErrorMsg: Text; DocumentSeq: Integer)
     var
-        RecImpLogEnt: Record "Import Log Entries";
+        //RecImpLogEnt: Record "Import Log Entries";
         CreatedDate: Date;
     begin
         CreatedDate := DT2Date(CreatedDatetime);
-        RecImpLogEnt.Reset();
+        /*RecImpLogEnt.Reset();
         RecImpLogEnt.SetCurrentKey("Entry No.", "Entry Type", "Document No.", "Document Sequence");
         RecImpLogEnt.SetRange("Entry Type", EntryType);
         RecImpLogEnt.SetRange("Document No.", DocumentNo);
@@ -97,17 +105,35 @@ table 50022 "Import Log Entries"
                 RecImpLogEnt."Error Message" := ErrorMsg;
                 RecImpLogEnt.Modify();
             until RecImpLogEnt.Next() = 0;
-        end
-        else begin
-            CreateNewLogEntry(EntryType, DocumentNo, LineNo, CreatedDatetime, Status, ErrorMsg, DocumentSeq);
+        end*/
+        Rec.Reset();
+        if (DocumentNo <> '') or (LineNo <> 0) then begin
+            Rec.SetCurrentKey("Entry No.", "Entry Type", "Document No.", "Document Sequence");
+            Rec.SetRange("Entry Type", EntryType);
+            Rec.SetRange("Document No.", DocumentNo);
+            if LineNo > 0 then begin
+                Rec.SetRange("Line No.", LineNo);
+            end;
+            Rec.SetRange("Created Datetime", CreateDateTime(CreatedDate, 000000T), CreateDateTime(CreatedDate, 235959T));
+            Rec.SetRange("Document Sequence", DocumentSeq);
+            if not Rec.IsEmpty() then begin
+                Rec.FindSet();
+                repeat
+                    Rec.Status := Status;
+                    Rec."Error Message" := ErrorMsg;
+                    Rec.Modify();
+                until Rec.Next() = 0;
+                exit;
+            end;
         end;
+        CreateNewLogEntry(EntryType, DocumentNo, LineNo, CreatedDatetime, Status, ErrorMsg, DocumentSeq);
     end;
 
     local procedure CreateNewLogEntry(EntryType: Option "Purchase Invoice","Shipping Date"; DocumentNo: Code[20]; LineNo: Integer; CreatedDatetime: DateTime; Status: Option Success,Error; ErrorMsg: Text; DocumentSeq: Integer)
     var
-        RecImpLogEnt: Record "Import Log Entries";
+    //RecImpLogEnt: Record "Import Log Entries";
     begin
-        RecImpLogEnt.Reset();
+        /*RecImpLogEnt.Reset();
         RecImpLogEnt.Init();
         RecImpLogEnt."Entry No." := 0;
         RecImpLogEnt."Entry Type" := EntryType;
@@ -117,6 +143,17 @@ table 50022 "Import Log Entries"
         RecImpLogEnt.Status := Status;
         RecImpLogEnt."Error Message" := ErrorMsg;
         RecImpLogEnt."Document Sequence" := DocumentSeq;
-        RecImpLogEnt.Insert();
+        RecImpLogEnt.Insert();*/
+        Rec.Reset();
+        Rec.Init();
+        Rec."Entry No." := 0;
+        Rec."Entry Type" := EntryType;
+        Rec."Document No." := DocumentNo;
+        Rec."Line No." := LineNo;
+        Rec."Created Datetime" := CreatedDatetime;
+        Rec.Status := Status;
+        Rec."Error Message" := ErrorMsg;
+        Rec."Document Sequence" := DocumentSeq;
+        Rec.Insert();
     end;
 }
