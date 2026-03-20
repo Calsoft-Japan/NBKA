@@ -13,8 +13,33 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
             {
                 ApplicationArea = All;
             }
+            field(SystemCreatedAt; Rec.SystemCreatedAt)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemCreatedBy; GetUserName(Rec.SystemCreatedBy))
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemModifiedAt; Rec.SystemModifiedAt)
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
+            field(SystemModifiedBy; GetUserName(Rec.SystemModifiedBy))
+            {
+                ApplicationArea = All;
+                Editable = false;
+                Visible = false;
+            }
         }
     }
+
 
     actions
     {
@@ -47,6 +72,16 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
         TotalRows: Integer;
         RecImportLogEntries: Record "Import Log Entries";
         ReleasePurchDoc: Codeunit "Release Purchase Document";
+
+    local procedure GetUserName(UserSecurityId: Guid): Text
+    var
+        User: Record User;
+    begin
+        if User.Get(UserSecurityId) then
+            exit(User."User Name")
+        else
+            exit('');
+    end;
 
     procedure ImportInvoicesExcel()
     var

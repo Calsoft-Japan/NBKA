@@ -3,16 +3,12 @@ namespace NBKA.NBKA;
 using Microsoft.Sales.History;
 using System.Security.AccessControl;
 
-pageextension 50014 Postedsalesinvoiceext extends "Posted Sales Invoice"
+pageextension 50116 PostedSalesInvoicesExt extends "Posted Sales Invoices"
 {
     layout
     {
-        addlast(General)
+        addlast(Control1)
         {
-            field("Invoice Email"; Rec."Invoice Email")
-            {
-                ApplicationArea = all;
-            }
             field(SystemCreatedAt; Rec.SystemCreatedAt)
             {
                 ApplicationArea = All;
@@ -37,6 +33,8 @@ pageextension 50014 Postedsalesinvoiceext extends "Posted Sales Invoice"
                 Editable = false;
                 Visible = false;
             }
+
+
         }
     }
     local procedure GetUserName(UserSecurityId: Guid): Text
