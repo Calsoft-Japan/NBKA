@@ -10,7 +10,7 @@ report 50111 "Combine Shipments NBK"
     {
         dataitem(SalesOrderHeader; "Sales Header")
         {
-            DataItemTableView = sorting("Document Type", "Combine Shipments", "Bill-to Customer No.", "Currency Code", "EU 3-Party Trade", "Dimension Set ID", "Journal Templ. Name") where("Document Type" = const(Order), "Combine Shipments" = const(true));
+            DataItemTableView = sorting("Document Type", "Combine Shipments", "Bill-to Customer No.", "Ship-to Code", "Currency Code", "EU 3-Party Trade", "Dimension Set ID", "Journal Templ. Name") where("Document Type" = const(Order), "Combine Shipments" = const(true));
             RequestFilterFields = "Sell-to Customer No.", "Bill-to Customer No.";
             RequestFilterHeading = 'Sales Order';
             dataitem("Sales Shipment Header"; "Sales Shipment Header")
@@ -400,6 +400,7 @@ report 50111 "Combine Shipments NBK"
             SalesHeader.Validate("VAT Reporting Date", VATDateReq);
             SalesHeader.Validate("Currency Code", SalesOrderHeader."Currency Code");
             SalesHeader.Validate("EU 3-Party Trade", SalesOrderHeader."EU 3-Party Trade");
+            SalesHeader.Validate("Ship-to Code", SalesOrderHeader."Ship-to Code");
             if GLSetup."Journal Templ. Name Mandatory" then
                 SalesHeader.Validate("Journal Templ. Name", SalesOrderHeader."Journal Templ. Name");
             SalesHeader."Salesperson Code" := SalesOrderHeader."Salesperson Code";
@@ -549,7 +550,8 @@ report 50111 "Combine Shipments NBK"
           (SalesOrderHeader."Currency Code" <> SalesHeader."Currency Code") or
           (SalesOrderHeader."EU 3-Party Trade" <> SalesHeader."EU 3-Party Trade") or
           (SalesOrderHeader."Dimension Set ID" <> SalesHeader."Dimension Set ID") or
-          (SalesOrderHeader."Journal Templ. Name" <> SalesHeader."Journal Templ. Name");
+          (SalesOrderHeader."Journal Templ. Name" <> SalesHeader."Journal Templ. Name") or
+          (SalesOrderHeader."Ship-to Code" <> SalesHeader."Ship-to Code");
 
         OnAfterShouldFinalizeSalesInvHeader(SalesOrderHeader, SalesHeader, Finalize, SalesShipmentLine, "Sales Shipment Header");
         exit(Finalize);

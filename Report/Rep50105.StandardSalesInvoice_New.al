@@ -188,48 +188,96 @@ report 50105 "Standard Sales - Invoice New"
             column(ShipToAddress_Lbl; ShiptoAddrLbl)
             {
             }
-            column(ShipToAddress1; ShipToAddr[1])
+            column(ShipToAddress1; "Ship-to Name")
             {
             }
-            column(ShipToAddress2; ShipToAddr[2])
+            column(ShipToAddress2; "Ship-to Address")
             {
             }
-            column(ShipToAddress3; ShipToAddr[3])
+            column(ShipToAddress3; "Ship-to Address 2")
             {
             }
-            column(ShipToAddress4; ShipToAddr[4])
+            column(ShipToAddress4; "Ship-to City")
             {
             }
-            column(ShipToAddress5; ShipToAddr[5])
+            column(ShipToAddress5; "Ship-to County")
             {
             }
-            column(ShipToAddress6; ShipToAddr[6])
+            column(ShipToAddress6; "Ship-to Post Code")
             {
             }
-            column(ShipToAddress7; ShipToAddr[7])
-            {
-            }
-            column(ShipToAddress8; ShipToAddr[8])
-            {
-            }
-            column(SellToAddress1; SellToAddr[1])
-            {
-            }
-            column(SellToAddress2; SellToAddr[2])
+            column(ShipToAddress7; CountryShiptoName)
             {
             }
 
-            column(SellToAddress3; SellToAddr[3])
+            // column(ShipToAddress1; ShipToAddr[1])
+            // {
+            // }
+            // column(ShipToAddress2; ShipToAddr[2])
+            // {
+            // }
+            // column(ShipToAddress3; ShipToAddr[3])
+            // {
+            // }
+            // column(ShipToAddress4; ShipToAddr[4])
+            // {
+            // }
+            // column(ShipToAddress5; ShipToAddr[5])
+            // {
+            // }
+            // column(ShipToAddress6; ShipToAddr[6])
+            // {
+            // }
+            // column(ShipToAddress7; ShipToAddr[7])
+            // {
+            // }
+            // column(ShipToAddress8; ShipToAddr[8])
+            // {
+            // }
+            column(SellToAddress1; "Sell-to Customer Name")
+            {
+            }
+            column(SellToAddress2; "Sell-to Address")
             {
             }
 
-            column(SellToAddress4; SellToAddr[4])
+            column(SellToAddress3; "Sell-to Address 2")
             {
             }
 
-            column(SellToAddress5; SellToAddr[5])
+            column(SellToAddress4; "Sell-to City")
             {
             }
+
+            column(SellToAddress5; "Sell-to County")
+            {
+            }
+            column(SellToAddress6; "Sell-to Post Code")
+            {
+            }
+            column(SellToAddress7; CountrySelltoName)
+            {
+            }
+
+
+            // column(SellToAddress1; SellToAddr[1])
+            // {
+            // }
+            // column(SellToAddress2; SellToAddr[2])
+            // {
+            // }
+
+            // column(SellToAddress3; SellToAddr[3])
+            // {
+            // }
+
+            // column(SellToAddress4; SellToAddr[4])
+            // {
+            // }
+
+            // column(SellToAddress5; SellToAddr[5])
+            // {
+            // }
 
 
             column(ShipToPhoneNo; Header."Ship-to Phone No.")
@@ -566,6 +614,9 @@ report 50105 "Standard Sales - Invoice New"
             {
             }
             column(PaymentTermsCode; "Payment Terms Code")
+            {
+            }
+            column(Shiptolbl; Shiptolbl)
             {
             }
 
@@ -1278,6 +1329,7 @@ report 50105 "Standard Sales - Invoice New"
                 PaymentServiceSetup: Record "Payment Service Setup";
                 Currency: Record Currency;
                 GeneralLedgerSetup: Record "General Ledger Setup";
+                CountryRec: Record "Country/Region";
             begin
                 CurrReport.Language := LanguageMgt.GetLanguageIdOrDefault("Language Code");
                 CurrReport.FormatRegion := LanguageMgt.GetFormatRegionOrDefault("Format Region");
@@ -1336,7 +1388,10 @@ report 50105 "Standard Sales - Invoice New"
 
                 OnAfterGetSalesHeader(Header);
                 //if Contact.get("Sell-to Contact No.") then;
-
+                if CountryRec.Get("Sell-to Country/Region Code") then
+                    CountrySelltoName := CountryRec.Name;
+                if CountryRec.Get("Ship-to Country/Region Code") then
+                    CountryShiptoName := CountryRec.Name;
                 TotalSubTotal := 0;
                 TotalInvDiscAmount := 0;
                 TotalAmount := 0;
@@ -1349,6 +1404,8 @@ report 50105 "Standard Sales - Invoice New"
                 if Header."Payment Terms Code" = 'Advance' then
                     TotalAmountDue := 0 else
                     TotalAmountDue := TotalAmountInclVAT;
+
+
             end;
 
             trigger OnPreDataItem()
@@ -1465,6 +1522,8 @@ report 50105 "Standard Sales - Invoice New"
     var
         Countryrec: Record "Country/Region";
         CountryName: Text;
+        CountrySelltoName: Text[50];
+        CountryShiptoName: Text[50];
         NbkCompanyaddress: Text[100];
         Contact: Record Contact;
         GLSetup: Record "General Ledger Setup";
@@ -1588,6 +1647,7 @@ report 50105 "Standard Sales - Invoice New"
         CustomerPONumberLbl: Label 'Customer PO No.';
         UnitPriceLbl: Label 'Unit Price';
         LineAmountLbl: Label 'Line Amount';
+        Shiptolbl: Label 'Ship To';
         LegalOfficeTxt, LegalOfficeLbl, CustomGiroTxt, CustomGiroLbl, LegalStatementLbl : Text;
 
     protected var
@@ -1846,12 +1906,24 @@ report 50105 "Standard Sales - Invoice New"
     end;
 
     local procedure FormatAddressFields(var SalesInvoiceHeader: Record "Sales Invoice Header")
+    var
+        i: Integer;
     begin
         FormatAddr.GetCompanyAddr(SalesInvoiceHeader."Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
         FormatAddr.SalesInvBillTo(CustAddr, SalesInvoiceHeader);
         FormatAddr.SalesInvSellTo(SellToAddr, SalesInvoiceHeader);
 
         ShowShippingAddr := FormatAddr.SalesInvShipTo(ShipToAddr, CustAddr, SalesInvoiceHeader);
+        for i := 1 to ArrayLen(SellToAddr) do begin
+            if SellToAddr[i] = SalesInvoiceHeader."Sell-to Contact" then
+                SellToAddr[i] := '';
+        end;
+        for i := 1 to ArrayLen(ShipToAddr) do begin
+            if ShipToAddr[i] = SalesInvoiceHeader."Ship-to Contact" then
+                ShipToAddr[i] := '';
+        end;
+        CompressArray(SellToAddr);
+        CompressArray(ShipToAddr);
     end;
 
     local procedure FormatDocumentFields(SalesInvoiceHeader: Record "Sales Invoice Header")

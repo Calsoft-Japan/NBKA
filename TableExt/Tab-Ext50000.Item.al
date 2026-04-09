@@ -63,6 +63,13 @@ tableextension 50000 "Item Ext" extends "Item"
         {
             ToolTip = 'Specifies if the item is special product';
         }
+        modify("Base Unit of Measure")
+        {
+            trigger OnAfterValidate()
+            begin
+                "Put-away Unit of Measure Code" := "Base Unit of Measure";
+            end;
+        }
     }
     fieldgroups
     {

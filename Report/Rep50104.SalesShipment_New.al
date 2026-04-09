@@ -40,8 +40,10 @@ report 50104 "Sales Shipment New"
                     TempSalesShipmentLineAsm := "Sales Shipment Line";
                     TempSalesShipmentLineAsm.Insert();
                     HighestLineNo := "Line No.";
-                    Clear(ItemRec);
-                    if ItemRec.Get("Sales Shipment Line"."No.") then;
+
+
+
+
                 end;
 
                 trigger OnPreDataItem()
@@ -393,14 +395,14 @@ report 50104 "Sales Shipment New"
                         {
                         }
 
-                        column(Item_PN; ItemRec."P/N")
+                        column(Item_PN; ItemPN)
                         {
                         }
 
-                        column(Item_Netweight; ItemRec."Net Weight")
+                        column(Item_Netweight; ItemNetweight)
                         {
                         }
-                        column(Item_TarrifNo; ItemRec."Tariff No.")
+                        column(Item_TarrifNo; ItemTarrifNo)
                         {
                         }
                         column(TempSalesShipmentLine_ShiptopoNo; TempSalesShipmentLine."Ship-to PO No.")
@@ -500,6 +502,15 @@ report 50104 "Sales Shipment New"
 
                             if OnLineNumber = NumberOfLines then
                                 PrintFooter := true;
+                            Clear(ItemRec);
+                            Clear(ItemTarrifNo);
+                            Clear(ItemPN);
+                            Clear(ItemNetweight);
+                            if ItemRec.Get(TempSalesShipmentLine."No.") then begin
+                                ItemTarrifNo := ItemRec."Tariff No.";
+                                ItemPN := ItemRec."P/N";
+                                ItemNetweight := itemrec."Net Weight";
+                            end;
                         end;
 
                         trigger OnPreDataItem()
@@ -815,6 +826,9 @@ report 50104 "Sales Shipment New"
         ShippingAgent: Record "Shipping Agent";
         ShippingAgentService: Record "Shipping Agent Services";
         ItemRec: Record Item;
+        ItemPN: Code[50];
+        ItemTarrifNo: Code[20];
+        ItemNetweight: Decimal;
         CompanyInfoPhoneNoLbl: Label 'Phone No.:';
         WorkDes: Text;
         InStr: InStream;

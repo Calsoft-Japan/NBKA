@@ -292,6 +292,21 @@ codeunit 50100 EventSubscriber
         Item."Special Product" := ItemTempl."Special Product";
     end;
 
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", OnBeforeConfirmSellToContactNoChange, '', false, false)]
+    local procedure OnBeforeConfirmSellToContactNoChange(var SalesHeader: Record "Sales Header"; var xSalesHeader: Record "Sales Header"; CurrentFieldNo: Integer; var Confirmed: Boolean; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+        Confirmed := true;
+    end;
+
+    [EventSubscriber(ObjectType::Table, Database::"Sales Header", OnBeforeConfirmbillToContactNoChange, '', false, false)]
+    local procedure OnBeforeConfirmBillToContactNoChange(var SalesHeader: Record "Sales Header"; var xSalesHeader: Record "Sales Header"; CurrentFieldNo: Integer; var Confirmed: Boolean; var IsHandled: Boolean)
+    begin
+        IsHandled := true;
+        Confirmed := false;
+    end;
+
     var
         RequisitionIsHandled: Boolean;
+
 }

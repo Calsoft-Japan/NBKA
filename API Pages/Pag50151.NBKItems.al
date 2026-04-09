@@ -718,10 +718,11 @@ page 50151 NBK_Items
                 {
                     Caption = 'Sales Unit of Measure';
                 }
-                field(scheduledNeedQty; Rec."Scheduled Need (Qty.)")
-                {
-                    Caption = 'Scheduled Need (Qty.)';
-                }
+                // field(scheduledNeedQty; Rec."Scheduled Need (Qty.)")
+                // {
+                //     Caption = 'Scheduled Need (Qty.)';
+                // }
+
                 field(scheduledReceiptQty; Rec."Scheduled Receipt (Qty.)")
                 {
                     Caption = 'Scheduled Receipt (Qty.)';

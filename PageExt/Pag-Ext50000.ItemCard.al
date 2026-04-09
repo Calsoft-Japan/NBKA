@@ -88,4 +88,9 @@ pageextension 50000 "Item Card Ext" extends "Item Card"
         }
 
     }
+    trigger OnQueryClosePage(CloseAction: Action): Boolean
+    begin
+        Rec.TestField("Item Category Code");
+    end;
+
 }
