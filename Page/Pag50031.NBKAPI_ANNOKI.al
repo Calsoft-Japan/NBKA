@@ -79,6 +79,8 @@ page 50031 "NBKAPI_ANNOKI"
                 SalesLine.Reset();
                 SalesLine.SetRange("Document No.", Rec.JUCH1);
                 SalesLine.SetRange("Document Type", SalesLine."Document Type"::Order);
+                // 4/17/2026 Added by channing.zhou only check the shipping date for sales orders that has sales lines with type = Item.
+                SalesLine.SetRange(Type, SalesLine.Type::Item);
                 if not SalesLine.IsEmpty then begin
                     SalesLine.FindSet();
                     ShippingDateEmpty := false;
