@@ -175,11 +175,6 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 if RecPurchaseHeader.Get(RecPurchaseHeader."Document Type"::Order, PurchaseOrderHeaderNo) then begin
                     CurrentPOHasHeader := true;
                     CurPOToBePostedLinesCount := 0;
-                    ReOpened := false;
-                    if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
-                        ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
-                        ReOpened := true;
-                    end;
                     RecPurchaseLine.Reset();
                     RecPurchaseLine.SetRange("Document Type", RecPurchaseHeader."Document Type");
                     RecPurchaseLine.SetRange("Document No.", RecPurchaseHeader."No.");
@@ -215,6 +210,11 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                     CellText := GetValueAtCell(currentRow, 11, 0);
                     ShipmenmtDate := CellText.Trim().Substring(5, 2) + '/' + CellText.Trim().Substring(7, 2) + '/' + CellText.Trim().Substring(1, 4);
                     if Evaluate(PostingDate, ShipmenmtDate.Trim()) then begin
+                        ReOpened := false;
+                        if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
+                            ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
+                            ReOpened := true;
+                        end;
                         RecPurchaseHeader.Validate("Posting Date", PostingDate);
                         CellText := GetValueAtCell(currentRow, 3, 0);
                         InvoiceNo := CellText.Trim();
@@ -243,6 +243,10 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                                             CurPOToBePostedLinesCount += 1;
                                             RecPurchaseLine.Modify();
                                             RecPurchaseHeader.Modify();
+                                            if ReOpened then begin
+                                                ReOpened := false;
+                                                ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
+                                            end;
                                             ErrorMsg := '';
                                             SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq, currentRow);
                                         end
@@ -294,8 +298,10 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 end;
             end
             else begin
-                ErrorMsg := StrSubstNo('The value [%1] from Cloumn [Purchase Order No] in File Line [%2] is empty or invalid.', PurchaseOrderNo, currentRow);
-                SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq, currentRow);
+                if ErrorMsg <> '' then begin
+                    ErrorMsg := StrSubstNo('The value [%1] from Cloumn [Purchase Order No] in File Line [%2] is empty or invalid.', PurchaseOrderNo, currentRow);
+                    SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq, currentRow);
+                end;
             end;
             if (currentRow < TotalRows) then begin
                 NextDocumentSeq := CurrentDocumentSeq;
@@ -308,10 +314,16 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                 NextPurchaseOrderLineNo := 0;
             end;
             if (CurrentPOHasHeader = true) and (CurPOToBePostedLinesCount > 0) and ((currentRow = TotalRows) or (PurchaseOrderHeaderNo <> NextPurchaseOrderHeaderNo)) then begin
+                ReOpened := false;
+                if RecPurchaseHeader.Status <> RecPurchaseHeader.Status::Open then begin
+                    ReleasePurchDoc.PerformManualReopen(RecPurchaseHeader);
+                    ReOpened := true;
+                end;
                 RecPurchaseHeader.Receive := false;
                 RecPurchaseHeader.Invoice := true;
                 RecPurchaseHeader.Modify();
                 if ReOpened then begin
+                    ReOpened := false;
                     ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
                 end;
                 Commit();
