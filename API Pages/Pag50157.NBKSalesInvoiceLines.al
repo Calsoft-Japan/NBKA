@@ -511,6 +511,8 @@ page 50157 NBK_SalesInvoiceLines
     var
         SalesHeaderArchive: Record "Sales Header Archive";
         Salesheader: Record "Sales Header";
+        SaleslineArchive: Record "Sales Line Archive";
+        Salesline: Record "Sales Line";
     begin
         Clear(selltocustomerno);
         Clear(orderdate);
@@ -524,6 +526,12 @@ page 50157 NBK_SalesInvoiceLines
             externaldocno := Salesheader."External Document No.";
             salesQuoteno := Salesheader."Quote No.";
             Ecorder := Salesheader."EC Order";
+            Salesline.Reset();
+            Salesline.SetRange("Document Type", SalesHeader."Document Type");
+            Salesline.SetRange("Document No.", SalesHeader."No.");
+            Salesline.SetRange("Line No.", Rec."Order Line No.");
+            if Salesline.FindFirst() then
+                Reqdeldate := Salesline."Requested Delivery Date";
         end else begin
             SalesHeaderArchive.Reset();
             SalesHeaderArchive.SetRange("Document Type", SalesHeaderArchive."Document Type"::Order);
@@ -535,6 +543,14 @@ page 50157 NBK_SalesInvoiceLines
                 externaldocno := SalesHeaderArchive."External Document No.";
                 salesQuoteno := SalesHeaderArchive."Sales Quote No.";
                 Ecorder := SalesHeaderArchive."EC Order";
+                SaleslineArchive.Reset();
+                SaleslineArchive.SetRange("Document Type", SalesHeaderArchive."Document Type");
+                SaleslineArchive.SetRange("Document No.", SalesHeaderArchive."No.");
+                SaleslineArchive.SetRange("Doc. No. Occurrence", SalesHeaderArchive."Doc. No. Occurrence");
+                SaleslineArchive.SetRange("Version No.", SalesHeaderArchive."Version No.");
+                SaleslineArchive.SetRange("Line No.", Rec."Order Line No.");
+                if SaleslineArchive.FindFirst() then
+                    Reqdeldate := SaleslineArchive."Requested Delivery Date";
             end;
         end;
     end;

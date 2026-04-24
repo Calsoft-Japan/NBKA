@@ -461,6 +461,9 @@ report 50102 "Standard Sales - Quote New"
             column(DraftCheck; DraftCheck)
             {
             }
+            column(TotalTaxLbl; TotalTaxLbl)
+            {
+            }
             dataitem(Line; "Sales Line")
             {
                 DataItemLink = "Document No." = field("No.");
