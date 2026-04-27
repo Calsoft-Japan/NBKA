@@ -243,10 +243,6 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                                             CurPOToBePostedLinesCount += 1;
                                             RecPurchaseLine.Modify();
                                             RecPurchaseHeader.Modify();
-                                            if ReOpened then begin
-                                                ReOpened := false;
-                                                ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
-                                            end;
                                             ErrorMsg := '';
                                             SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, true, ErrorMsg, CurrentDocumentSeq, currentRow);
                                         end
@@ -283,6 +279,10 @@ pageextension 50021 "Purchase Order List Ext" extends "Purchase Order List"
                             WholeFileHasError := true;
                             ErrorMsg := StrSubstNo('The value [%1] for Cloumn [Invoice_Number] in File Line [%2] is not valid.', InvoiceNo, currentRow);
                             SaveLogMessage(PurchaseOrderHeaderNo, PurchaseOrderLineNo, CreatedDateTime, false, ErrorMsg, CurrentDocumentSeq, currentRow);
+                        end;
+                        if ReOpened then begin
+                            ReOpened := false;
+                            ReleasePurchDoc.PerformManualRelease(RecPurchaseHeader);
                         end;
                     end
                     else begin
