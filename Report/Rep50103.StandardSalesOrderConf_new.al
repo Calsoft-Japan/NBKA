@@ -1028,6 +1028,7 @@ report 50103 "Standard Sales -Order Conf.New"
                 GeneralLedgerSetup: Record "General Ledger Setup";
                 ArchiveManagement: Codeunit ArchiveManagement;
                 SalesPost: Codeunit "Sales-Post";
+                i: Integer;
             begin
                 FirstLineHasBeenOutput := false;
                 Clear(Line);
@@ -1054,8 +1055,23 @@ report 50103 "Standard Sales -Order Conf.New"
                 ShowWorkDescription := "Work Description".HasValue;
 
                 FormatAddr.GetCompanyAddr("Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
-                FormatAddr.SalesHeaderBillTo(CustAddr, Header);
-                ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
+                //FormatAddr.SalesHeaderBillTo(CustAddr, Header);
+                //ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
+
+
+                CustAddr[1] := "Bill-to Name";
+                CustAddr[2] := "Bill-to Contact";
+                CustAddr[3] := "Bill-to Address" + ' ' + "Bill-to Address 2";
+                CustAddr[4] := "Bill-to City" + ',' + "Bill-to County" + ' ' + "Bill-to Post Code" + ' ';
+                CustAddr[5] := "Bill-to Country/Region Code";
+
+                ShipToAddr[1] := "Ship-to Name";
+                ShipToAddr[2] := "Ship-to Contact";
+                ShipToAddr[3] := "Ship-to Address" + ' ' + "Ship-to Address 2";
+                ShipToAddr[4] := "Ship-to City" + ',' + "Ship-to County" + ' ' + "Ship-to Post Code" + ' ';
+                ShipToAddr[5] := "Ship-to Country/Region Code";
+
+
 
                 if not CompanyBankAccount.Get(Header."Company Bank Account Code") then
                     CompanyBankAccount.CopyBankFieldsFromCompanyInfo(CompanyInfo);
