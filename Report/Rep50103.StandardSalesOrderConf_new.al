@@ -1059,11 +1059,11 @@ report 50103 "Standard Sales -Order Conf.New"
                 //ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
 
 
-                CustAddr[1] := "Bill-to Name";
-                CustAddr[2] := "Bill-to Contact";
-                CustAddr[3] := "Bill-to Address" + ' ' + "Bill-to Address 2";
-                CustAddr[4] := "Bill-to City" + ',' + "Bill-to County" + ' ' + "Bill-to Post Code" + ' ';
-                CustAddr[5] := "Bill-to Country/Region Code";
+                CustAddr[1] := "Sell-to Customer Name";
+                CustAddr[2] := "Sell-to Contact";
+                CustAddr[3] := "Sell-to Address" + ' ' + "Sell-to Address 2";
+                CustAddr[4] := "Sell-to City" + ',' + "Sell-to County" + ' ' + "Sell-to Post Code" + ' ';
+                CustAddr[5] := "Sell-to Country/Region Code";
 
                 ShipToAddr[1] := "Ship-to Name";
                 ShipToAddr[2] := "Ship-to Contact";
