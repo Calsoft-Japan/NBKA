@@ -419,7 +419,9 @@ page 50029 "NBKAPI_INS"
         end;
         if PayAccNo <> '' then begin
             RecDSPkgOpt.Reset();
-            RecDSPkgOpt.RetrievePackageOptions("DSHIP Document Type"::"Sales Order", RecSalesHeader."No.", RecSalesHeader."No.");
+            //RecDSPkgOpt.RetrievePackageOptions("DSHIP Document Type"::"Sales Order", RecSalesHeader."No.", RecSalesHeader."No.");
+            //modified by channing.zhou on 5/8/2026, since the third parameter of RetrievePackageOptions will lead the records to be not found, pass '' to make it find or create.
+            RecDSPkgOpt.RetrievePackageOptions("DSHIP Document Type"::"Sales Order", RecSalesHeader."No.", '');
             if not RecDSPkgOpt.IsEmpty() then begin
                 RecDSPkgOpt."Payment Account No." := PayAccNo;
                 /*Added for FDD V1.8 start*/
@@ -429,6 +431,7 @@ page 50029 "NBKAPI_INS"
                 RecDSPkgOpt."Payment Country Code" := Rec.TCOUNTRY;
                 /*Added for FDD V1.8 end*/
                 RecDSPkgOpt.Modify(true);
+                //end;
             end;
         end;
         RecDSSet.Get();
