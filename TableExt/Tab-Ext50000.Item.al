@@ -38,6 +38,7 @@ tableextension 50000 "Item Ext" extends "Item"
             trigger OnValidate()
             var
                 ItemRec: Record Item;
+                Pricelistline: Record "Price List Line";
             begin
                 if "P/N" = '' then
                     exit;
@@ -49,6 +50,16 @@ tableextension 50000 "Item Ext" extends "Item"
                 if ItemRec.FindFirst() then
                     Error(
                         'P/N %1 is already used by Item %2.', "P/N", ItemRec."No.");
+
+                Pricelistline.Reset();
+                Pricelistline.SetRange("Asset Type", Pricelistline."Asset Type"::Item);
+                Pricelistline.SetRange("Product No.", "No.");
+                if Pricelistline.FindSet() then
+                    repeat
+                        Pricelistline."P/N" := "P/N";
+                        Pricelistline.Modify()
+                 until PriceListLine.Next() = 0;
+
             end;
 
 
@@ -68,6 +79,22 @@ tableextension 50000 "Item Ext" extends "Item"
             trigger OnAfterValidate()
             begin
                 "Put-away Unit of Measure Code" := "Base Unit of Measure";
+            end;
+        }
+        modify(Description)
+        {
+            trigger OnAfterValidate()
+            var
+                Pricelistline: Record "Price List Line";
+            begin
+                Pricelistline.Reset();
+                Pricelistline.SetRange("Asset Type", Pricelistline."Asset Type"::Item);
+                Pricelistline.SetRange("Product No.", "No.");
+                if Pricelistline.FindSet() then
+                    repeat
+                        Pricelistline.Description := Description;
+                        Pricelistline.Modify()
+                 until PriceListLine.Next() = 0;
             end;
         }
     }

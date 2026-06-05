@@ -2,7 +2,7 @@
   "id": "f4c449a6-198a-4756-b48b-36ef2221d6ed",
   "name": "NBKA Customization",
   "publisher": "Calsoft Systems",
-  "version": "1.0.0.25",
+  "version": "1.0.0.26",
   "brief": "",
   "description": "",
   "privacyStatement": "",
@@ -46,6 +46,12 @@
       "name": "Continia Document Output",
       "version": "1.0.0.0",
       "publisher": "Continia Software"
+    },
+    {
+      "id": "f4938bf6-4995-4143-bcb6-08bd55b7cf91",
+      "name": "Order Fulfillment Worksheet",
+      "version": "1.6.9568.1",
+      "publisher": "Insight Works"
     }
   ],
   "screenshots": [],

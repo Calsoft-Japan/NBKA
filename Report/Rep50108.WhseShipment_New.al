@@ -271,7 +271,8 @@ report 50108 "Whse. - Shipment New"
 
                 Barcodefontprovider := Enum::"Barcode Font Provider"::IDAutomation1D;
                 Barcodesymbology := Enum::"Barcode Symbology"::Code128;
-                BarcodeStr := '*' + "No." + '*';
+                //BarcodeStr := '*' + "No." + '*';
+                BarcodeStr := "No.";
                 Barcodefontprovider.ValidateInput(BarcodeStr, Barcodesymbology);
                 EncodedTxt := Barcodefontprovider.EncodeFont(BarcodeStr, Barcodesymbology);
 

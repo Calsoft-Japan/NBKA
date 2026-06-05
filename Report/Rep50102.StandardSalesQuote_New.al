@@ -969,8 +969,13 @@ report 50102 "Standard Sales - Quote New"
                 ShowWorkDescription := "Work Description".HasValue;
 
                 FormatAddr.GetCompanyAddr("Responsibility Center", RespCenter, CompanyInfo, CompanyAddr);
-                FormatAddr.SalesHeaderBillTo(CustAddr, Header);
-                ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
+                // FormatAddr.SalesHeaderBillTo(CustAddr, Header);
+                // ShowShippingAddr := FormatAddr.SalesHeaderShipTo(ShipToAddr, CustAddr, Header);
+                CustAddr[1] := "Sell-to Customer Name";
+                CustAddr[2] := "Sell-to Contact";
+                CustAddr[3] := "Sell-to Address" + ' ' + "Sell-to Address 2";
+                CustAddr[4] := "Sell-to City" + ',' + "Sell-to County" + ' ' + "Sell-to Post Code" + ' ';
+                CustAddr[5] := "Sell-to Country/Region Code";
 
 
 
