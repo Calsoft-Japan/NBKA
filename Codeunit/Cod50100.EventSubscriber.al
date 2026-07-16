@@ -306,6 +306,12 @@ codeunit 50100 EventSubscriber
         Confirmed := false;
     end;
 
+    [EventSubscriber(ObjectType::Report, Report::"Whse.-Shipment - Create Pick", OnAfterOpenPage, '', false, false)]
+    local procedure OnAfterOpenPage(var DoNotFillQtytoHandle: Boolean)
+    begin
+        DoNotFillQtytoHandle := true;
+    end;
+
     var
         RequisitionIsHandled: Boolean;
 

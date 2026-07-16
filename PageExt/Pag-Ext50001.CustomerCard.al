@@ -16,6 +16,14 @@ pageextension 50001 "Customer Card Ext" extends "Customer Card"
             {
                 ApplicationArea = all;
             }
+            field("Special Quote work"; Rec."Special Quote work")
+            {
+                ApplicationArea = All;
+            }
+            // field("Special Quote work Completed"; Rec."Special Quote work Completed")
+            // {
+            //     ApplicationArea = All;
+            // }
 
         }
         modify("No.")

@@ -41,6 +41,11 @@ report 50100 "Create Warehouse Shipment New"
             begin
                 SingleInstance.SetWarehouseRequestDate(ToBeShippedBY);
             end;
+
+            trigger OnPostDataItem()
+            begin
+                CheckAndDeleteEmptyWhseShipHeader();
+            end;
         }
     }
     requestpage
@@ -295,9 +300,10 @@ report 50100 "Create Warehouse Shipment New"
                             PostedPurchRcptLine.Reset();
                             PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
                             PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
-                            if PostedPurchRcptLine.FindFirst() then begin
-                                ReservedQty += PostedPurchRcptLine.Quantity;
-                            end;
+                            if PostedPurchRcptLine.FindFirst() then
+                                repeat
+                                    ReservedQty += PostedPurchRcptLine.Quantity;
+                                until PostedPurchRcptLine.Next() = 0;
                         Until PostedPurchRcpt.Next() = 0;
                 end;
                 if SalesLine."Outstanding Qty. (Base)" > (ReservedQty) then
@@ -358,9 +364,10 @@ report 50100 "Create Warehouse Shipment New"
                             PostedPurchRcptLine.Reset();
                             PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
                             PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
-                            if PostedPurchRcptLine.FindFirst() then begin
-                                ReservedQty += PostedPurchRcptLine.Quantity;
-                            end;
+                            if PostedPurchRcptLine.FindFirst() then
+                                repeat
+                                    ReservedQty += PostedPurchRcptLine.Quantity;
+                                until PostedPurchRcptLine.Next() = 0;
                         Until PostedPurchRcpt.Next() = 0;
                 end;
                 if (SalesLine."Outstanding Qty. (Base)" <= (ReservedQty)) and

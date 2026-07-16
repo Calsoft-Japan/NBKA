@@ -86,11 +86,21 @@ pageextension 50000 "Item Card Ext" extends "Item Card"
         {
             ShowMandatory = true;
         }
+        modify("Vendor No.")
+        {
+            ShowMandatory = true;
+
+        }
+        modify("Item Category Code")
+        {
+            ShowMandatory = true;
+        }
 
     }
     trigger OnQueryClosePage(CloseAction: Action): Boolean
     begin
         Rec.TestField("Item Category Code");
+        Rec.TestField("Vendor No.");
     end;
 
 }

@@ -73,6 +73,34 @@ tableextension 50003 "SalesHeader Ext" extends "Sales Header"
         {
             Caption = 'Invoice Email';
         }
+        field(50013; "Special Quote work"; Boolean)
+        {
+            Caption = 'Special Quote work';
+            Editable = true;
+        }
+        field(50014; "Special Quote work Completed"; Boolean)
+        {
+            Caption = 'Special Quote work Completed';
+            Editable = true;
+        }
+        modify("Sell-to Customer No.")
+        {
+            trigger OnAfterValidate()
+            var
+                cust: Record Customer;
+            begin
+                if "Sell-to Customer No." <> '' then begin
+                    if cust.get("Sell-to Customer No.") then begin
+                        "Special Quote work" := cust."Special Quote work";
+                        // "Special Quote work Completed" := cust."Special Quote work Completed";
+                    end;
+                end else begin
+                    "Special Quote work" := false;
+                    // "Special Quote Work Completed" := false;
+                end;
+
+            end;
+        }
     }
 
     trigger OnInsert()

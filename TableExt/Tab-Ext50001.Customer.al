@@ -14,5 +14,12 @@ tableextension 50001 "Customer Ext" extends Customer
         {
             ToolTip = 'Specifies whether this customer needs special assistance for shipping.';
         }
+        field(50004; "Special Quote work"; Boolean)
+        {
+            Caption = 'Special Quote work';
+        }
     }
+
+
+
 }
