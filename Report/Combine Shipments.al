@@ -262,10 +262,9 @@ report 50111 "Combine Shipments NBK"
             if IsHandled then
                 exit;
 
-            if PostingDateReq = 0D then
-                PostingDateReq := WorkDate();
-            if DocDateReq = 0D then
-                DocDateReq := WorkDate();
+
+            PostingDateReq := today();
+            DocDateReq := today();
             if VATDateReq = 0D then
                 VATDateReq := GLSetup.GetVATDate(PostingDateReq, DocDateReq);
             SalesSetup.Get();

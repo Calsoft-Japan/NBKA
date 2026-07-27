@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-07-01T15:04:47.4940636Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-07-27T18:19:27.0667338Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -106,10 +106,21 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>Thank you for the quotation request. In order to place an order please reference this quotation number. Please note we will use FedEx for your order if you elect to NBK America's shipping account, NBK does not take responsibility for any troubles (delays, lost items etc) when shipped with non-NBK account numbers.</Value>
+                                                    <Value>Thank you for the quotation request. In order to place an order please reference this quotation number. Please note we will use FedEx for your order if you elect to NBK America's shipping account, NBK does not take responsibility for any troubles (delays, lost items etc) when shipped with non-NBK account numbers. </Value>
                                                     <Style>
                                                       <FontFamily>Segoe UI</FontFamily>
                                                       <FontSize>8pt</FontSize>
+                                                    </Style>
+                                                  </TextRun>
+                                                  <TextRun>
+                                                    <Value>Please note that applicable state and local sales taxes will be charged unless a valid resale or exemption certificate is provided prior to shipment.</Value>
+                                                    <Style>
+                                                      <FontStyle>Normal</FontStyle>
+                                                      <FontFamily>Segoe UI</FontFamily>
+                                                      <FontSize>8pt</FontSize>
+                                                      <FontWeight>Normal</FontWeight>
+                                                      <TextDecoration>None</TextDecoration>
+                                                      <Color>#000000</Color>
                                                     </Style>
                                                   </TextRun>
                                                 </TextRuns>

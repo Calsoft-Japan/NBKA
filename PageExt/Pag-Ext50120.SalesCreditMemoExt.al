@@ -181,6 +181,7 @@ pageextension 50120 SalesCreditMemoExt extends "Sales Credit Memo"
                         }
                         field("Ship-to UPS Zone"; Rec."Ship-to UPS Zone")
                         {
+                            ApplicationArea = Basic, Suite;
                             Caption = 'UPS Zone';
                             Editable = ShipToOptions = ShipToOptions::"Custom Address";
                             ToolTip = 'Specifies a UPS Zone code for this document if UPS is used for shipments.';
