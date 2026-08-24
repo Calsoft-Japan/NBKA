@@ -166,6 +166,7 @@ page 50026 "NBKAPI_INSTOKUCD"
         errorMsg: Text;
         RecCompanyInfo: Record "Company Information";
         RecTaxArea: Record "Tax Area";
+        RecDefDim: Record "Default Dimension";
         NoSeries: Codeunit "No. Series";
     begin
         RecCustomer.Init();
@@ -188,25 +189,36 @@ page 50026 "NBKAPI_INSTOKUCD"
         RecCustomer.Validate("Customer Posting Group", 'DEFAULT');
         RecCustomer.Validate("Location Code", 'NBKAM');
         RecCustomer.Validate("CDO Send Code", 'EMAIL');
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.4 Start*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.4 Start*/
         RecCustomer.Validate("Customer Disc. Group", 'B2C');
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.4 End*/
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 Start*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.4 End*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.5 Start*/
         RecCustomer.Validate("Combine Shipments", true);
         RecTaxArea.Reset();
         if RecTaxArea.Get(RecINSTOKUCD.TPOSTCODE) then begin
             RecCustomer.Validate("Tax Area Code", RecINSTOKUCD.TPOSTCODE);
         end;
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.5 End*/
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.6 Start*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.5 End*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.6 Start*/
         RecCustomer.Validate("Tax Exemption No.", RecINSTOKUCD.RESELLER);
-        /*1/26/2015 Channing.Zhou Added based on FDD 1.6 End*/
+        /*1/26/2025 Channing.Zhou Added based on FDD 1.6 End*/
         if (RecINSTOKUCD.TSTATE <> '') and (RecINSTOKUCD.RESELLER = '') and (RecCompanyInfo.FindFirst()) and (RecCompanyInfo.County = RecINSTOKUCD.TSTATE) then begin
             RecCustomer."Tax Liable" := true;
         end
         else begin
             RecCustomer."Tax Liable" := false;
         end;
+        /*8/21/2026 Channing.Zhou Added based on FDD V1.7 Start*/
+        RecDefDim.Reset();
+        RecDefDim.Init();
+        RecDefDim."Table ID" := DATABASE::Customer;
+        RecDefDim."No." := RecCustomer."No.";
+        RecDefDim."Dimension Code" := 'INDUSTRY';
+        RecDefDim."Dimension Value Code" := 'ENDUSER';
+        RecDefDim."Value Posting" := RecDefDim."Value Posting"::"Code Mandatory";
+        RecDefDim."Parent Type" := RecDefDim."Parent Type"::Customer;
+        RecDefDim.Insert();
+        /*8/21/2025 Channing.Zhou Added based on FDD 1.7 End*/
         RecCustomer.Modify(true);
     end;
 }

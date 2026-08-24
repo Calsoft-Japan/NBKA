@@ -312,6 +312,16 @@ codeunit 50100 EventSubscriber
         DoNotFillQtytoHandle := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnBeforeReleaseSalesDoc, '', false, false)]
+    local procedure "Release Sales Document_OnBeforeReleaseSalesDoc"(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean; var IsHandled: Boolean; var SkipCheckReleaseRestrictions: Boolean; SkipWhseRequestOperations: Boolean)
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            if SalesHeader."Shortcut Dimension 1 Code" = '' then
+                Error('Industry Code is missing.');
+        end;
+    end;
+
+
     var
         RequisitionIsHandled: Boolean;
 
