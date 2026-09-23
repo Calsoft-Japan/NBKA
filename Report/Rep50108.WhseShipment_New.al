@@ -131,6 +131,7 @@ report 50108 "Whse. - Shipment New"
                 column(ShipToAddress8; ShipToAddress[8])
                 {
                 }
+                column(SalesBoolean4; SalesBoolean4) { }
                 column(EncodedTxt; EncodedTxt)
                 {
                 }
@@ -257,13 +258,16 @@ report 50108 "Whse. - Shipment New"
                         ShipToAddress[1] := SalesHeader."Ship-to Name";
                         ShipToAddress[2] := SalesHeader."Ship-to Contact";
                         ShipToAddress[3] := SalesHeader."Ship-to Address";
+                        //if SalesHeader."Ship-to Address 2" <> '' then
                         ShipToAddress[4] := SalesHeader."Ship-to Address 2";
+                        //ShipToAddress[4] := 'hide';
                         ShipToAddress[5] := SalesHeader."Ship-to City";
                         ShipToAddress[6] := SalesHeader."Ship-to County";
                         ShipToAddress[7] := SalesHeader."Ship-to Post Code";
                         If SalesHeader."Ship-to Country/Region Code" <> '' then
                             if Country.Get(SalesHeader."Ship-to Country/Region Code") then
                                 ShipToAddress[8] := Country.Name;
+                        SalesBoolean4 := true;
                         if ShippingAgent.Get(SalesHeader."Shipping Agent Code") then;
                         if ShippingAgentService.Get(SalesHeader."Shipping Agent Code", SalesHeader."Shipping Agent Service Code") then;
                         if DshipPackageOptions.Get(SalesHeader."No.") then;
@@ -332,7 +336,7 @@ report 50108 "Whse. - Shipment New"
         COClbl: Label 'COC';
         Shiptoaddresslbl: Label 'Ship-to address:';
         BarcodeStr, EncodedTxt, coc : Text;
-
+        SalesBoolean4, SalesBoolean3 : Boolean;
 
         Instr: InStream;
 

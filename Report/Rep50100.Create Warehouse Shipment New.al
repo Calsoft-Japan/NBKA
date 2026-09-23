@@ -39,12 +39,28 @@ report 50100 "Create Warehouse Shipment New"
 
             trigger OnPreDataItem()
             begin
+                Clear(Warehouseshpmts);
                 SingleInstance.SetWarehouseRequestDate(ToBeShippedBY);
+                SingleInstance.SetWarehouseFillonInventory(fillInvavbOrd);
             end;
 
             trigger OnPostDataItem()
+            Var
+                WareHouseShipHeaderRec: Record "Warehouse Shipment Header";
+                WarehouseShpReport: Report "Whse. - Shipment New";
             begin
-                CheckAndDeleteEmptyWhseShipHeader();
+                CheckAndDeleteEmptyWhseShipHeaderorCreatePick();
+                If PrintPickList then
+                    if Warehouseshpmts <> '' then begin
+                        WareHouseShipHeaderRec.Reset();
+                        WareHouseShipHeaderRec.SetFilter("No.", Warehouseshpmts);
+                        If WareHouseShipHeaderRec.FindSet() then begin
+                            Clear(WarehouseShpReport);
+                            WarehouseShpReport.SetTableView(WareHouseShipHeaderRec);
+                            WarehouseShpReport.UseRequestPage(false);
+                            WarehouseShpReport.RunModal();
+                        end;
+                    end;
             end;
         }
     }
@@ -79,6 +95,18 @@ report 50100 "Create Warehouse Shipment New"
                         Caption = 'To Be Shipped By';
                         ToolTip = 'Specifies if the To Be Shipped By field in the warehouse document is create source document on the date.';
                     }
+                    field(fillInvavbOrd; fillInvavbOrd)
+                    {
+                        ApplicationArea = all;
+                        Caption = 'Fill Inventory Available Orders ';
+                        //ToolTip = 'Specifies if the To Be Shipped By field in the warehouse document is create source document on the date.';
+                    }
+                    field(PrintPickList; PrintPickList)
+                    {
+                        ApplicationArea = all;
+                        Caption = 'Print Pick List';
+                        //ToolTip = 'Specifies if the To Be Shipped By field in the warehouse document is create source document on the date.';
+                    }
                 }
             }
         }
@@ -91,6 +119,7 @@ report 50100 "Create Warehouse Shipment New"
     trigger OnPostReport()
     begin
         SingleInstance.ClearWarehouseRequestDate();
+        SingleInstance.ClearFillOnInventory();
     end;
 
 
@@ -102,6 +131,10 @@ report 50100 "Create Warehouse Shipment New"
         ReservedFromStock: Enum "Reservation From Stock";
         ToBeShippedBY: Date;
         PrevCustomerNo, PrevShiptoCode : code[20];
+        fillInvavbOrd: Boolean;
+        PrintPickList: Boolean;
+        Warehouseshpmts: Text;
+
     procedure InitializeRequest(NewDoNotFillQtyToHandle: Boolean; NewReservedFromStock: Enum "Reservation From Stock")
     begin
         DoNotFillQtytoHandle := NewDoNotFillQtyToHandle;
@@ -137,6 +170,7 @@ report 50100 "Create Warehouse Shipment New"
         SalesHeader: Record "Sales Header";
         WarehouseRequest: Record "Warehouse Request";
         GetSourceDocOutbound: Codeunit "Get Source Doc. Outbound";
+        LinesExist: Boolean;
     begin
         WarehouseRequest.Copy("Warehouse Request");
         SalesHeader.Get(SalesHeader."Document Type"::Order, WarehouseRequest."Source No.");
@@ -160,7 +194,8 @@ report 50100 "Create Warehouse Shipment New"
         (PrevShiptoCode <> SalesHeader."Ship-to Code") then begin
             PrevCustomerNo := SalesHeader."Sell-to Customer No.";
             PrevShiptoCode := SalesHeader."Ship-to Code";
-            CheckAndDeleteEmptyWhseShipHeader();
+            Clear(LinesExist);
+            CheckAndDeleteEmptyWhseShipHeaderorCreatePick();
             CreateShptHeader();
         end;
         CreateWarehouseShipmentFromWhseRequest_Sales(WarehouseRequest);
@@ -184,7 +219,7 @@ report 50100 "Create Warehouse Shipment New"
         WhseShptHeader.Insert(true);
     end;
 
-    local procedure CheckAndDeleteEmptyWhseShipHeader()
+    local procedure CheckAndDeleteEmptyWhseShipHeaderorCreatePick()
     var
         WarehouseShipLine: Record "Warehouse Shipment Line";
     begin
@@ -193,10 +228,18 @@ report 50100 "Create Warehouse Shipment New"
 
         WarehouseShipLine.Reset();
         WarehouseShipLine.SetRange("No.", WhseShptHeader."No.");
-        if not WarehouseShipLine.FindFirst() then begin
+        if not WarehouseShipLine.FindSet() then begin
             WhseShptHeader.Delete(true);
             Commit();
+        end else begin
+            PickCreate(WarehouseShipLine);
+            If PrintPickList then
+                If Warehouseshpmts = '' then
+                    Warehouseshpmts := WhseShptHeader."No."
+                else
+                    Warehouseshpmts := Warehouseshpmts + '|' + WhseShptHeader."No.";
         end;
+
     end;
 
     local procedure CreateWarehouseShipmentForPurchaseReturnOrder()
@@ -328,9 +371,11 @@ report 50100 "Create Warehouse Shipment New"
         SalesLine.setrange("Document Type", SalesHeader."Document Type");
         SalesLine.SetRange("Document No.", SalesHeader."No.");
         SalesLine.SetRange(Type, SalesLine.Type::Item);
-        if ToBeShippedBY <> 0D then begin
-            SalesLine.SetFilter("Shipping Date", '<=%1', ToBeShippedBY);
-        end;
+
+        If not fillInvavbOrd then
+            if ToBeShippedBY <> 0D then begin
+                SalesLine.SetFilter("Shipping Date", '<=%1', ToBeShippedBY);
+            end;
         //SalesLine.SetFilter("Shipment Date", '<=%1', ToBeShippedBY);
         if SalesLine.FindSet() then begin
             repeat
@@ -338,46 +383,94 @@ report 50100 "Create Warehouse Shipment New"
                 // Item.SetRange("No.", SalesLine."No.");
                 // Item.SetFilter("Location Filter", SalesLine."Location Code");
                 // if Item.FindFirst() then;
-                if not SalesLine."Special Order" then begin
-                    Clear(ReservedQty);
-                    SalesLine.CalcFields("Reserved Qty. (Base)");
-                    if SalesLine."Reserved Qty. (Base)" <> 0 then begin
-                        ReservationEntry.Reset();
-                        ReservationEntry.SetRange("Source Type", Database::"Sales Line");
-                        ReservationEntry.SetRange("Source Subtype", 1);
-                        ReservationEntry.SetRange("Item No.", SalesLine."No.");
-                        ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
-                        ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
-                        ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
-                        if ReservationEntry.FindSet() then
-                            repeat
-                                if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
-                                    ReservedQty += ReservationEntry2."Quantity (Base)";
-                            until ReservationEntry.Next() = 0;
-                    end;
-                end else begin
-                    Clear(ReservedQty);
-                    PostedPurchRcpt.Reset();
-                    PostedPurchRcpt.SetRange("Order No.", SalesLine."Special Order Purchase No.");
-                    if PostedPurchRcpt.FindSet() then
-                        repeat
-                            PostedPurchRcptLine.Reset();
-                            PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
-                            PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
-                            if PostedPurchRcptLine.FindFirst() then
+                if SalesLine."Shipping Date" <= TobeShippedBY then begin
+                    if not SalesLine."Special Order" then begin
+                        Clear(ReservedQty);
+                        SalesLine.CalcFields("Reserved Qty. (Base)");
+                        if SalesLine."Reserved Qty. (Base)" <> 0 then begin
+                            ReservationEntry.Reset();
+                            ReservationEntry.SetRange("Source Type", Database::"Sales Line");
+                            ReservationEntry.SetRange("Source Subtype", 1);
+                            ReservationEntry.SetRange("Item No.", SalesLine."No.");
+                            ReservationEntry.SetRange("Source ID", SalesLine."Document No.");
+                            ReservationEntry.SetRange("Source Ref. No.", SalesLine."Line No.");
+                            ReservationEntry.SetRange("Reservation Status", ReservationEntry."Reservation Status"::Reservation);
+                            if ReservationEntry.FindSet() then
                                 repeat
-                                    ReservedQty += PostedPurchRcptLine.Quantity;
-                                until PostedPurchRcptLine.Next() = 0;
-                        Until PostedPurchRcpt.Next() = 0;
-                end;
-                if (SalesLine."Outstanding Qty. (Base)" <= (ReservedQty)) and
-                SalesWarehouseMgt.CheckIfFromSalesLine2ShptLine(SalesLine, ReservedFromStock) then
-                    exit(true);
+                                    if ReservationEntry2.Get(ReservationEntry."Entry No.", not ReservationEntry.Positive) and (ReservationEntry2."Source Type" = Database::"Item Ledger Entry") then
+                                        ReservedQty += ReservationEntry2."Quantity (Base)";
+                                until ReservationEntry.Next() = 0;
+                        end;
+                    end else begin
+                        Clear(ReservedQty);
+                        PostedPurchRcpt.Reset();
+                        PostedPurchRcpt.SetRange("Order No.", SalesLine."Special Order Purchase No.");
+                        if PostedPurchRcpt.FindSet() then
+                            repeat
+                                PostedPurchRcptLine.Reset();
+                                PostedPurchRcptLine.SetRange("Document No.", PostedPurchRcpt."No.");
+                                PostedPurchRcptLine.SetRange("No.", SalesLine."No.");
+                                if PostedPurchRcptLine.FindFirst() then
+                                    repeat
+                                        ReservedQty += PostedPurchRcptLine.Quantity;
+                                    until PostedPurchRcptLine.Next() = 0;
+                            Until PostedPurchRcpt.Next() = 0;
+                    end;
+                    if (SalesLine."Outstanding Qty. (Base)" <= (ReservedQty)) and
+                    SalesWarehouseMgt.CheckIfFromSalesLine2ShptLine(SalesLine, ReservedFromStock) then
+                        exit(true);
 
+                end else begin
+                    Item.Reset();
+                    Item.SetRange("No.", SalesLine."No.");
+                    if Item.FindFirst() then begin
+                        Item.CalcFields(Inventory);
+                        Item.CalcFields("Qty. on Sales Order");
+                        ReservedQty := (Item.Inventory - Item."Qty. on Sales Order");
+                    end;
+
+                    if (SalesLine."Outstanding Qty. (Base)" <= (ReservedQty)) and
+                    SalesWarehouseMgt.CheckIfFromSalesLine2ShptLine(SalesLine, ReservedFromStock) then
+                        exit(true);
+                end;
             until SalesLine.Next() = 0;
         end else
             exit(false);
         exit(false);
+    end;
+
+    procedure PickCreate(Var WarehouseShipLine: Record "Warehouse Shipment Line")
+    var
+        WhseShptHeader: Record "Warehouse Shipment Header";
+        WhseShptLine: Record "Warehouse Shipment Line";
+        ReleaseWhseShipment: Codeunit "Whse.-Shipment Release";
+    begin
+        WhseShptLine.Copy(WarehouseShipLine);
+        WhseShptHeader.Get(WhseShptLine."No.");
+        if WhseShptHeader.Status = WhseShptHeader.Status::Open then
+            ReleaseWhseShipment.Release(WhseShptHeader);
+        CreatePickDoc(WhseShptLine, WhseShptHeader);
+
+    end;
+
+    procedure CreatePickDoc(var WhseShptLine: Record "Warehouse Shipment Line"; WhseShptHeader2: Record "Warehouse Shipment Header")
+    begin
+        WhseShptHeader2.TestField(Status, WhseShptHeader.Status::Released);
+        WhseShptLine.SetFilter(Quantity, '>0');
+        WhseShptLine.SetRange("Completely Picked", false);
+        if WhseShptLine.Find('-') then
+            CreatePickDocFromWhseShpt(WhseShptLine, WhseShptHeader2);
+    end;
+
+    local procedure CreatePickDocFromWhseShpt(var WhseShptLine: Record "Warehouse Shipment Line"; WhseShptHeader2: Record "Warehouse Shipment Header")
+    var
+        WhseShipmentCreatePick: Report "Whse.-Shipment - Create Pick";
+    begin
+        WhseShipmentCreatePick.SetWhseShipmentLine(WhseShptLine, WhseShptHeader2);
+        WhseShipmentCreatePick.SetHideValidationDialog(True);
+        WhseShipmentCreatePick.UseRequestPage(false);
+        WhseShipmentCreatePick.RunModal();
+        Clear(WhseShipmentCreatePick);
     end;
 
     [IntegrationEvent(true, false)]

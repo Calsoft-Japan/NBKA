@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-07-27T18:19:27.0667338Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-09-11T15:05:44.3659780Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -177,7 +177,7 @@
                                   <TextRuns>
                                     <TextRun>
                                       <Value>Claims: When a product shipped is found to be incorrect, a claim must be made in writing to Seller within ten days after Seller's delivery. If one does not give notice within the aforementioned limit it shall constitute unqualified acceptance and a waiver of all such claims by Buyer. 
-Returns: So long as the product is a standard one and in unused, unopened condition, Buyer can return the Products, within 30 days and Seller will issue 50% credit (taking a 50% re-stocking fee) for the Product not including freight charges, packaging costs, taxes, insurance and other incidental costs. On the return of Products from a foreign country, Seller will not be responsible for any brokerage fees and duty fees regardless of reason for return. Modified and special-order Products cannot be cancelled or returned.</Value>
+Cancellations and Returns: Any order for standard Products cancelled after order confirmation but prior to shipment is subject to a 50% cancellation fee.Once shipped, So long as the product is a standard one and in unused, unopened condition, Buyer can return the Products, within 30 days and Seller will issue 50% credit (taking a 50% re-stocking fee) for the Product not including freight charges, packaging costs, taxes, insurance and other incidental costs. On the return of Products from a foreign country, Seller will not be responsible for any brokerage fees and duty fees regardless of reason for return.Modified and special-order Products cannot be cancelled or returned.</Value>
                                       <Style>
                                         <FontStyle>Normal</FontStyle>
                                         <FontFamily>Segoe UI</FontFamily>

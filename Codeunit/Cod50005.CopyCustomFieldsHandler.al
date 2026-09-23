@@ -31,8 +31,10 @@ codeunit 50005 "Copy Sales Custom Fields"
                     if FromSalesHeader.Get(FromDocType.AsInteger(), FromDocumentNo) then begin
                         ToSalesHeader."Estimator Role" := FromSalesHeader."Estimator Role";
                         ToSalesHeader."Approval User" := FromSalesHeader."Approval User";
+
                     end;
                 end;
+
         end;
 
         // Copy from Customer Card → Sales Line
