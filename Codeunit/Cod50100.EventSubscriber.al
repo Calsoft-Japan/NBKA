@@ -335,7 +335,82 @@ codeunit 50100 EventSubscriber
         DoNotFillQtytoHandle := true;
     end;
 
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnBeforeReleaseSalesDoc, '', false, false)]
+    local procedure "Release Sales Document_OnBeforeReleaseSalesDoc"(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean; var IsHandled: Boolean; var SkipCheckReleaseRestrictions: Boolean; SkipWhseRequestOperations: Boolean)
+    begin
+        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+            if SalesHeader."Shortcut Dimension 1 Code" = '' then
+                Error('Industry Code is missing.');
+        end;
+    end;
+
+    /// <summary>
+    /// Make Order. OnBeforeOnRun has no IsHandled parameter, so an error is the way to stop the
+    /// conversion - it rolls the whole thing back, which is what we want.
+    /// </summary>
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Sales-Quote to Order", 'OnBeforeOnRun', '', false, false)]
+    local procedure OnBeforeMakeOrderCheckQuoteNotExpired(var SalesHeader: Record "Sales Header")
+    begin
+        CheckQuoteNotExpired(SalesHeader);
+    end;
+
+    /// <summary>
+    /// Copy Document. Only relevant when the source is a quote - copying from an order, invoice or
+    /// archived document is left alone.
+    ///
+    /// FromDocumentType is published as an Option, so it is compared against the enum's ordinal
+    /// rather than hard coding a number, which would break if Microsoft reorders the enum.
+    /// </summary>
+    [EventSubscriber(ObjectType::Codeunit, Codeunit::"Copy Document Mgt.", 'OnBeforeCopySalesDocument', '', false, false)]
+    local procedure OnBeforeCopySalesDocumentCheckQuoteNotExpired(FromDocumentType: Option; FromDocumentNo: Code[20]; var ToSalesHeader: Record "Sales Header"; var IsHandled: Boolean)
+    var
+        FromSalesHeader: Record "Sales Header";
+    begin
+        if IsHandled then
+            exit;
+        if FromDocumentNo = '' then
+            exit;
+        if FromDocumentType <> Enum::"Sales Document Type From"::Quote.AsInteger() then
+            exit;
+        if not FromSalesHeader.Get(FromSalesHeader."Document Type"::Quote, FromDocumentNo) then
+            exit;
+
+        CheckQuoteNotExpired(FromSalesHeader);
+    end;
+
+    /// <summary>
+    /// The rule, as agreed with the client:
+    ///   valid-to date BEFORE today            -> expired, show the error
+    ///   valid-to date EQUAL TO or AFTER today -> still valid, no error
+    /// So the date itself is the last valid day - a quote valid to today is still good today.
+    ///
+    /// A blank date means the quote never expires and is left alone.
+    /// </summary>
+    procedure CheckQuoteNotExpired(var SalesHeader: Record "Sales Header")
+    begin
+        if SalesHeader."Document Type" <> SalesHeader."Document Type"::Quote then
+            exit;
+        if SalesHeader."Quote Valid Until Date" = 0D then
+            exit;
+        if SalesHeader."Quote Valid Until Date" >= ReferenceDate() then
+            exit;
+
+        Error(QuoteExpiredErr);
+    end;
+
+    /// <summary>
+    /// The single place that decides what "now" means for the expiry test.
+    /// The client asked for the real calendar date, so this is Today() rather than WorkDate() -
+    /// a stale working date must not let an expired quote through.
+    /// </summary>
+    local procedure ReferenceDate(): Date
+    begin
+        exit(Today());
+    end;
+
+
     var
         RequisitionIsHandled: Boolean;
+        QuoteExpiredErr: Label 'Sales quote is expired.';
 
 }

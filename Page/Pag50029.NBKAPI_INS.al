@@ -325,9 +325,12 @@ page 50029 "NBKAPI_INS"
         RecCompanyInfo: Record "Company Information";
         ReleaseSalDoc: Codeunit "Release Sales Document";
         RecDSSet: Record "DSHIP Setup";
+        RecDefDim: Record "Default Dimension";
+        RecDimVal: Record "Dimension Value";
         PayAccNo: Text;
         LineNo: Integer;
         OldDSAVB: Enum "DSHIP Address Val. Behaviour";
+        ccc: CODEUNIT "Release Sales Document";
     begin
         RecSalesHeader.Init();
         RecSalesHeader.Validate("Document Type", RecSalesHeader."Document Type"::Order);
@@ -365,16 +368,31 @@ page 50029 "NBKAPI_INS"
         RecSalesHeader.Validate("Shipping Agent Code", Rec.SHIPAGENT);
         RecSalesHeader.Validate("Shipping Agent Service Code", Rec.SHIPSERVICE);
         RecSalesHeader.Validate("Shipping Advice", RecSalesHeader."Shipping Advice"::Complete); //Added since V1.3
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.9 Start*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.9 Start*/
         RecSalesHeader.Validate("Combine Shipments", true);
         RecTaxArea.Reset();
         if RecTaxArea.Get(Rec.TPOSTCODE) then begin
             RecSalesHeader.Validate("Tax Area Code", Rec.TPOSTCODE);
         end;
-        /*1/26/2015 Channing.Zhou Added based on FDD V1.9 End*/
-        /*1/26/2015 Channing.Zhou Added based on FDD V2.0 Start*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V1.9 End*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V2.0 Start*/
         RecSalesHeader.Validate("Tax Exemption No.", Rec.RESELLER);
-        /*1/26/2015 Channing.Zhou Added based on FDD V2.0 End*/
+        /*1/26/2025 Channing.Zhou Added based on FDD V2.0 End*/
+        /*8/21/2026 Channing.Zhou Added based on FDD V2.1 Start*/
+        RecDefDim.Reset();
+        RecDefDim.SetRange("Table ID", DATABASE::Customer);
+        RecDefDim.SetRange("No.", Rec.TOKUCD);
+        RecDefDim.SetRange("Dimension Code", 'INDUSTRY');
+        if RecDefDim.FindFirst() then begin
+            RecDimVal.Reset();
+            RecDimVal.SetRange("Global Dimension No.", 1);
+            RecDimVal.SetRange(blocked, false);
+            RecDimVal.SetRange(Code, RecDefDim."Dimension Value Code");
+            if RecDimVal.FindFirst() then begin
+                RecSalesHeader.Validate("Shortcut Dimension 1 Code", RecDimVal.Code);
+            end;
+        end;
+        /*8/21/2026 Channing.Zhou Added based on FDD V2.1 Start*/
         RecSalesHeader.Modify(true);
 
         LineNo := 0;
@@ -395,6 +413,22 @@ page 50029 "NBKAPI_INS"
             RecSalesLine.Validate("Unit Price", RecNBKAPITBL_INS_LINE.UNITPRICE);
             RecSalesLine.Validate("Requested Delivery Date", RecNBKAPITBL_INS_LINE.REQUESTDATE);
             RecSalesLine.Validate("Ship-to PO No.", RecNBKAPITBL_INS_LINE.TKHAC);
+
+            /*8/21/2026 Channing.Zhou Added based on FDD V2.1 Start*/
+            RecDefDim.Reset();
+            RecDefDim.SetRange("Table ID", DATABASE::Customer);
+            RecDefDim.SetRange("No.", Rec.TOKUCD);
+            RecDefDim.SetRange("Dimension Code", 'INDUSTRY');
+            if RecDefDim.FindFirst() then begin
+                RecDimVal.Reset();
+                RecDimVal.SetRange("Global Dimension No.", 1);
+                RecDimVal.SetRange(blocked, false);
+                RecDimVal.SetRange(Code, RecDefDim."Dimension Value Code");
+                if RecDimVal.FindFirst() then begin
+                    RecSalesHeader.Validate("Shortcut Dimension 1 Code", RecDimVal.Code);
+                end;
+            end;
+            /*8/21/2026 Channing.Zhou Added based on FDD V2.1 Start*/
             RecSalesLine.Insert(True);
         until RecNBKAPITBL_INS_LINE.Next() = 0;
         if Rec.FREIGHT > 0 then begin
