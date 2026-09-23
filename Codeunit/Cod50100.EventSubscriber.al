@@ -368,10 +368,13 @@ codeunit 50100 EventSubscriber
     begin
         if IsHandled then
             exit;
+        if ToSalesHeader."Document Type" <> ToSalesHeader."Document Type"::Order then
+            exit;
         if FromDocumentNo = '' then
             exit;
         if FromDocumentType <> Enum::"Sales Document Type From"::Quote.AsInteger() then
             exit;
+
         if not FromSalesHeader.Get(FromSalesHeader."Document Type"::Quote, FromDocumentNo) then
             exit;
 
