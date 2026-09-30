@@ -338,7 +338,8 @@ codeunit 50100 EventSubscriber
     [EventSubscriber(ObjectType::Codeunit, Codeunit::"Release Sales Document", OnBeforeReleaseSalesDoc, '', false, false)]
     local procedure "Release Sales Document_OnBeforeReleaseSalesDoc"(var SalesHeader: Record "Sales Header"; PreviewMode: Boolean; var IsHandled: Boolean; var SkipCheckReleaseRestrictions: Boolean; SkipWhseRequestOperations: Boolean)
     begin
-        if SalesHeader."Document Type" = SalesHeader."Document Type"::Order then begin
+        //if SalesHeader."Document Type" = SalesHeader."Document Type"::Order &SalesHeader."Document Type" = SalesHeader."Document Type"::Quote then begin
+        if (SalesHeader."Document Type" = SalesHeader."Document Type"::Order) or (SalesHeader."Document Type" = SalesHeader."Document Type"::Quote) then begin
             if SalesHeader."Shortcut Dimension 1 Code" = '' then
                 Error('Industry Code is missing.');
         end;
