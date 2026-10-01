@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-09-04T16:48:45.4173644Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-10-01T16:48:38.1543758Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -2158,7 +2158,7 @@
                               </Filters>
                               <Left>0.00004in</Left>
                               <Height>1.82442in</Height>
-                              <Width>7.27084in</Width>
+                              <Width>7.27083in</Width>
                               <Style>
                                 <FontSize>7pt</FontSize>
                               </Style>
@@ -2372,7 +2372,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>6.50252cm</Top>
+            <Top>6.66127cm</Top>
             <Left>0.07774cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2410,7 +2410,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>6.79715cm</Top>
+            <Top>6.9559cm</Top>
             <Left>0.07774cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2446,7 +2446,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>7.11061cm</Top>
+            <Top>7.26936cm</Top>
             <Left>0.07774cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2481,7 +2481,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>7.40524cm</Top>
+            <Top>7.56399cm</Top>
             <Left>0.07774cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2514,7 +2514,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>5.07435cm</Top>
+            <Top>5.2331cm</Top>
             <Left>5.79088cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2545,7 +2545,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>5.37705cm</Top>
+            <Top>5.5358cm</Top>
             <Left>5.79088cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2581,7 +2581,7 @@ Cstr(Fields!DocDateCaption.Value)
               </Paragraph>
             </Paragraphs>
             <rd:DefaultName>Textbox46</rd:DefaultName>
-            <Top>7.71623cm</Top>
+            <Top>7.87498cm</Top>
             <Left>0.07825cm</Left>
             <Height>0.28177cm</Height>
             <Width>6.74769cm</Width>
@@ -2593,305 +2593,304 @@ Cstr(Fields!DocDateCaption.Value)
               <VerticalAlign>Top</VerticalAlign>
             </Style>
           </Textbox>
-          <Rectangle Name="Rectangle2">
-            <ReportItems>
-              <Textbox Name="Textbox54">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value EvaluationMode="Constant">202 West Ridge Pike, Conshohocken, PA 19248</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.09156cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>6.74769cm</Width>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox55">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>Account No.:</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.39045cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>4.36681cm</Width>
-                <ZIndex>1</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox56">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>Routing No.: </Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.68222cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>4.36681cm</Width>
-                <ZIndex>2</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox57">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>Swift Code: </Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.99927cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>4.36681cm</Width>
-                <ZIndex>3</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox58">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value EvaluationMode="Constant">ACH Payment &amp; Wire Instructions</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                          <FontWeight>Bold</FontWeight>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>1.46851cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>6.74769cm</Width>
-                <ZIndex>4</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <BottomBorder>
-                    <Color>Black</Color>
-                    <Style>Solid</Style>
-                    <Width>1pt</Width>
-                  </BottomBorder>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox59">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value EvaluationMode="Constant">Citizens Bank</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>1.77804cm</Top>
-                <Left>11.71701cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>6.74769cm</Width>
-                <ZIndex>5</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox60">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>6300269012</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.41566cm</Top>
-                <Left>16.08382cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>2.38088cm</Width>
-                <ZIndex>6</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox61">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>036076150</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.73271cm</Top>
-                <Left>16.08382cm</Left>
-                <Height>0.25297cm</Height>
-                <Width>2.38088cm</Width>
-                <ZIndex>7</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-              <Textbox Name="Textbox62">
-                <CanGrow>true</CanGrow>
-                <KeepTogether>true</KeepTogether>
-                <Paragraphs>
-                  <Paragraph>
-                    <TextRuns>
-                      <TextRun>
-                        <Value>CTZIUS33</Value>
-                        <Style>
-                          <FontFamily>Segoe UI</FontFamily>
-                          <FontSize>8pt</FontSize>
-                        </Style>
-                      </TextRun>
-                    </TextRuns>
-                    <Style>
-                      <TextAlign>Left</TextAlign>
-                    </Style>
-                  </Paragraph>
-                </Paragraphs>
-                <rd:DefaultName>Textbox46</rd:DefaultName>
-                <Top>2.98568cm</Top>
-                <Left>16.08382cm</Left>
-                <Height>0.28177cm</Height>
-                <Width>2.38088cm</Width>
-                <ZIndex>8</ZIndex>
-                <Style>
-                  <Border>
-                    <Style>None</Style>
-                  </Border>
-                  <VerticalAlign>Top</VerticalAlign>
-                </Style>
-              </Textbox>
-            </ReportItems>
+          <Textbox Name="Textbox54">
+            <CanGrow>true</CanGrow>
             <KeepTogether>true</KeepTogether>
-            <Top>1.9644in</Top>
-            <Left>0.0308in</Left>
-            <Height>1.4878in</Height>
-            <Width>7.26957in</Width>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant">202 West Ridge Pike, Conshohocken, PA 19248</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>7.28432cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>6.74769cm</Width>
             <ZIndex>8</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox55">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Account No.:</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>7.58321cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>4.36681cm</Width>
+            <ZIndex>9</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox56">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Routing No.: </Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>7.87498cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>4.36681cm</Width>
+            <ZIndex>10</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox57">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>Swift Code: </Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>8.19203cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>4.36681cm</Width>
+            <ZIndex>11</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox58">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant">ACH Payment &amp; Wire Instructions</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                      <FontWeight>Bold</FontWeight>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>6.66127cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>6.74769cm</Width>
+            <ZIndex>12</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <BottomBorder>
+                <Color>Black</Color>
+                <Style>Solid</Style>
+                <Width>1pt</Width>
+              </BottomBorder>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox59">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value EvaluationMode="Constant">Citizens Bank</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>6.9708cm</Top>
+            <Left>11.68444cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>6.74769cm</Width>
+            <ZIndex>13</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox60">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>6300269012</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>7.60842cm</Top>
+            <Left>16.05125cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>2.38088cm</Width>
+            <ZIndex>14</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox61">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>036076150</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>7.92547cm</Top>
+            <Left>16.05125cm</Left>
+            <Height>0.25297cm</Height>
+            <Width>2.38088cm</Width>
+            <ZIndex>15</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Textbox Name="Textbox62">
+            <CanGrow>true</CanGrow>
+            <KeepTogether>true</KeepTogether>
+            <Paragraphs>
+              <Paragraph>
+                <TextRuns>
+                  <TextRun>
+                    <Value>CTZIUS33</Value>
+                    <Style>
+                      <FontFamily>Segoe UI</FontFamily>
+                      <FontSize>8pt</FontSize>
+                    </Style>
+                  </TextRun>
+                </TextRuns>
+                <Style>
+                  <TextAlign>Left</TextAlign>
+                </Style>
+              </Paragraph>
+            </Paragraphs>
+            <rd:DefaultName>Textbox46</rd:DefaultName>
+            <Top>8.17844cm</Top>
+            <Left>16.05125cm</Left>
+            <Height>0.28177cm</Height>
+            <Width>2.38088cm</Width>
+            <ZIndex>16</ZIndex>
+            <Style>
+              <Border>
+                <Style>None</Style>
+              </Border>
+              <VerticalAlign>Top</VerticalAlign>
+            </Style>
+          </Textbox>
+          <Rectangle Name="Rectangle1">
+            <KeepTogether>true</KeepTogether>
+            <Top>5.05113cm</Top>
+            <Left>0.07826cm</Left>
+            <Height>3.42267cm</Height>
+            <Width>18.46341cm</Width>
+            <ZIndex>17</ZIndex>
             <Style>
               <Border>
                 <Style>None</Style>
@@ -2899,13 +2898,13 @@ Cstr(Fields!DocDateCaption.Value)
             </Style>
           </Rectangle>
         </ReportItems>
-        <Height>8.76859cm</Height>
+        <Height>8.4738cm</Height>
         <Style />
       </Body>
       <Width>18.59756cm</Width>
       <Page>
         <PageHeader>
-          <Height>4.41891cm</Height>
+          <Height>4.96572cm</Height>
           <PrintOnFirstPage>true</PrintOnFirstPage>
           <PrintOnLastPage>true</PrintOnLastPage>
           <ReportItems>
