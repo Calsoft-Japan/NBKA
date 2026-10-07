@@ -134,6 +134,7 @@ report 50100 "Create Warehouse Shipment New"
         fillInvavbOrd: Boolean;
         PrintPickList: Boolean;
         Warehouseshpmts: Text;
+        warehouseshipmentno: code[20];
 
     procedure InitializeRequest(NewDoNotFillQtyToHandle: Boolean; NewReservedFromStock: Enum "Reservation From Stock")
     begin
@@ -146,6 +147,7 @@ report 50100 "Create Warehouse Shipment New"
         SalesHeader: Record "Sales Header";
         WarehouseRequest: Record "Warehouse Request";
         GetSourceDocOutbound: Codeunit "Get Source Doc. Outbound";
+        singleInstance: Codeunit SingleInstance;
     begin
         WarehouseRequest.Copy("Warehouse Request");
 
@@ -163,6 +165,8 @@ report 50100 "Create Warehouse Shipment New"
             exit;
 
         CreateWarehouseShipmentFromWhseRequest(WarehouseRequest);
+        singleinstance.GetWarehouseShipmentNo(warehouseshipmentno);
+        ECCheckAndDeleteEmptyWhseShipHeaderorCreatePick(warehouseshipmentno);
     end;
 
     local procedure CreateWarehouseShipmentForSalesOrder()
@@ -241,6 +245,32 @@ report 50100 "Create Warehouse Shipment New"
         end;
 
     end;
+
+    local procedure ECCheckAndDeleteEmptyWhseShipHeaderorCreatePick(WhseShmptNo: Code[20])
+    var
+        WarehouseShipLine: Record "Warehouse Shipment Line";
+        ECWhseShptHeader: Record "Warehouse Shipment Header";
+    begin
+        if WhseShmptNo = '' then
+            exit;
+
+        WarehouseShipLine.Reset();
+        WarehouseShipLine.SetRange("No.", WhseShmptNo);
+        if not WarehouseShipLine.FindSet() then begin
+            ecWhseShptHeader.Get(WhseShmptNo);
+            ecWhseShptHeader.Delete(true);
+            Commit();
+        end else begin
+            PickCreate(WarehouseShipLine);
+            If PrintPickList then
+                If Warehouseshpmts = '' then
+                    Warehouseshpmts := WhseShmptNo
+                else
+                    Warehouseshpmts := Warehouseshpmts + '|' + WhseShmptNo;
+        end;
+
+    end;
+
 
     local procedure CreateWarehouseShipmentForPurchaseReturnOrder()
     var

@@ -81,10 +81,23 @@ codeunit 50101 SingleInstance
         clear(gWarehouseShipmentLine);
     end;
 
+    [EventSubscriber(ObjectType::Report, Report::"Get Source Documents", OnAfterCreateShptHeader, '', false, false)]
+
+    local procedure OnAfterCreateShptHeader(var WarehouseShipmentHeader: Record "Warehouse Shipment Header"; WarehouseRequest: Record "Warehouse Request"; SalesLine: Record "Sales Line"; PurchaseLine: Record "Purchase Line")
+    begin
+        warehouseshpNum := WarehouseShipmentHeader."No.";
+    end;
+
+    procedure GetWarehouseShipmentNo(var WarehouseShipmentNo: Code[20])
+    begin
+        WarehouseShipmentNo := warehouseshpNum;
+    end;
+
     var
         ToBeShippedBY2: date;
         gWarehouseShipmentLine: Record "Warehouse Shipment Line";
         ToBinCode: Code[20];
         FromBinCode: Code[20];
         FillOnInventory: Boolean;
+        warehouseshpNum: Code[20];
 }

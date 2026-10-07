@@ -9,7 +9,7 @@
       <am:Name>MSRB</am:Name>
       <am:Version>15.0.20283.0</am:Version>
     </am:UpdatedBy>
-    <am:LastModifiedTimestamp>2026-09-11T15:05:44.3659780Z</am:LastModifiedTimestamp>
+    <am:LastModifiedTimestamp>2026-10-07T20:14:00.3270137Z</am:LastModifiedTimestamp>
   </am:AuthoringMetadata>
   <AutoRefresh>0</AutoRefresh>
   <DataSources>
@@ -1742,7 +1742,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                   <Top>0.06495cm</Top>
                                   <Left>0cm</Left>
                                   <Height>0.6cm</Height>
-                                  <Width>5.00472cm</Width>
+                                  <Width>6.08069cm</Width>
                                   <Style>
                                     <Border>
                                       <Style>None</Style>
@@ -2043,7 +2043,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                       <TablixBody>
                                         <TablixColumns>
                                           <TablixColumn>
-                                            <Width>5cm</Width>
+                                            <Width>6.07597cm</Width>
                                           </TablixColumn>
                                         </TablixColumns>
                                         <TablixRows>
@@ -2278,7 +2278,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                       <Top>0.03528cm</Top>
                                       <Left>0cm</Left>
                                       <Height>2.0172cm</Height>
-                                      <Width>5cm</Width>
+                                      <Width>6.07597cm</Width>
                                       <Style>
                                         <Border>
                                           <Style>None</Style>
@@ -2290,7 +2290,7 @@ Also, we request you to ensure that no NBK products are used or sold, through an
                                   <Top>0.80606cm</Top>
                                   <Left>0.00472cm</Left>
                                   <Height>2.05248cm</Height>
-                                  <Width>5cm</Width>
+                                  <Width>6.07597cm</Width>
                                   <ZIndex>5</ZIndex>
                                   <Style>
                                     <Border>
