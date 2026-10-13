@@ -99,6 +99,7 @@ report 50100 "Create Warehouse Shipment New"
                     {
                         ApplicationArea = all;
                         Caption = 'Fill Inventory Available Orders ';
+                        visible = false;
                         //ToolTip = 'Specifies if the To Be Shipped By field in the warehouse document is create source document on the date.';
                     }
                     field(PrintPickList; PrintPickList)
@@ -114,6 +115,7 @@ report 50100 "Create Warehouse Shipment New"
     trigger OnInitReport()
     begin
         ToBeShippedBY := WorkDate();
+        printPickList := true;
     end;
 
     trigger OnPostReport()
@@ -135,6 +137,7 @@ report 50100 "Create Warehouse Shipment New"
         PrintPickList: Boolean;
         Warehouseshpmts: Text;
         warehouseshipmentno: code[20];
+        prewarehouseshipmentno: code[20];
 
     procedure InitializeRequest(NewDoNotFillQtyToHandle: Boolean; NewReservedFromStock: Enum "Reservation From Stock")
     begin
@@ -148,6 +151,7 @@ report 50100 "Create Warehouse Shipment New"
         WarehouseRequest: Record "Warehouse Request";
         GetSourceDocOutbound: Codeunit "Get Source Doc. Outbound";
         singleInstance: Codeunit SingleInstance;
+
     begin
         WarehouseRequest.Copy("Warehouse Request");
 
@@ -166,7 +170,10 @@ report 50100 "Create Warehouse Shipment New"
 
         CreateWarehouseShipmentFromWhseRequest(WarehouseRequest);
         singleinstance.GetWarehouseShipmentNo(warehouseshipmentno);
-        ECCheckAndDeleteEmptyWhseShipHeaderorCreatePick(warehouseshipmentno);
+        if prewarehouseshipmentno <> warehouseshipmentno then begin
+            prewarehouseshipmentno := warehouseshipmentno;
+            ECCheckAndDeleteEmptyWhseShipHeaderorCreatePick(warehouseshipmentno);
+        end;
     end;
 
     local procedure CreateWarehouseShipmentForSalesOrder()
@@ -257,8 +264,8 @@ report 50100 "Create Warehouse Shipment New"
         WarehouseShipLine.Reset();
         WarehouseShipLine.SetRange("No.", WhseShmptNo);
         if not WarehouseShipLine.FindSet() then begin
-            ecWhseShptHeader.Get(WhseShmptNo);
-            ecWhseShptHeader.Delete(true);
+            if ecWhseShptHeader.Get(WhseShmptNo) then
+                ecWhseShptHeader.Delete(true);
             Commit();
         end else begin
             PickCreate(WarehouseShipLine);
@@ -468,6 +475,8 @@ report 50100 "Create Warehouse Shipment New"
             exit(false);
         exit(false);
     end;
+
+
 
     procedure PickCreate(Var WarehouseShipLine: Record "Warehouse Shipment Line")
     var
